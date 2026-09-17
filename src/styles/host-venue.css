@@ -1,0 +1,196 @@
+/* ==========================================================================
+   HOST & VENUE SECTION STYLING
+   Showcase Jaya Engineering College & Department of CSE
+   ========================================================================== */
+
+.host-section {
+  position: relative;
+  background: linear-gradient(180deg, rgba(10, 13, 20, 0) 0%, rgba(15, 20, 32, 0.4) 50%, rgba(10, 13, 20, 0) 100%);
+}
+
+.host-card {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  padding: 44px;
+  background: rgba(15, 20, 32, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.host-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-green), var(--accent-blue), transparent);
+}
+
+.host-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.host-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.host-main-title {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.host-sub-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.host-bio {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.host-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.host-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+}
+
+.host-feature-icon {
+  color: var(--accent-green);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.host-feature-text h4 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 2px;
+}
+
+.host-feature-text p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Right Location Widget */
+.host-location-widget {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32px;
+  background: rgba(8, 11, 17, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  position: relative;
+}
+
+.location-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.location-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-green);
+  background: rgba(16, 185, 129, 0.1);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.location-radar {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulseGreen 1.5s infinite;
+}
+
+.location-address-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.address-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.address-icon {
+  color: #38bdf8;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.address-content h5 {
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.address-content p {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.address-content small {
+  font-size: 0.82rem;
+  color: #64748b;
+  display: block;
+}
+
+.map-btn-wrapper {
+  margin-top: auto;
+}
+
+@media (max-width: 960px) {
+  .host-card {
+    grid-template-columns: 1fr;
+    padding: 28px;
+    gap: 32px;
+  }
+  .host-features-grid {
+    grid-template-columns: 1fr;
+  }
+}
