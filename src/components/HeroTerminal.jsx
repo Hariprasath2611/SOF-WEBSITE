@@ -29,13 +29,16 @@ export default function HeroTerminal() {
     let currentIdx = 0;
     const timer = setInterval(() => {
       if (currentIdx < INITIAL_LINES.length) {
-        setHistory((prev) => [...prev, INITIAL_LINES[currentIdx]]);
+        const nextLine = INITIAL_LINES[currentIdx];
+        if (nextLine) {
+          setHistory((prev) => [...prev, nextLine]);
+        }
         currentIdx++;
       } else {
         setIsTypingInitial(false);
         clearInterval(timer);
       }
-    }, 420);
+    }, 380);
 
     return () => clearInterval(timer);
   }, []);
@@ -149,6 +152,7 @@ export default function HeroTerminal() {
         {/* Terminal Body */}
         <div className="terminal-body" ref={terminalBodyRef} aria-live="polite">
           {history.map((item, index) => {
+            if (!item || typeof item !== 'object' || !item.type) return null;
             if (item.type === 'input') {
               return (
                 <div key={index} className="term-line">
