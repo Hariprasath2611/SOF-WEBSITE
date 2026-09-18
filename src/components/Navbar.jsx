@@ -22,7 +22,8 @@ export default function Navbar() {
     { label: 'Coordinators', href: '#coordinators' },
     { label: 'Schedule', href: '#schedule' },
     { label: 'FAQ', href: '#faq' },
-    { label: 'Contact', href: '#contact' }
+    { label: 'Register', href: '#register' },
+    { label: 'Admin', href: '#admin' }
   ];
 
   return (
