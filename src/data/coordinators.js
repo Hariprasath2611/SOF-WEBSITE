@@ -46,7 +46,7 @@ export const overallCoordinators = [
   },
   {
     id: 4,
-    name: "Aashiq",
+    name: "MOHAMMED AASHIQ",
     role: "Overall Event Coordinator",
     designation: "Public Relations & Outreach",
     department: "Dept of Computer Science & Engineering",
