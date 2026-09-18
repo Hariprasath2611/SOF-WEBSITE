@@ -121,9 +121,9 @@ export default function AdminDashboard({ onBackToHome }) {
     loadData();
   };
 
-  const handleExportCSV = () => {
-    const filename = `SFD_2026_Registrations_${filterEvent || 'all'}_${filterStatus || 'all'}.csv`;
-    exportRegistrationsToCSV(registrations, filename);
+  const handleExportExcel = () => {
+    const filename = `SFD_2026_Registrations_${filterEvent || 'all'}_${filterStatus || 'all'}.xlsx`;
+    exportRegistrationsToExcel(registrations, filename);
   };
 
   // If not authenticated, show password prompt
@@ -229,13 +229,13 @@ export default function AdminDashboard({ onBackToHome }) {
           <div className="admin-top-actions">
             <button
               type="button"
-              onClick={handleExportCSV}
+              onClick={handleExportExcel}
               className="btn-wizard-back"
-              style={{ color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)', cursor: 'pointer' }}
-              title="Export filtered registrations to CSV"
+              style={{ color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.3)', cursor: 'pointer' }}
+              title="Export filtered registrations to Microsoft Excel (.xlsx)"
             >
-              <Download size={14} />
-              <span>Export CSV</span>
+              <FileSpreadsheet size={15} />
+              <span>Export Excel</span>
             </button>
 
             <button
