@@ -124,9 +124,6 @@ export default function App() {
         {/* 10 Overall Event Coordinators Grid */}
         <OverallCoordinators />
 
-        {/* Event Schedule Timeline */}
-        <Timeline />
-
         {/* High-Converting Registration CTA */}
         <RegistrationCTA />
 
