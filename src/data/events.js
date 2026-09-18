@@ -75,11 +75,11 @@ export const events = [
       "Judging criteria: Problem-solution fit, code quality, open-source spirit, and functional demo."
     ],
     coordinator: {
-      name: "Coordinator Name",
+      name: "Nishanth",
       role: "Mini Hackathon Coordinator",
       department: "Dept of CSE",
       photo: null,
-      phone: "+919876543212",
+      phone: "+919025877663",
       email: "hackathon.sfd2026@gmail.com"
     }
   },
@@ -114,11 +114,11 @@ export const events = [
       "Judged on creativity, visual impact, thematic relevance to Software Freedom, and typography."
     ],
     coordinator: {
-      name: "Coordinator Name",
+      name: "Rajeshwari",
       role: "Poster Design Coordinator",
       department: "Dept of CSE",
       photo: null,
-      phone: "+919876543213",
+      phone: "+919884256512",
       email: "poster.sfd2026@gmail.com"
     }
   },
@@ -152,11 +152,11 @@ export const events = [
       "Seats are allocated on a first-come, first-served basis."
     ],
     coordinator: {
-      name: "Coordinator Name",
+      name: "Ram siva Sundara Karthikeyan",
       role: "Workshop Coordinator",
       department: "Dept of CSE",
       photo: null,
-      phone: "+919876543214",
+      phone: "+917305077196",
       email: "workshop.sfd2026@gmail.com"
     }
   },
@@ -165,7 +165,7 @@ export const events = [
     number: "05",
     code: "TECH-DEBATE",
     repo: "sfd-2026/debate",
-    title: "Debate",
+    title: "Debate & Discussion Panel",
     tagline: "Think. Question. Defend.",
     icon: "MessageSquareCode",
     color: "#f59e0b", // Amber
@@ -190,11 +190,11 @@ export const events = [
       "Judged on factual knowledge, logical structure, clarity of articulation, rebuttal precision, and poise."
     ],
     coordinator: {
-      name: "Coordinator Name",
-      role: "Debate Coordinator",
+      name: "Rahul Raj",
+      role: "Discussion Panel Coordinator",
       department: "Dept of CSE",
       photo: null,
-      phone: "+919876543215",
+      phone: "+918925529539",
       email: "debate.sfd2026@gmail.com"
     }
   }
