@@ -60,8 +60,8 @@ app.use((err, req, res, next) => {
 });
 
 // Start listening
-app.listen(PORT, async () => {
-  console.log(`🚀 SFD 2026 Registration Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', async () => {
+  console.log(`🚀 SFD 2026 Registration Server running on port ${PORT}`);
   console.log(`📊 Google Sheets integration: ${googleSheetsService.isConfigured() ? 'CONFIGURED & CONNECTED' : 'LOCAL FALLBACK ACTIVE (Configure .env to sync with Google Cloud)'}`);
 
   // Initialize sheets if Google credentials configured

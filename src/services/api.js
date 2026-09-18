@@ -6,17 +6,29 @@
 
 import { EVENT_TRACKS, getTrackConfig } from '../config/events';
 import * as XLSX from 'xlsx';
-import { createClient } from '@supabase/supabase-js';
 
-const API_BASE = '/api';
+const DEFAULT_API_BASE = import.meta.env.VITE_API_URL || '/api';
+
+export function getApiBase() {
+  const envUrl = import.meta.env.VITE_API_URL || '';
+  const storedUrl = typeof localStorage !== 'undefined' ? localStorage.getItem('sfd_backend_url') || '' : '';
+  const base = storedUrl || envUrl || '/api';
+  return base.replace(/\/+$/, '');
+}
+
+export function setCustomBackendUrl(url) {
+  if (typeof localStorage !== 'undefined') {
+    if (!url || !url.trim()) {
+      localStorage.removeItem('sfd_backend_url');
+    } else {
+      localStorage.setItem('sfd_backend_url', url.trim());
+    }
+  }
+}
+
 const LOCAL_STORAGE_KEY = 'sfd_registrations_v1';
 const LOCAL_COUNTER_KEY = 'sfd_registration_counter_v1';
 const ADMIN_PASSWORD_FALLBACK = '12345';
-
-// Optional direct client-side Supabase connection
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-export const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 // -------------------------------------------------------------
 // LOCAL CLIENT STORE (Offline / Vercel Serverless Fallback)
@@ -168,7 +180,7 @@ function registerLocally(formData) {
 
 export async function fetchEvents() {
   try {
-    const res = await fetch(`${API_BASE}/events`);
+    const res = await fetch(`${getApiBase()}/events`);
     if (res.ok) {
       const json = await res.json();
       if (json.events && Array.isArray(json.events)) {
@@ -183,7 +195,7 @@ export async function fetchEvents() {
 
 export async function submitRegistration(payload) {
   try {
-    const res = await fetch(`${API_BASE}/registrations`, {
+    const res = await fetch(`${getApiBase()}/registrations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -199,7 +211,7 @@ export async function submitRegistration(payload) {
     }
   } catch (err) {
     if (err.code) throw err; // Re-throw validation/duplicate error
-    // If backend isn't reachable (Vercel deployment without backend server), use local fallback
+    // If backend isn't reachable, use local fallback
   }
 
   return registerLocally(payload);
@@ -207,7 +219,7 @@ export async function submitRegistration(payload) {
 
 export async function fetchRegistrationById(id) {
   try {
-    const res = await fetch(`${API_BASE}/registrations/${encodeURIComponent(id)}`);
+    const res = await fetch(`${getApiBase()}/registrations/${encodeURIComponent(id)}`);
     if (res.ok) {
       const json = await res.json();
       if (json.registration) return json.registration;
@@ -228,7 +240,7 @@ export async function fetchRegistrationById(id) {
 
 export async function adminLogin(password) {
   try {
-    const res = await fetch(`${API_BASE}/admin/login`, {
+    const res = await fetch(`${getApiBase()}/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password })
@@ -253,7 +265,7 @@ export async function adminLogin(password) {
 
 export async function fetchAdminOverview(token) {
   try {
-    const res = await fetch(`${API_BASE}/admin/overview`, {
+    const res = await fetch(`${getApiBase()}/admin/overview`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (res.ok) {
@@ -271,31 +283,6 @@ export async function fetchAdminOverview(token) {
     throw new Error('Unauthorized');
   }
 
-  // Direct Supabase Client Query
-  if (supabase) {
-    try {
-      const { data } = await supabase.from('registrations').select('*').order('created_at', { ascending: false });
-      if (data && Array.isArray(data) && data.length > 0) {
-        const list = data.map((r) => r.payload || r);
-        const confirmed = list.filter((r) => r.status === 'CONFIRMED');
-        const cancelled = list.filter((r) => r.status === 'CANCELLED');
-        const totalParticipants = confirmed.reduce((acc, r) => acc + (r.members ? r.members.length : 1), 0);
-        return {
-          success: true,
-          totalRegistrations: list.length,
-          confirmedRegistrations: confirmed.length,
-          cancelledRegistrations: cancelled.length,
-          totalParticipants,
-          events: getLocalEventsWithSlots(),
-          recentRegistrations: list.slice(0, 10),
-          storageProvider: 'Supabase PostgreSQL'
-        };
-      }
-    } catch (err) {
-      console.warn('Client Supabase overview notice:', err.message);
-    }
-  }
-
   const regs = getLocalRegistrations();
   const confirmed = regs.filter((r) => r.status === 'CONFIRMED');
   const cancelled = regs.filter((r) => r.status === 'CANCELLED');
@@ -308,7 +295,8 @@ export async function fetchAdminOverview(token) {
     cancelledRegistrations: cancelled.length,
     totalParticipants,
     events: getLocalEventsWithSlots(),
-    recentRegistrations: [...regs].reverse().slice(0, 10)
+    recentRegistrations: [...regs].reverse().slice(0, 10),
+    isLocalFallback: true
   };
 }
 
@@ -319,7 +307,7 @@ export async function fetchAdminRegistrations(token, { search = '', event = '', 
     if (event) params.set('event', event);
     if (status) params.set('status', status);
 
-    const res = await fetch(`${API_BASE}/admin/registrations?${params.toString()}`, {
+    const res = await fetch(`${getApiBase()}/admin/registrations?${params.toString()}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (res.ok) {
@@ -333,34 +321,6 @@ export async function fetchAdminRegistrations(token, { search = '', event = '', 
 
   if (token !== ADMIN_PASSWORD_FALLBACK) {
     throw new Error('Unauthorized');
-  }
-
-  // Direct Supabase Client Query
-  if (supabase) {
-    try {
-      const { data } = await supabase.from('registrations').select('*').order('created_at', { ascending: false });
-      if (data && Array.isArray(data) && data.length > 0) {
-        let list = data.map((r) => r.payload || r);
-        if (event) list = list.filter((r) => r.eventKey === event);
-        if (status) list = list.filter((r) => r.status === status);
-        if (search && search.trim()) {
-          const q = search.trim().toLowerCase();
-          list = list.filter((r) => {
-            const matchId = r.registrationId && r.registrationId.toLowerCase().includes(q);
-            const matchTeam = r.teamName && r.teamName.toLowerCase().includes(q);
-            const matchLeader = r.teamLeader && (
-              (r.teamLeader.name && r.teamLeader.name.toLowerCase().includes(q)) ||
-              (r.teamLeader.email && r.teamLeader.email.toLowerCase().includes(q)) ||
-              (r.teamLeader.college && r.teamLeader.college.toLowerCase().includes(q))
-            );
-            return matchId || matchTeam || matchLeader;
-          });
-        }
-        return list;
-      }
-    } catch (err) {
-      console.warn('Client Supabase registrations notice:', err.message);
-    }
   }
 
   let regs = getLocalRegistrations();
@@ -390,7 +350,7 @@ export async function fetchAdminRegistrations(token, { search = '', event = '', 
 
 export async function updateRegistrationStatus(token, id, status) {
   try {
-    const res = await fetch(`${API_BASE}/admin/registrations/${encodeURIComponent(id)}/status`, {
+    const res = await fetch(`${getApiBase()}/admin/registrations/${encodeURIComponent(id)}/status`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -411,14 +371,6 @@ export async function updateRegistrationStatus(token, id, status) {
     throw new Error('Unauthorized');
   }
 
-  if (supabase) {
-    try {
-      await supabase.from('registrations').update({ status }).eq('registration_id', id);
-    } catch (err) {
-      console.warn('Supabase status update error:', err.message);
-    }
-  }
-
   const regs = getLocalRegistrations();
   const target = regs.find((r) => r.registrationId === id);
   if (!target) {
@@ -435,7 +387,7 @@ export function getExportUrl(token, { event = '', status = '' } = {}) {
   const params = new URLSearchParams();
   if (event) params.set('event', event);
   if (status) params.set('status', status);
-  return `${API_BASE}/admin/export?${params.toString()}`;
+  return `${getApiBase()}/admin/export?${params.toString()}`;
 }
 
 /**
