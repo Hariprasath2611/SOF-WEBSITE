@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import BackgroundCanvas from './components/BackgroundCanvas';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -13,8 +13,79 @@ import RegistrationCTA from './components/RegistrationCTA';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import RegistrationPage from './pages/RegistrationPage';
+import AdminDashboard from './components/admin/AdminDashboard';
+
+// Import newly created styles
+import './styles/registration.css';
+import './styles/admin.css';
 
 export default function App() {
+  const [currentView, setCurrentView] = useState('home'); // 'home' | 'register' | 'admin'
+  const [preselectedTrack, setPreselectedTrack] = useState(null);
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#register')) {
+        const urlParams = new URLSearchParams(hash.split('?')[1] || '');
+        const track = urlParams.get('track');
+        if (track) setPreselectedTrack(track);
+        setCurrentView('register');
+        window.scrollTo(0, 0);
+      } else if (hash.startsWith('#admin')) {
+        setCurrentView('admin');
+        window.scrollTo(0, 0);
+      } else {
+        setCurrentView('home');
+      }
+    };
+
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+
+    // Custom event for smooth programmatic registration triggering
+    const handleCustomOpen = (e) => {
+      if (e.detail && e.detail.track) {
+        setPreselectedTrack(e.detail.track);
+      }
+      window.location.hash = '#register';
+    };
+    window.addEventListener('open-registration', handleCustomOpen);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('open-registration', handleCustomOpen);
+    };
+  }, []);
+
+  const navigateToHome = () => {
+    window.location.hash = '';
+    setCurrentView('home');
+    setPreselectedTrack(null);
+  };
+
+  // 1. Full-screen Custom Registration View
+  if (currentView === 'register') {
+    return (
+      <div className="app-root">
+        <BackgroundCanvas />
+        <RegistrationPage onBackToHome={navigateToHome} preselectedTrack={preselectedTrack} />
+      </div>
+    );
+  }
+
+  // 2. Full-screen Admin Dashboard View
+  if (currentView === 'admin') {
+    return (
+      <div className="app-root">
+        <BackgroundCanvas />
+        <AdminDashboard onBackToHome={navigateToHome} />
+      </div>
+    );
+  }
+
+  // 3. Main Event Website
   return (
     <div className="app-root">
       {/* Dynamic Animated Background Canvas with Git Branches & Code Particles */}
