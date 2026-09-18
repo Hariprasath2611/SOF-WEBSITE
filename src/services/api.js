@@ -62,7 +62,7 @@ function getLocalEventsWithSlots() {
 }
 
 function registerLocally(formData) {
-  const { eventKey, teamName, teamLeader, members } = formData;
+  const { eventKey, teamName, teamLeader, members, paymentAmount, paymentUtr, payerName, paymentStatus } = formData;
   const track = getTrackConfig(eventKey);
   if (!track) {
     throw new Error(`Invalid event selected: "${eventKey}"`);
@@ -94,6 +94,19 @@ function registerLocally(formData) {
     const err = new Error(`Email "${leaderEmail}" is already registered for ${track.title}.`);
     err.code = 'DUPLICATE_REGISTRATION';
     throw err;
+  }
+
+  // 2b. Duplicate UTR check (prevent reusing transaction ID)
+  if (paymentUtr && paymentUtr !== 'N/A') {
+    const cleanUtr = paymentUtr.trim().toLowerCase();
+    const dupUtr = regs.find(
+      (r) => r.status !== 'CANCELLED' && r.paymentUtr && r.paymentUtr.trim().toLowerCase() === cleanUtr
+    );
+    if (dupUtr) {
+      const err = new Error(`The UPI Reference / UTR "${paymentUtr}" has already been submitted for another registration.`);
+      err.code = 'DUPLICATE_UTR';
+      throw err;
+    }
   }
 
   // 3. Assemble member list
@@ -128,6 +141,10 @@ function registerLocally(formData) {
     teamName: track.isTeam ? (teamName || 'N/A') : 'N/A',
     teamLeader: { ...teamLeader },
     members: allMembers,
+    paymentAmount: paymentAmount || 0,
+    paymentUtr: paymentUtr || 'N/A',
+    payerName: payerName || '',
+    paymentStatus: paymentStatus || 'SUBMITTED',
     status: 'CONFIRMED',
     statusUpdatedAt: new Date().toISOString()
   };
@@ -367,6 +384,9 @@ export function exportRegistrationsToCSV(registrations, filename = 'SFD2026_Regi
     'Timestamp',
     'Event Track',
     'Status',
+    'Fee (INR)',
+    'UPI UTR / Ref No',
+    'Payer Name',
     'Team Name',
     'Total Members',
     'Leader Name',
