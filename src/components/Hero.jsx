@@ -48,7 +48,7 @@ export default function Hero() {
                 <span className="btn-arrow-icon">→</span>
               </a>
 
-              <a href="#events" className="btn btn-secondary">
+              <a href="#register" className="btn btn-secondary">
                 <span>Register Now</span>
                 <span className="btn-arrow-icon">↗</span>
               </a>

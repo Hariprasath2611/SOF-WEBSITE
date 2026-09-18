@@ -191,12 +191,11 @@ export default function EventModal({ event, onClose }) {
 
           <a
             href={event.registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
             className="btn btn-primary"
+            onClick={onClose}
           >
             <span>Register for {event.title}</span>
-            <ExternalLink size={16} />
+            <span className="btn-arrow-icon">→</span>
           </a>
         </div>
       </div>
