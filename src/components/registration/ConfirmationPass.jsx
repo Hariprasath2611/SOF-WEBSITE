@@ -72,6 +72,15 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
               {registration.teamLeader?.college}
             </h4>
           </div>
+
+          <div>
+            <span style={{ fontSize: '0.74rem', color: '#94a3b8', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>
+              Fee & UPI Ref (UTR)
+            </span>
+            <h4 style={{ fontSize: '0.92rem', color: '#10b981', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+              ₹{registration.paymentAmount || 0} • {registration.paymentUtr || 'VERIFIED'}
+            </h4>
+          </div>
         </div>
 
         {/* Team Roster */}
@@ -109,7 +118,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
         {/* Footer Notes for Printout */}
         <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px dashed rgba(255, 255, 255, 0.1)', fontSize: '0.82rem', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
           <div>🏛️ Department of CSE, Jaya Engineering College, Thirunindravur, Chennai</div>
-          <div>Status: <strong style={{ color: '#10b981' }}>CONFIRMED (VERIFIED)</strong></div>
+          <div>Payment: <strong style={{ color: '#10b981' }}>₹{registration.paymentAmount || 0} (UTR: {registration.paymentUtr || 'VERIFIED'})</strong></div>
         </div>
       </div>
 

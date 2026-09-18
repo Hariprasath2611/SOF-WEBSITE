@@ -405,10 +405,11 @@ export default function AdminDashboard({ onBackToHome }) {
                   <th>Reg ID</th>
                   <th>Timestamp</th>
                   <th>Event</th>
+                  <th>Fee & UTR</th>
                   <th>Team / Participant</th>
                   <th>Leader Name & Email</th>
                   <th>College & Dept</th>
-                  <th>Members Count</th>
+                  <th>Members</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
@@ -416,7 +417,7 @@ export default function AdminDashboard({ onBackToHome }) {
               <tbody>
                 {registrations.length === 0 ? (
                   <tr>
-                    <td colSpan={9} style={{ textAlign: 'center', padding: '36px', color: '#94a3b8' }}>
+                    <td colSpan={10} style={{ textAlign: 'center', padding: '36px', color: '#94a3b8' }}>
                       {loading ? 'Loading registration data...' : 'No registrations found matching criteria.'}
                     </td>
                   </tr>
@@ -433,6 +434,19 @@ export default function AdminDashboard({ onBackToHome }) {
                           {r.timestamp}
                         </td>
                         <td style={{ fontWeight: 600 }}>{r.eventName}</td>
+                        <td>
+                          <div style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                            ₹{r.paymentAmount || 0}
+                          </div>
+                          <div style={{ fontSize: '0.74rem', color: '#38bdf8', fontFamily: 'var(--font-mono)' }} title="UPI Transaction Reference">
+                            UTR: {r.paymentUtr || 'N/A'}
+                          </div>
+                          {r.payerName && (
+                            <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+                              ({r.payerName})
+                            </div>
+                          )}
+                        </td>
                         <td style={{ color: r.teamName !== 'N/A' ? '#38bdf8' : '#cbd5e1' }}>
                           {r.teamName !== 'N/A' ? r.teamName : r.teamLeader.name}
                         </td>

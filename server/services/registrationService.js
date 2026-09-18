@@ -189,6 +189,10 @@ class RegistrationService {
           year: teamLeader.year
         },
         members: allMembers,
+        paymentAmount: formData.paymentAmount || 0,
+        paymentUtr: formData.paymentUtr || 'N/A',
+        payerName: formData.payerName || '',
+        paymentStatus: formData.paymentStatus || 'SUBMITTED',
         status: 'CONFIRMED'
       };
 
