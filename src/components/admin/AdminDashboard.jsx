@@ -4,7 +4,8 @@ import {
   fetchAdminOverview,
   fetchAdminRegistrations,
   updateRegistrationStatus,
-  getExportUrl
+  getExportUrl,
+  exportRegistrationsToCSV
 } from '../../services/api';
 import {
   Shield,
@@ -120,6 +121,11 @@ export default function AdminDashboard({ onBackToHome }) {
     loadData();
   };
 
+  const handleExportCSV = () => {
+    const filename = `SFD_2026_Registrations_${filterEvent || 'all'}_${filterStatus || 'all'}.csv`;
+    exportRegistrationsToCSV(registrations, filename);
+  };
+
   // If not authenticated, show password prompt
   if (!token) {
     return (
@@ -221,17 +227,16 @@ export default function AdminDashboard({ onBackToHome }) {
           </div>
 
           <div className="admin-top-actions">
-            <a
-              href={exportUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={handleExportCSV}
               className="btn-wizard-back"
-              style={{ color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
+              style={{ color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)', cursor: 'pointer' }}
               title="Export filtered registrations to CSV"
             >
               <Download size={14} />
               <span>Export CSV</span>
-            </a>
+            </button>
 
             <button
               type="button"
