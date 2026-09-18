@@ -227,27 +227,41 @@
 /* Action Buttons inside Card */
 .event-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: 1.18fr 0.82fr;
+  gap: 8px;
+  align-items: stretch;
 }
 
-.btn-details {
+.event-actions .btn-phone {
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  letter-spacing: -0.01em;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.event-actions .btn-details {
   background: rgba(255, 255, 255, 0.04);
   color: var(--text-primary);
   border: 1px solid var(--border-medium);
-  font-size: 0.85rem;
-  padding: 10px 14px;
+  font-size: 0.78rem;
+  letter-spacing: -0.01em;
+  padding: 10px 10px;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 5px;
   font-family: var(--font-mono);
   cursor: pointer;
   transition: all var(--transition-fast);
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.btn-details:hover {
+.event-actions .btn-details:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: #fff;
 }
