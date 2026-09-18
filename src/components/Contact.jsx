@@ -30,9 +30,9 @@ export default function Contact() {
             <p>
               Connect with our student organizing committee for rapid assistance on scheduling, team registrations, and queries.
             </p>
-            <a href="tel:+919876543201" className="contact-link">
+            <a href="tel:+919025877663" className="contact-link">
               <Phone size={15} />
-              <span>+91 98765 43201</span>
+              <span>+91 90258 77663 (Nishanth)</span>
             </a>
           </div>
 
