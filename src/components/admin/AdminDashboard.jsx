@@ -45,6 +45,7 @@ export default function AdminDashboard({ onBackToHome }) {
   const [filterEvent, setFilterEvent] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [actionMessage, setActionMessage] = useState('');
+  const [adminTab, setAdminTab] = useState('registrations'); // 'registrations' | 'slots'
 
   // Backend URL Configuration
   const [showServerModal, setShowServerModal] = useState(false);
@@ -408,186 +409,244 @@ export default function AdminDashboard({ onBackToHome }) {
               </div>
             </div>
 
-            {/* Event Availability Breakdown Cards */}
-            <h3 style={{ fontSize: '1rem', color: '#cbd5e1', marginBottom: '14px', fontFamily: 'var(--font-mono)' }}>
-              EVENT SLOTS STATUS (LIVE AVAILABILITY MATRIX)
-            </h3>
+            {/* Dashboard Tab Switcher & Quick Export */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  type="button"
+                  className="btn-wizard-back"
+                  onClick={() => setAdminTab('registrations')}
+                  style={{
+                    background: adminTab === 'registrations' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                    color: adminTab === 'registrations' ? '#34d399' : '#94a3b8',
+                    borderColor: adminTab === 'registrations' ? '#10b981' : 'rgba(255, 255, 255, 0.15)',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Users size={15} />
+                  <span>Registrations List ({registrations.length})</span>
+                </button>
 
-            <div className="admin-events-slots-grid">
-              {(overview.events || []).map((ev) => {
-                const percent = Math.min(100, Math.round((ev.registeredCount / ev.maxSlots) * 100));
-                const isFull = ev.status === 'FULL';
+                <button
+                  type="button"
+                  className="btn-wizard-back"
+                  onClick={() => setAdminTab('slots')}
+                  style={{
+                    background: adminTab === 'slots' ? 'rgba(56, 189, 248, 0.15)' : 'transparent',
+                    color: adminTab === 'slots' ? '#38bdf8' : '#94a3b8',
+                    borderColor: adminTab === 'slots' ? '#38bdf8' : 'rgba(255, 255, 255, 0.15)',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Layers size={15} />
+                  <span>Slot Availability Matrix</span>
+                </button>
+              </div>
 
-                return (
-                  <div key={ev.key} className={`event-slot-card ${isFull ? 'full-border' : ''}`}>
-                    <div className="event-slot-header">
-                      <div>
-                        <div className="event-slot-name">{ev.title}</div>
-                        <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
-                          Team Size: {ev.teamSize}
-                        </span>
-                      </div>
-                      <span className={`status-badge ${isFull ? 'cancelled' : 'confirmed'}`}>
-                        {ev.status}
-                      </span>
-                    </div>
-
-                    <div className="event-slot-bar-bg">
-                      <div
-                        className={`event-slot-bar-fill ${isFull ? 'full' : ''}`}
-                        style={{ width: `${percent}%` }}
-                      />
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
-                      <span style={{ color: '#fff', fontWeight: 700 }}>
-                        {ev.registeredCount} / {ev.maxSlots}
-                      </span>
-                      <span style={{ color: isFull ? '#f87171' : '#10b981' }}>
-                        {ev.remainingSlots} Left
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-
-        {/* Toolbar: Search and Filter */}
-        <div className="admin-toolbar">
-          <form onSubmit={handleSearchSubmit} className="admin-search-box">
-            <Search size={16} color="#94a3b8" />
-            <input
-              type="text"
-              className="admin-search-input"
-              placeholder="Search by ID, Name, Email, Team, College..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </form>
-
-          <div className="admin-filters-group">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Filter size={14} color="#94a3b8" />
-              <select
-                className="form-select"
-                style={{ padding: '8px 12px', fontSize: '0.82rem', width: 'auto' }}
-                value={filterEvent}
-                onChange={(e) => setFilterEvent(e.target.value)}
+              <button
+                type="button"
+                onClick={handleExportExcel}
+                className="btn-wizard-next"
+                style={{ fontSize: '0.84rem', padding: '10px 18px', display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+                title="Download full registration spreadsheet in native Excel (.xlsx)"
               >
-                <option value="">All Events</option>
-                {EVENT_TRACKS.map((t) => (
-                  <option key={t.key} value={t.key}>
-                    {t.title}
-                  </option>
-                ))}
-              </select>
+                <FileSpreadsheet size={16} />
+                <span>Export to Excel (.xlsx)</span>
+              </button>
             </div>
 
-            <select
-              className="form-select"
-              style={{ padding: '8px 12px', fontSize: '0.82rem', width: 'auto' }}
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option value="">All Statuses</option>
-              <option value="CONFIRMED">CONFIRMED</option>
-              <option value="CANCELLED">CANCELLED</option>
-            </select>
-          </div>
-        </div>
+            {/* TAB 1: REGISTRATIONS LIST */}
+            {adminTab === 'registrations' && (
+              <>
+                {/* Toolbar: Search and Filter */}
+                <div className="admin-toolbar">
+                  <form onSubmit={handleSearchSubmit} className="admin-search-box">
+                    <Search size={16} color="#94a3b8" />
+                    <input
+                      type="text"
+                      className="admin-search-input"
+                      placeholder="Search by ID, Name, Email, Team, College..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </form>
 
-        {/* Data Table */}
-        <div className="admin-table-panel">
-          <div className="admin-table-scroll">
-            <table className="admin-data-table">
-              <thead>
-                <tr>
-                  <th>Reg ID</th>
-                  <th>Timestamp</th>
-                  <th>Event</th>
-                  <th>Fee & UTR</th>
-                  <th>Team / Participant</th>
-                  <th>Leader Name & Email</th>
-                  <th>College & Dept</th>
-                  <th>Members</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {registrations.length === 0 ? (
-                  <tr>
-                    <td colSpan={10} style={{ textAlign: 'center', padding: '36px', color: '#94a3b8' }}>
-                      {loading ? 'Loading registration data...' : 'No registrations found matching criteria.'}
-                    </td>
-                  </tr>
-                ) : (
-                  registrations.map((r) => {
-                    const isConfirmed = r.status === 'CONFIRMED';
+                  <div className="admin-filters-group">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Filter size={14} color="#94a3b8" />
+                      <select
+                        className="form-select"
+                        style={{ padding: '8px 12px', fontSize: '0.82rem', width: 'auto' }}
+                        value={filterEvent}
+                        onChange={(e) => setFilterEvent(e.target.value)}
+                      >
+                        <option value="">All Events</option>
+                        {EVENT_TRACKS.map((t) => (
+                          <option key={t.key} value={t.key}>
+                            {t.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <select
+                      className="form-select"
+                      style={{ padding: '8px 12px', fontSize: '0.82rem', width: 'auto' }}
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                    >
+                      <option value="">All Statuses</option>
+                      <option value="CONFIRMED">CONFIRMED</option>
+                      <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Data Table */}
+                <div className="admin-table-panel">
+                  <div className="admin-table-scroll">
+                    <table className="admin-data-table">
+                      <thead>
+                        <tr>
+                          <th>Reg ID</th>
+                          <th>Timestamp</th>
+                          <th>Event</th>
+                          <th>Fee & UTR</th>
+                          <th>Team / Participant</th>
+                          <th>Leader Name & Email</th>
+                          <th>College & Dept</th>
+                          <th>Members</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {registrations.length === 0 ? (
+                          <tr>
+                            <td colSpan={10} style={{ textAlign: 'center', padding: '36px', color: '#94a3b8' }}>
+                              {loading ? 'Loading registration data...' : 'No registrations found matching criteria.'}
+                            </td>
+                          </tr>
+                        ) : (
+                          registrations.map((r) => {
+                            const isConfirmed = r.status === 'CONFIRMED';
+                            const leader = r.teamLeader || {};
+
+                            return (
+                              <tr key={r.registrationId}>
+                                <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#38bdf8' }}>
+                                  {r.registrationId}
+                                </td>
+                                <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: '#94a3b8' }}>
+                                  {r.timestamp}
+                                </td>
+                                <td style={{ fontWeight: 600 }}>{r.eventName}</td>
+                                <td>
+                                  <div style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                                    ₹{r.paymentAmount || 0}
+                                  </div>
+                                  <div style={{ fontSize: '0.74rem', color: '#38bdf8', fontFamily: 'var(--font-mono)' }} title="UPI Transaction Reference">
+                                    UTR: {r.paymentUtr || 'N/A'}
+                                  </div>
+                                  {r.payerName && (
+                                    <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+                                      ({r.payerName})
+                                    </div>
+                                  )}
+                                </td>
+                                <td style={{ color: r.teamName && r.teamName !== 'N/A' ? '#38bdf8' : '#cbd5e1' }}>
+                                  {r.teamName && r.teamName !== 'N/A' ? r.teamName : (leader.name || 'N/A')}
+                                </td>
+                                <td>
+                                  <div><strong>{leader.name || 'N/A'}</strong></div>
+                                  <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{leader.email || ''}</div>
+                                </td>
+                                <td>
+                                  <div>{leader.college || 'N/A'}</div>
+                                  <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                                    {leader.department || ''} {leader.year ? `(${leader.year})` : ''}
+                                  </div>
+                                </td>
+                                <td style={{ fontFamily: 'var(--font-mono)', textAlign: 'center' }}>
+                                  {r.members ? r.members.length : 1}
+                                </td>
+                                <td>
+                                  <span className={`status-badge ${isConfirmed ? 'confirmed' : 'cancelled'}`}>
+                                    {r.status}
+                                  </span>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn-status-toggle"
+                                    onClick={() => handleStatusToggle(r.registrationId, r.status)}
+                                    title={isConfirmed ? 'Cancel registration (frees up 1 slot)' : 'Re-confirm registration'}
+                                  >
+                                    {isConfirmed ? 'Cancel Slot' : 'Re-confirm'}
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* TAB 2: SLOT AVAILABILITY MATRIX */}
+            {adminTab === 'slots' && (
+              <div style={{ marginTop: '10px' }}>
+                <h3 style={{ fontSize: '1rem', color: '#cbd5e1', marginBottom: '14px', fontFamily: 'var(--font-body)', fontWeight: 600 }}>
+                  Live Event Slot Matrix
+                </h3>
+
+                <div className="admin-events-slots-grid">
+                  {(overview.events || []).map((ev) => {
+                    const percent = Math.min(100, Math.round((ev.registeredCount / (ev.maxSlots || 1)) * 100));
+                    const isFull = ev.status === 'FULL';
 
                     return (
-                      <tr key={r.registrationId}>
-                        <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#38bdf8' }}>
-                          {r.registrationId}
-                        </td>
-                        <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: '#94a3b8' }}>
-                          {r.timestamp}
-                        </td>
-                        <td style={{ fontWeight: 600 }}>{r.eventName}</td>
-                        <td>
-                          <div style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
-                            ₹{r.paymentAmount || 0}
+                      <div key={ev.key} className={`event-slot-card ${isFull ? 'full-border' : ''}`}>
+                        <div className="event-slot-header">
+                          <div>
+                            <div className="event-slot-name">{ev.title}</div>
+                            <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
+                              Team Size: {ev.teamSize}
+                            </span>
                           </div>
-                          <div style={{ fontSize: '0.74rem', color: '#38bdf8', fontFamily: 'var(--font-mono)' }} title="UPI Transaction Reference">
-                            UTR: {r.paymentUtr || 'N/A'}
-                          </div>
-                          {r.payerName && (
-                            <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
-                              ({r.payerName})
-                            </div>
-                          )}
-                        </td>
-                        <td style={{ color: r.teamName !== 'N/A' ? '#38bdf8' : '#cbd5e1' }}>
-                          {r.teamName !== 'N/A' ? r.teamName : r.teamLeader.name}
-                        </td>
-                        <td>
-                          <div><strong>{r.teamLeader.name}</strong></div>
-                          <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{r.teamLeader.email}</div>
-                        </td>
-                        <td>
-                          <div>{r.teamLeader.college}</div>
-                          <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
-                            {r.teamLeader.department} ({r.teamLeader.year})
-                          </div>
-                        </td>
-                        <td style={{ fontFamily: 'var(--font-mono)', textAlign: 'center' }}>
-                          {r.members ? r.members.length : 1}
-                        </td>
-                        <td>
-                          <span className={`status-badge ${isConfirmed ? 'confirmed' : 'cancelled'}`}>
-                            {r.status}
+                          <span className={`status-badge ${isFull ? 'cancelled' : 'confirmed'}`}>
+                            {ev.status}
                           </span>
-                        </td>
-                        <td>
-                          <button
-                            type="button"
-                            className="btn-status-toggle"
-                            onClick={() => handleStatusToggle(r.registrationId, r.status)}
-                            title={isConfirmed ? 'Cancel registration (frees up 1 slot)' : 'Re-confirm registration'}
-                          >
-                            {isConfirmed ? 'Cancel Slot' : 'Re-confirm'}
-                          </button>
-                        </td>
-                      </tr>
+                        </div>
+
+                        <div className="event-slot-bar-bg">
+                          <div
+                            className={`event-slot-bar-fill ${isFull ? 'full' : ''}`}
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
+                          <span style={{ color: '#fff', fontWeight: 700 }}>
+                            {ev.registeredCount} / {ev.maxSlots}
+                          </span>
+                          <span style={{ color: isFull ? '#f87171' : '#10b981' }}>
+                            {ev.remainingSlots} Left
+                          </span>
+                        </div>
+                      </div>
                     );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                  })}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
