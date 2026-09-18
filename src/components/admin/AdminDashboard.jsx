@@ -5,7 +5,9 @@ import {
   fetchAdminRegistrations,
   updateRegistrationStatus,
   getExportUrl,
-  exportRegistrationsToExcel
+  exportRegistrationsToExcel,
+  getApiBase,
+  setCustomBackendUrl
 } from '../../services/api';
 import {
   Shield,
@@ -21,7 +23,9 @@ import {
   Users,
   Layers,
   Terminal,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Server,
+  Globe
 } from 'lucide-react';
 import { EVENT_TRACKS } from '../../config/events';
 
@@ -41,6 +45,26 @@ export default function AdminDashboard({ onBackToHome }) {
   const [filterEvent, setFilterEvent] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [actionMessage, setActionMessage] = useState('');
+
+  // Backend URL Configuration
+  const [showServerModal, setShowServerModal] = useState(false);
+  const [serverUrlInput, setServerUrlInput] = useState(getApiBase());
+
+  const handleSaveServerUrl = (e) => {
+    e.preventDefault();
+    setCustomBackendUrl(serverUrlInput);
+    setShowServerModal(false);
+    setActionMessage(`Backend API set to: ${getApiBase()}`);
+    loadData();
+  };
+
+  const handleResetServerUrl = () => {
+    setCustomBackendUrl('');
+    setServerUrlInput('/api');
+    setShowServerModal(false);
+    setActionMessage('Backend API reset to default (/api)');
+    loadData();
+  };
 
   const loadData = async (activeToken) => {
     const t = activeToken || token;
@@ -229,6 +253,24 @@ export default function AdminDashboard({ onBackToHome }) {
           <div className="admin-top-actions">
             <button
               type="button"
+              onClick={() => {
+                setServerUrlInput(getApiBase());
+                setShowServerModal(true);
+              }}
+              className="btn-wizard-back"
+              style={{
+                color: getApiBase().startsWith('http') ? '#38bdf8' : '#fbbf24',
+                borderColor: getApiBase().startsWith('http') ? 'rgba(56, 189, 248, 0.35)' : 'rgba(251, 191, 36, 0.35)',
+                cursor: 'pointer'
+              }}
+              title="Configure Live Cloud Backend URL (e.g. Render)"
+            >
+              <Server size={14} />
+              <span>{getApiBase().startsWith('http') ? 'Live Cloud API' : 'Server Settings'}</span>
+            </button>
+
+            <button
+              type="button"
               onClick={handleExportExcel}
               className="btn-wizard-back"
               style={{ color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.3)', cursor: 'pointer' }}
@@ -260,6 +302,66 @@ export default function AdminDashboard({ onBackToHome }) {
             )}
           </div>
         </div>
+
+        {/* Server Configuration Modal */}
+        {showServerModal && (
+          <div className="admin-login-overlay" style={{ zIndex: 1100 }}>
+            <div className="admin-login-card" style={{ maxWidth: '520px', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                <Server size={22} color="#38bdf8" />
+                <h3 style={{ fontSize: '1.15rem', color: '#fff', margin: 0 }}>Backend Server Settings</h3>
+              </div>
+              <p style={{ fontSize: '0.84rem', color: '#94a3b8', lineHeight: 1.5, marginBottom: '18px' }}>
+                Connect this Admin Dashboard and registration forms to your live cloud server (e.g. Render).
+              </p>
+
+              <form onSubmit={handleSaveServerUrl}>
+                <div style={{ marginBottom: '14px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', color: '#cbd5e1', marginBottom: '6px', fontWeight: 600 }}>
+                    Backend API URL
+                  </label>
+                  <input
+                    type="url"
+                    className="form-control"
+                    placeholder="https://sof-backend.onrender.com/api"
+                    value={serverUrlInput}
+                    onChange={(e) => setServerUrlInput(e.target.value)}
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem' }}
+                  />
+                  <small style={{ display: 'block', marginTop: '6px', color: '#64748b', fontSize: '0.74rem' }}>
+                    Example: https://sof-backend.onrender.com/api (or leave as /api for local dev)
+                  </small>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                  <button
+                    type="button"
+                    onClick={handleResetServerUrl}
+                    className="btn-wizard-back"
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    Reset to Default
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowServerModal(false)}
+                    className="btn-wizard-back"
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn-wizard-next"
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    Save & Reconnect
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {actionMessage && (
           <div
