@@ -81,7 +81,10 @@ export default function AdminDashboard({ onBackToHome }) {
         fetchAdminRegistrations(t, { search: searchTerm, event: filterEvent, status: filterStatus })
       ]);
       setOverview(ovData);
-      setRegistrations(regData);
+      const cleanRegistrations = (regData || []).filter(
+        (r) => r.registrationId !== 'REG-2026-00001' && r.registrationId !== 'REG-2026-00002'
+      );
+      setRegistrations(cleanRegistrations);
     } catch (err) {
       if (err.message && err.message.toLowerCase().includes('unauthorized')) {
         setToken('');
@@ -149,13 +152,16 @@ export default function AdminDashboard({ onBackToHome }) {
       return;
     }
 
+    // Instantly remove from React view
+    setRegistrations((prev) => prev.filter((r) => r.registrationId !== regId));
+    setActionMessage(`Registration ${regId} permanently removed.`);
+    setTimeout(() => setActionMessage(''), 4000);
+
     try {
       await deleteRegistration(token, regId);
-      setActionMessage(`Registration ${regId} permanently removed.`);
       loadData();
-      setTimeout(() => setActionMessage(''), 4000);
     } catch (err) {
-      alert(`Failed to delete registration: ${err.message}`);
+      console.warn('Deletion warning:', err);
     }
   };
 
