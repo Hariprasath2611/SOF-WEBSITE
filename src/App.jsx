@@ -117,9 +117,6 @@ export default function App() {
         {/* Open Source Living Ecosystem */}
         <OpenSourceNetwork />
 
-        {/* GitHub-Style Contribution Heatmap */}
-        <ContributionGraph />
-
         {/* 10 Overall Event Coordinators Grid */}
         <OverallCoordinators />
 
