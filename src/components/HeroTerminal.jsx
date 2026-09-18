@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Terminal, Shield, CheckCircle2, Award, Users, Phone, ArrowUpRight, Calendar, MapPin, Sparkles } from 'lucide-react';
+import { Terminal, Shield, CheckCircle2, Award, Users, Phone, ArrowUpRight, Calendar, MapPin, Sparkles, Bookmark } from 'lucide-react';
 import { events } from '../data/events';
 
 export default function HeroTerminal() {
@@ -99,7 +99,7 @@ export default function HeroTerminal() {
               className={`showcase-tab ${activeTab === 'overview' ? 'active' : ''}`}
               onClick={() => setActiveTab('overview')}
             >
-              <Award size={13} />
+              <Bookmark size={13} />
               <span>Event Showcase</span>
             </button>
             <button
@@ -107,7 +107,7 @@ export default function HeroTerminal() {
               className={`showcase-tab ${activeTab === 'terminal' ? 'active' : ''}`}
               onClick={() => setActiveTab('terminal')}
             >
-              <Terminal size={13} />
+              <span className="cli-icon-prefix">&gt;_</span>
               <span>Terminal CLI</span>
             </button>
           </div>
