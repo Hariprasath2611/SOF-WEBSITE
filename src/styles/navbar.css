@@ -36,10 +36,10 @@
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  font-family: var(--font-mono);
+  font-family: var(--font-heading);
   font-weight: 700;
   font-size: 1.15rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   user-select: none;
 }
@@ -50,16 +50,16 @@
   justify-content: center;
   width: 38px;
   height: 38px;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
   border-radius: var(--radius-sm);
   color: var(--accent-green);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .brand-logo:hover .brand-icon {
-  transform: rotate(6deg) scale(1.05);
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
 }
 
 .brand-text {

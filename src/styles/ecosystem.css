@@ -1,6 +1,6 @@
 /* ==========================================================================
-   OPEN SOURCE ECOSYSTEM & CONTRIBUTION GRAPH STYLING
-   Visual Tree Network & GitHub Contribution Heatmap
+   OPEN SOURCE ECOSYSTEM & COMMUNITY ARCHITECTURE STYLING
+   Visual Tree Network & FOSS Pillars
    ========================================================================== */
 
 .ecosystem-section {
@@ -9,14 +9,14 @@
 
 /* Ecosystem Tree Layout */
 .ecosystem-container {
-  background: rgba(12, 16, 26, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   padding: 48px 32px;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(16px);
   margin-bottom: 56px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .ecosystem-root-node {
@@ -30,16 +30,15 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.15));
+  background: #090d15;
   border: 2px solid var(--accent-green);
   color: #fff;
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
   padding: 12px 28px;
   border-radius: var(--radius-full);
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
-  letter-spacing: 0.06em;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
 }
 
 /* Middle Branch Grid */
@@ -60,7 +59,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: all var(--transition-normal);
+  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
   position: relative;
 }
 
@@ -76,40 +75,40 @@
 
 .eco-branch-card:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: var(--accent-green);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(16, 185, 129, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 .eco-icon {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent-green);
   margin-bottom: 12px;
-  transition: transform var(--transition-fast);
+  transition: background-color var(--transition-fast);
 }
 
 .eco-branch-card:hover .eco-icon {
-  transform: scale(1.12);
+  background: rgba(16, 185, 129, 0.16);
 }
 
 .eco-title {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   margin-bottom: 4px;
-  font-family: var(--font-mono);
+  font-family: var(--font-heading);
 }
 
 .eco-desc {
-  font-size: 0.74rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 /* Freedom Root Destination */
@@ -123,24 +122,23 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-  border: 1px solid rgba(59, 130, 246, 0.4);
+  background: #090d15;
+  border: 1px solid rgba(56, 189, 248, 0.4);
   color: #38bdf8;
-  font-family: var(--font-mono);
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
   padding: 10px 24px;
   border-radius: var(--radius-full);
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.25);
 }
 
 /* GitHub Contribution Heatmap Section */
 .contribution-widget {
-  background: #080b11;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: 32px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .contrib-header {
@@ -155,8 +153,9 @@
 }
 
 .contrib-title-group h3 {
+  font-family: var(--font-heading);
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
   display: flex;
   align-items: center;
@@ -173,7 +172,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
 }
 
 .contrib-stat {
@@ -183,7 +182,7 @@
 
 .contrib-stat span {
   color: var(--accent-green);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* Grid Matrix */
@@ -204,12 +203,11 @@
   width: 13px;
   height: 13px;
   border-radius: 2px;
-  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  transition: background-color var(--transition-fast);
   cursor: pointer;
 }
 
 .contrib-cell:hover {
-  transform: scale(1.4);
   outline: 1px solid #fff;
   z-index: 10;
 }
@@ -227,7 +225,7 @@
   justify-content: flex-end;
   gap: 6px;
   margin-top: 14px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.72rem;
   color: var(--text-muted);
 }
