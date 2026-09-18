@@ -93,21 +93,19 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
             <table className="roster-table">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Department</th>
-                  <th>Year</th>
+                  <th style={{ width: '40px' }}>#</th>
+                  <th>Participant Name</th>
+                  <th>Role / Designation</th>
                 </tr>
               </thead>
               <tbody>
                 {(registration.members || [registration.teamLeader]).map((m, idx) => (
                   <tr key={idx}>
                     <td><span style={{ fontFamily: 'var(--font-mono)', color: '#94a3b8' }}>{idx + 1}</span></td>
-                    <td style={{ fontWeight: 600 }}>{m.name} {idx === 0 && isTeam ? '(Leader)' : ''}</td>
-                    <td>{m.email}</td>
-                    <td>{m.department}</td>
-                    <td>{m.year}</td>
+                    <td style={{ fontWeight: 600 }}>{m.name}</td>
+                    <td style={{ fontSize: '0.82rem', color: idx === 0 && isTeam ? '#10b981' : '#94a3b8' }}>
+                      {idx === 0 && isTeam ? 'Team Leader (Primary Contact)' : (isTeam ? `Team Member ${idx + 1}` : 'Participant')}
+                    </td>
                   </tr>
                 ))}
               </tbody>

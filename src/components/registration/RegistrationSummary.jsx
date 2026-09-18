@@ -112,27 +112,25 @@ export default function RegistrationSummary({
               <thead>
                 <tr>
                   <th>Role</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Department</th>
-                  <th>Year</th>
+                  <th>Participant Name</th>
+                  <th>Details</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><span className="card-track-number" style={{ fontSize: '0.68rem' }}>LEADER</span></td>
                   <td style={{ fontWeight: 600 }}>{formData.teamLeader?.name}</td>
-                  <td>{formData.teamLeader?.email}</td>
-                  <td>{formData.teamLeader?.department}</td>
-                  <td>{formData.teamLeader?.year}</td>
+                  <td style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                    {formData.teamLeader?.email} • {formData.teamLeader?.phone} ({formData.teamLeader?.department}, {formData.teamLeader?.year})
+                  </td>
                 </tr>
                 {(formData.members || []).map((m, idx) => (
                   <tr key={idx}>
                     <td><span style={{ color: '#94a3b8', fontSize: '0.74rem', fontFamily: 'var(--font-mono)' }}>MEMBER {idx + 2}</span></td>
                     <td style={{ fontWeight: 600 }}>{m.name}</td>
-                    <td>{m.email}</td>
-                    <td>{m.department}</td>
-                    <td>{m.year}</td>
+                    <td style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                      (Institution & contact tagged to Leader)
+                    </td>
                   </tr>
                 ))}
               </tbody>

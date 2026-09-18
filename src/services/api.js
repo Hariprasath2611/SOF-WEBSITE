@@ -527,29 +527,9 @@ export function exportRegistrationsToExcel(registrations, filename = 'SFD_2026_R
       'Leader Department': leader.department || '',
       'Leader Year': leader.year || '',
       'Member 2 Name': m2.name || '',
-      'Member 2 Email': m2.email || '',
-      'Member 2 Phone': m2.phone || '',
-      'Member 2 College': m2.college || '',
-      'Member 2 Dept': m2.department || '',
-      'Member 2 Year': m2.year || '',
       'Member 3 Name': m3.name || '',
-      'Member 3 Email': m3.email || '',
-      'Member 3 Phone': m3.phone || '',
-      'Member 3 College': m3.college || '',
-      'Member 3 Dept': m3.department || '',
-      'Member 3 Year': m3.year || '',
       'Member 4 Name': m4.name || '',
-      'Member 4 Email': m4.email || '',
-      'Member 4 Phone': m4.phone || '',
-      'Member 4 College': m4.college || '',
-      'Member 4 Dept': m4.department || '',
-      'Member 4 Year': m4.year || '',
-      'Member 5 Name': m5.name || '',
-      'Member 5 Email': m5.email || '',
-      'Member 5 Phone': m5.phone || '',
-      'Member 5 College': m5.college || '',
-      'Member 5 Dept': m5.department || '',
-      'Member 5 Year': m5.year || ''
+      'Member 5 Name': m5.name || ''
     };
   });
 

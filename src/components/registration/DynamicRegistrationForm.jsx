@@ -188,6 +188,25 @@ export default function DynamicRegistrationForm({
           )}
         </div>
 
+        <div className="form-group">
+          <label className="form-label">
+            <span>Mobile Phone Number <span className="required-asterisk">*</span></span>
+          </label>
+          <input
+            type="tel"
+            className={`form-input ${errors.leader_phone ? 'has-error' : ''}`}
+            placeholder="e.g. 9876543210"
+            maxLength={14}
+            value={formData.teamLeader?.phone || ''}
+            onChange={(e) => handleLeaderChange('phone', e.target.value)}
+          />
+          {errors.leader_phone && (
+            <span className="form-error-msg">
+              <AlertCircle size={13} /> {errors.leader_phone}
+            </span>
+          )}
+        </div>
+
         <div className="form-group full-width">
           <label className="form-label">
             <span>College / Institution <span className="required-asterisk">*</span></span>
@@ -248,13 +267,16 @@ export default function DynamicRegistrationForm({
         </div>
       </div>
 
-      {/* TEAM MEMBERS (MEMBER 2 to MEMBER N) */}
+      {/* TEAM MEMBERS (MEMBER 2 to MEMBER N) - ONLY NAME REQUIRED */}
       {eventConfig.isTeam && remainingMembersCount > 0 && (
         <div style={{ marginTop: '28px' }}>
           <div className="form-section-title">
             <Users size={18} color="#38bdf8" />
-            <span>Remaining Team Members ({remainingMembersCount} Required)</span>
+            <span>Team Members ({remainingMembersCount} Additional {remainingMembersCount === 1 ? 'Member' : 'Members'})</span>
           </div>
+          <p style={{ color: '#94a3b8', fontSize: '0.84rem', marginTop: '-12px', marginBottom: '18px' }}>
+            Only full names are required for team members. Contact, email, and college details are taken from the Team Leader.
+          </p>
 
           {Array.from({ length: remainingMembersCount }).map((_, idx) => {
             const memberNumber = idx + 2;
@@ -267,101 +289,25 @@ export default function DynamicRegistrationForm({
                   <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Participant #{memberNumber}</span>
                 </div>
 
-                <div className="form-grid-2col">
-                  <div className="form-group">
-                    <label className="form-label">
-                      <span>Full Name <span className="required-asterisk">*</span></span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-input ${errors[`member_${idx}_name`] ? 'has-error' : ''}`}
-                      placeholder={`Member ${memberNumber} full name`}
-                      value={currentMember.name || ''}
-                      onChange={(e) => handleMemberChange(idx, 'name', e.target.value)}
-                    />
-                    {errors[`member_${idx}_name`] && (
-                      <span className="form-error-msg">
-                        <AlertCircle size={13} /> {errors[`member_${idx}_name`]}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      <span>Email Address <span className="required-asterisk">*</span></span>
-                    </label>
-                    <input
-                      type="email"
-                      className={`form-input ${errors[`member_${idx}_email`] ? 'has-error' : ''}`}
-                      placeholder={`member${memberNumber}@college.edu`}
-                      value={currentMember.email || ''}
-                      onChange={(e) => handleMemberChange(idx, 'email', e.target.value)}
-                    />
-                    {errors[`member_${idx}_email`] && (
-                      <span className="form-error-msg">
-                        <AlertCircle size={13} /> {errors[`member_${idx}_email`]}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="form-group full-width">
-                    <label className="form-label">
-                      <span>College / Institution <span className="required-asterisk">*</span></span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-input ${errors[`member_${idx}_college`] ? 'has-error' : ''}`}
-                      placeholder="College / Institution name"
-                      value={currentMember.college || ''}
-                      onChange={(e) => handleMemberChange(idx, 'college', e.target.value)}
-                    />
-                    {errors[`member_${idx}_college`] && (
-                      <span className="form-error-msg">
-                        <AlertCircle size={13} /> {errors[`member_${idx}_college`]}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      <span>Department <span className="required-asterisk">*</span></span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-input ${errors[`member_${idx}_department`] ? 'has-error' : ''}`}
-                      placeholder="e.g. Information Technology"
-                      value={currentMember.department || ''}
-                      onChange={(e) => handleMemberChange(idx, 'department', e.target.value)}
-                    />
-                    {errors[`member_${idx}_department`] && (
-                      <span className="form-error-msg">
-                        <AlertCircle size={13} /> {errors[`member_${idx}_department`]}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      <span>Year of Study <span className="required-asterisk">*</span></span>
-                    </label>
-                    <select
-                      className={`form-select ${errors[`member_${idx}_year`] ? 'has-error' : ''}`}
-                      value={currentMember.year || ''}
-                      onChange={(e) => handleMemberChange(idx, 'year', e.target.value)}
-                    >
-                      <option value="">Select Year</option>
-                      {YEARS.map((y) => (
-                        <option key={y} value={y}>
-                          {y}
-                        </option>
-                      ))}
-                    </select>
-                    {errors[`member_${idx}_year`] && (
-                      <span className="form-error-msg">
-                        <AlertCircle size={13} /> {errors[`member_${idx}_year`]}
-                      </span>
-                    )}
-                  </div>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label">
+                    <span>Full Name <span className="required-asterisk">*</span></span>
+                    <span style={{ fontSize: '0.74rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
+                      As per College ID card
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`form-input ${errors[`member_${idx}_name`] ? 'has-error' : ''}`}
+                    placeholder={`e.g. Member ${memberNumber} full name`}
+                    value={currentMember.name || ''}
+                    onChange={(e) => handleMemberChange(idx, 'name', e.target.value)}
+                  />
+                  {errors[`member_${idx}_name`] && (
+                    <span className="form-error-msg">
+                      <AlertCircle size={13} /> {errors[`member_${idx}_name`]}
+                    </span>
+                  )}
                 </div>
               </div>
             );
