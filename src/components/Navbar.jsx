@@ -21,9 +21,7 @@ export default function Navbar() {
     { label: 'Ecosystem', href: '#ecosystem' },
     { label: 'Coordinators', href: '#coordinators' },
     { label: 'Schedule', href: '#schedule' },
-    { label: 'FAQ', href: '#faq' },
-    { label: 'Register', href: '#register' },
-    { label: 'Admin', href: '#admin' }
+    { label: 'FAQ', href: '#faq' }
   ];
 
   return (

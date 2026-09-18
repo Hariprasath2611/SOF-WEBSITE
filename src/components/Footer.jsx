@@ -57,7 +57,6 @@ export default function Footer() {
               <li><a href="#events" className="footer-link">Five Main Events</a></li>
               <li><a href="#register" className="footer-link" style={{ color: 'var(--accent-green)' }}>Registration Portal</a></li>
               <li><a href="#coordinators" className="footer-link">Meet Coordinators</a></li>
-              <li><a href="#admin" className="footer-link" style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Admin Console</a></li>
             </ul>
           </div>
 

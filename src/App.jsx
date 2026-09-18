@@ -25,24 +25,28 @@ export default function App() {
   const [preselectedTrack, setPreselectedTrack] = useState(null);
 
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#register')) {
-        const urlParams = new URLSearchParams(hash.split('?')[1] || '');
+    const handleRoute = () => {
+      const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
+      const hash = window.location.hash.toLowerCase();
+
+      if (path === '/admin' || hash.startsWith('#admin')) {
+        setCurrentView('admin');
+        window.scrollTo(0, 0);
+      } else if (path === '/register' || hash.startsWith('#register')) {
+        const searchSource = hash.includes('?') ? hash.split('?')[1] : window.location.search;
+        const urlParams = new URLSearchParams(searchSource);
         const track = urlParams.get('track');
         if (track) setPreselectedTrack(track);
         setCurrentView('register');
-        window.scrollTo(0, 0);
-      } else if (hash.startsWith('#admin')) {
-        setCurrentView('admin');
         window.scrollTo(0, 0);
       } else {
         setCurrentView('home');
       }
     };
 
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
+    handleRoute();
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('popstate', handleRoute);
 
     // Custom event for smooth programmatic registration triggering
     const handleCustomOpen = (e) => {
@@ -54,12 +58,16 @@ export default function App() {
     window.addEventListener('open-registration', handleCustomOpen);
 
     return () => {
-      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('hashchange', handleRoute);
+      window.removeEventListener('popstate', handleRoute);
       window.removeEventListener('open-registration', handleCustomOpen);
     };
   }, []);
 
   const navigateToHome = () => {
+    if (window.location.pathname !== '/') {
+      window.history.pushState({}, '', '/');
+    }
     window.location.hash = '';
     setCurrentView('home');
     setPreselectedTrack(null);
