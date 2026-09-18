@@ -1,7 +1,121 @@
 /* ==========================================================================
-   HUMAN-CRAFTED KEYFRAME ANIMATIONS & MICRO-INTERACTIONS
-   Calm, natural transitions and subtle atmospheric movements
+   KEYFRAME ANIMATIONS & DECORATIVE OPEN-SOURCE EFFECTS
    ========================================================================== */
+
+/* Git Branch Animated Line Drawing */
+@keyframes branchPulse {
+  0% {
+    stroke-dashoffset: 200;
+    opacity: 0.3;
+  }
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -200;
+    opacity: 0.3;
+  }
+}
+
+.anim-branch {
+  stroke-dasharray: 20 10;
+  animation: branchPulse 6s linear infinite;
+}
+
+/* Floating Code Particles */
+.code-particle-stream {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.32;
+}
+
+.floating-code-snippet {
+  position: absolute;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  color: #34d399;
+  user-select: none;
+  animation: floatCode 14s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes floatCode {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(-2deg);
+    opacity: 0;
+  }
+}
+
+/* Terminal Cursor Glow Pulse */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.75);
+  }
+}
+
+.pulse-glow {
+  animation: glowPulse 2.5s infinite;
+}
+
+/* Pulse Green for badges & dots */
+@keyframes pulseGreen {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 6px var(--accent-green);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 14px var(--accent-green);
+  }
+}
+
+.pulse-green {
+  animation: pulseGreen 2s infinite ease-in-out;
+}
+
+/* Repository Loading Scan Effect */
+.scan-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  animation: scanPass 4s infinite;
+  pointer-events: none;
+}
+
+@keyframes scanPass {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
+}
 
 /* Subtle Fade In */
 @keyframes fadeIn {
