@@ -20,7 +20,6 @@ export default function Navbar() {
     { label: 'Events', href: '#events' },
     { label: 'Ecosystem', href: '#ecosystem' },
     { label: 'Coordinators', href: '#coordinators' },
-    { label: 'Schedule', href: '#schedule' },
     { label: 'FAQ', href: '#faq' }
   ];
 
