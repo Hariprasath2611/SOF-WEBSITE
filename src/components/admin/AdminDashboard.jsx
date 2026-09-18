@@ -5,7 +5,7 @@ import {
   fetchAdminRegistrations,
   updateRegistrationStatus,
   getExportUrl,
-  exportRegistrationsToCSV
+  exportRegistrationsToExcel
 } from '../../services/api';
 import {
   Shield,
