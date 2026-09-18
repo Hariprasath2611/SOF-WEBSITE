@@ -85,7 +85,7 @@ export const overallCoordinators = [
   },
   {
     id: 7,
-    name: "John",
+    name: "John Danel Paul",
     role: "Overall Event Coordinator",
     designation: "Design & Creative Media Lead",
     department: "Dept of Computer Science & Engineering",
@@ -98,7 +98,7 @@ export const overallCoordinators = [
   },
   {
     id: 8,
-    name: "Karthick",
+    name: "Karthick J",
     role: "Overall Event Coordinator",
     designation: "Finance & Sponsorship Lead",
     department: "Dept of Computer Science & Engineering",
