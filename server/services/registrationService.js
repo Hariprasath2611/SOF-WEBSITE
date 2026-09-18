@@ -36,6 +36,25 @@ class AsyncLock {
   }
 }
 
+/**
+ * Category detection for Demo Stall 3-tier quota allocation:
+ * 1. jec_cse: Jaya Engineering College CSE (30 stalls)
+ * 2. jec_other: Other departments of Jaya Engineering College (10 stalls)
+ * 3. external: Any department from any other college (10 stalls)
+ */
+export function getDemoStallCategory(college = '', department = '') {
+  const isJaya = /(jaya|\bjec\b)/i.test((college || '').trim());
+  if (isJaya) {
+    const dept = (department || '').trim();
+    const isCse = /\b(cse|cs|computer\s*science)\b/i.test(dept);
+    if (isCse) {
+      return 'jec_cse';
+    }
+    return 'jec_other';
+  }
+  return 'external';
+}
+
 class RegistrationService {
   constructor() {
     this.lock = new AsyncLock();
@@ -84,25 +103,6 @@ class RegistrationService {
     const padded = String(this.counter).padStart(5, '0');
     return `REG-2026-${padded}`;
   }
-
-/**
- * Category detection for Demo Stall 3-tier quota allocation:
- * 1. jec_cse: Jaya Engineering College CSE (30 stalls)
- * 2. jec_other: Other departments of Jaya Engineering College (10 stalls)
- * 3. external: Any department from any other college (10 stalls)
- */
-export function getDemoStallCategory(college = '', department = '') {
-  const isJaya = /(jaya|\bjec\b)/i.test((college || '').trim());
-  if (isJaya) {
-    const dept = (department || '').trim();
-    const isCse = /\b(cse|cs|computer\s*science)\b/i.test(dept);
-    if (isCse) {
-      return 'jec_cse';
-    }
-    return 'jec_other';
-  }
-  return 'external';
-}
 
   /**
    * Calculates real-time slot statistics for all events
