@@ -490,3 +490,84 @@ export function exportRegistrationsToCSV(registrations, filename = 'SFD2026_Regi
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+/**
+ * Direct Browser Microsoft Excel (.xlsx) Download
+ * Uses SheetJS to generate a native .xlsx spreadsheet with formatted columns
+ */
+export function exportRegistrationsToExcel(registrations, filename = 'SFD_2026_Registrations.xlsx') {
+  if (!registrations || registrations.length === 0) {
+    alert('No registrations to export.');
+    return;
+  }
+
+  const data = registrations.map((r, index) => {
+    const leader = r.teamLeader || {};
+    const mems = r.members || [];
+    const m2 = mems[1] || {};
+    const m3 = mems[2] || {};
+    const m4 = mems[3] || {};
+    const m5 = mems[4] || {};
+
+    return {
+      'S.No': index + 1,
+      'Registration ID': r.registrationId,
+      'Timestamp': r.timestamp,
+      'Event Track': r.eventName,
+      'Status': r.status,
+      'Fee (INR)': r.paymentAmount || 0,
+      'UPI UTR / Ref No': r.paymentUtr || 'N/A',
+      'Payer Name': r.payerName || 'N/A',
+      'Team Name': r.teamName || 'N/A',
+      'Total Members': mems.length || 1,
+      'Leader Name': leader.name || '',
+      'Leader Email': leader.email || '',
+      'Leader Phone': leader.phone || '',
+      'Leader College': leader.college || '',
+      'Leader Department': leader.department || '',
+      'Leader Year': leader.year || '',
+      'Member 2 Name': m2.name || '',
+      'Member 2 Email': m2.email || '',
+      'Member 2 Phone': m2.phone || '',
+      'Member 2 College': m2.college || '',
+      'Member 2 Dept': m2.department || '',
+      'Member 2 Year': m2.year || '',
+      'Member 3 Name': m3.name || '',
+      'Member 3 Email': m3.email || '',
+      'Member 3 Phone': m3.phone || '',
+      'Member 3 College': m3.college || '',
+      'Member 3 Dept': m3.department || '',
+      'Member 3 Year': m3.year || '',
+      'Member 4 Name': m4.name || '',
+      'Member 4 Email': m4.email || '',
+      'Member 4 Phone': m4.phone || '',
+      'Member 4 College': m4.college || '',
+      'Member 4 Dept': m4.department || '',
+      'Member 4 Year': m4.year || '',
+      'Member 5 Name': m5.name || '',
+      'Member 5 Email': m5.email || '',
+      'Member 5 Phone': m5.phone || '',
+      'Member 5 College': m5.college || '',
+      'Member 5 Dept': m5.department || '',
+      'Member 5 Year': m5.year || ''
+    };
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  // Auto-fit column widths based on cell content
+  const colKeys = Object.keys(data[0] || {});
+  worksheet['!cols'] = colKeys.map((key) => {
+    const maxLen = Math.max(
+      key.length,
+      ...data.map((row) => String(row[key] || '').length)
+    );
+    return { wch: Math.min(Math.max(maxLen + 3, 10), 45) };
+  });
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations');
+
+  XLSX.writeFile(workbook, filename);
+}
+
