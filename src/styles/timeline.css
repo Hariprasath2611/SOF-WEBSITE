@@ -159,3 +159,25 @@
   color: var(--text-secondary);
   line-height: 1.6;
 }
+
+@media (max-width: 520px) {
+  .timeline-pipeline::before {
+    left: 14px;
+  }
+  .timeline-dot-marker {
+    left: 2px;
+    width: 26px;
+    height: 26px;
+  }
+  .timeline-card-content {
+    margin-left: 38px;
+    width: calc(100% - 38px);
+    padding: 16px 14px;
+  }
+  .timeline-title {
+    font-size: 1.05rem;
+  }
+  .timeline-desc {
+    font-size: 0.84rem;
+  }
+}

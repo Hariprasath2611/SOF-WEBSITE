@@ -23,12 +23,43 @@
 @media (max-width: 840px) {
   .coordinators-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 560px) {
+  .coordinators-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .coord-card {
+    padding: 14px 10px;
+  }
+  .coord-avatar-frame {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 12px;
+  }
+  .coord-name {
+    font-size: 0.94rem;
+  }
+  .coord-designation {
+    font-size: 0.75rem;
+  }
+  .coord-dept {
+    font-size: 0.7rem;
+  }
+  .coord-call-btn {
+    padding: 8px 10px;
+    font-size: 0.76rem;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 360px) {
   .coordinators-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 

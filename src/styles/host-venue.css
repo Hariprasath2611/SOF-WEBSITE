@@ -189,3 +189,20 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 520px) {
+  .host-card {
+    padding: 20px 14px;
+    gap: 22px;
+  }
+  .host-feature-item {
+    padding: 12px 14px;
+  }
+  .host-location-widget {
+    padding: 18px 14px;
+  }
+  .map-btn-wrapper .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

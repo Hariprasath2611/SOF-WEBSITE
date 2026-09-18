@@ -222,3 +222,26 @@
     display: flex;
   }
 }
+
+@media (max-width: 480px) {
+  .nav-btn-register {
+    display: none;
+  }
+  .brand-logo {
+    gap: 8px;
+  }
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .brand-title {
+    font-size: 1.05rem;
+  }
+  .mobile-drawer {
+    padding: 18px 16px;
+  }
+  .mobile-nav-link {
+    font-size: 1.05rem;
+    padding: 12px 14px;
+  }
+}

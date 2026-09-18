@@ -278,8 +278,46 @@
 @media (max-width: 640px) {
   .events-grid {
     grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .event-card-body {
+    padding: 18px 16px;
+  }
+  .event-repo-bar {
+    padding: 8px 14px;
   }
   .event-actions {
     grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 440px) {
+  .event-card-body {
+    padding: 16px 14px;
+  }
+  .event-title-group h3 {
+    font-size: 1.15rem;
+  }
+  .event-meta-specs {
+    gap: 6px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+  }
+  .spec-chip {
+    padding: 3px 8px;
+    font-size: 0.72rem;
+  }
+  .event-coordinator-box {
+    padding: 10px 12px;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .coordinator-avatar {
+    width: 38px;
+    height: 38px;
+  }
+  .coordinator-name {
+    font-size: 0.88rem;
   }
 }

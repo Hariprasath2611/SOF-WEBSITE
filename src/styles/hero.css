@@ -64,9 +64,9 @@
 }
 
 .hero-title {
-  font-size: clamp(2.6rem, 5vw, 4.3rem);
+  font-size: clamp(2.1rem, 6.5vw, 4.3rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.12;
   letter-spacing: -0.035em;
   margin-bottom: 16px;
   text-transform: none;
@@ -82,7 +82,7 @@
 
 .hero-headline {
   font-family: var(--font-body);
-  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  font-size: clamp(0.95rem, 1.8vw, 1.3rem);
   font-weight: 600;
   color: #38bdf8;
   letter-spacing: -0.01em;
@@ -93,7 +93,7 @@
 }
 
 .hero-description {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #94a3b8;
   line-height: 1.65;
   max-width: 580px;
@@ -153,9 +153,33 @@
 }
 
 @media (max-width: 640px) {
+  .hero-section {
+    padding-top: calc(var(--header-height) + 16px);
+    padding-bottom: 40px;
+  }
+  .hero-description {
+    font-size: 0.95rem;
+  }
+  .hero-host-info {
+    padding: 12px 14px;
+    margin-bottom: 24px;
+    width: 100%;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .hero-cta-group .btn {
+    width: 100%;
+    justify-content: center;
+  }
   .hero-stats-row {
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding-top: 20px;
   }
 }
 

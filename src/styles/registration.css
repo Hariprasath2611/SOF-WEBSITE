@@ -826,6 +826,9 @@
 
 /* Responsive Breakpoints */
 @media (max-width: 768px) {
+  .reg-page-container {
+    padding: 28px 16px 60px;
+  }
   .reg-card-panel {
     padding: 24px 18px;
   }
@@ -845,5 +848,98 @@
   }
   .reg-portal-title {
     font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .reg-page-container {
+    padding: 20px 12px 50px;
+  }
+  .reg-card-panel {
+    padding: 20px 14px;
+    border-radius: 12px;
+  }
+  .reg-portal-title {
+    font-size: 1.45rem;
+  }
+  .reg-portal-subtitle {
+    font-size: 0.88rem;
+  }
+  .reg-stepper {
+    margin: 20px 0 28px;
+    justify-content: space-around;
+  }
+  .reg-step-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  .reg-step-label {
+    display: none;
+  }
+  .reg-step-item.active .reg-step-label {
+    display: block;
+    position: absolute;
+    top: 38px;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    color: var(--accent-green, #10b981);
+    font-weight: 700;
+  }
+  .event-selection-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .event-select-card {
+    padding: 16px 14px;
+  }
+  .reg-actions-row {
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+  }
+  .btn-wizard-back,
+  .btn-wizard-next {
+    width: 100%;
+    justify-content: center;
+  }
+  .payment-card-box {
+    padding: 16px 14px;
+  }
+  .payment-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .payment-amount-badge {
+    width: 100%;
+    text-align: left;
+  }
+  .payment-grid-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .confirmation-card {
+    padding: 20px 14px;
+  }
+  .reg-id-display {
+    font-size: 1.15rem;
+    padding: 6px 14px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .conf-specs-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+  .conf-team-roster {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .roster-table {
+    min-width: 380px;
   }
 }
