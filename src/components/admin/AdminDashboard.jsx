@@ -7,7 +7,8 @@ import {
   getExportUrl,
   exportRegistrationsToExcel,
   getApiBase,
-  setCustomBackendUrl
+  setCustomBackendUrl,
+  getDemoStallCategory
 } from '../../services/api';
 import {
   Shield,
@@ -542,7 +543,23 @@ export default function AdminDashboard({ onBackToHome }) {
                                 <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: '#94a3b8' }}>
                                   {r.timestamp}
                                 </td>
-                                <td style={{ fontWeight: 600 }}>{r.eventName}</td>
+                                <td style={{ fontWeight: 600 }}>
+                                  <div>{r.eventName}</div>
+                                  {r.eventKey === 'demo-stall' && (
+                                    <div style={{ marginTop: '4px' }}>
+                                      {(() => {
+                                        const cat = r.demoStallCategory || getDemoStallCategory(leader.college, leader.department);
+                                        if (cat === 'jec_cse') {
+                                          return <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.15)', color: '#6ee7b7', border: '1px solid rgba(16, 185, 129, 0.3)' }}>JEC CSE (Quota: 30)</span>;
+                                        } else if (cat === 'jec_other') {
+                                          return <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(56, 189, 248, 0.15)', color: '#7dd3fc', border: '1px solid rgba(56, 189, 248, 0.3)' }}>JEC Other (Quota: 10)</span>;
+                                        } else {
+                                          return <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(168, 85, 247, 0.15)', color: '#c084fc', border: '1px solid rgba(168, 85, 247, 0.3)' }}>External (Quota: 10)</span>;
+                                        }
+                                      })()}
+                                    </div>
+                                  )}
+                                </td>
                                 <td>
                                   <div style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
                                     ₹{r.paymentAmount || 0}
@@ -639,6 +656,71 @@ export default function AdminDashboard({ onBackToHome }) {
                             {ev.remainingSlots} Left
                           </span>
                         </div>
+
+                        {ev.key === 'demo-stall' && (
+                          <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                              Quota Allocation Breakdown (50 Total)
+                            </div>
+
+                            {/* 1. Jaya CSE (30) */}
+                            <div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
+                                <span style={{ color: '#6ee7b7' }}>Jaya CSE (Max 30)</span>
+                                <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
+                                  {ev.quotasStats ? `${ev.quotasStats.jecCse.registered} / 30 (${ev.quotasStats.jecCse.remaining} left)` : '30 slots'}
+                                </span>
+                              </div>
+                              <div className="event-slot-bar-bg" style={{ height: '4px' }}>
+                                <div
+                                  className="event-slot-bar-fill"
+                                  style={{
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / 30) * 100)) : 0}%`,
+                                    background: '#10b981'
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+                            {/* 2. Jaya Other Depts (10) */}
+                            <div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
+                                <span style={{ color: '#7dd3fc' }}>Jaya Other Depts (Max 10)</span>
+                                <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
+                                  {ev.quotasStats ? `${ev.quotasStats.jecOther.registered} / 10 (${ev.quotasStats.jecOther.remaining} left)` : '10 slots'}
+                                </span>
+                              </div>
+                              <div className="event-slot-bar-bg" style={{ height: '4px' }}>
+                                <div
+                                  className="event-slot-bar-fill"
+                                  style={{
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecOther.registered / 10) * 100)) : 0}%`,
+                                    background: '#38bdf8'
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+                            {/* 3. External Colleges (10) */}
+                            <div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
+                                <span style={{ color: '#c084fc' }}>External Colleges (Max 10)</span>
+                                <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
+                                  {ev.quotasStats ? `${ev.quotasStats.external.registered} / 10 (${ev.quotasStats.external.remaining} left)` : '10 slots'}
+                                </span>
+                              </div>
+                              <div className="event-slot-bar-bg" style={{ height: '4px' }}>
+                                <div
+                                  className="event-slot-bar-fill"
+                                  style={{
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.external.registered / 10) * 100)) : 0}%`,
+                                    background: '#a855f7'
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}

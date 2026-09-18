@@ -85,23 +85,74 @@ class RegistrationService {
     return `REG-2026-${padded}`;
   }
 
+/**
+ * Category detection for Demo Stall 3-tier quota allocation:
+ * 1. jec_cse: Jaya Engineering College CSE (30 stalls)
+ * 2. jec_other: Other departments of Jaya Engineering College (10 stalls)
+ * 3. external: Any department from any other college (10 stalls)
+ */
+export function getDemoStallCategory(college = '', department = '') {
+  const isJaya = /(jaya|\bjec\b)/i.test((college || '').trim());
+  if (isJaya) {
+    const dept = (department || '').trim();
+    const isCse = /\b(cse|cs|computer\s*science)\b/i.test(dept);
+    if (isCse) {
+      return 'jec_cse';
+    }
+    return 'jec_other';
+  }
+  return 'external';
+}
+
   /**
    * Calculates real-time slot statistics for all events
    */
   getEventsWithSlots() {
     return EVENTS.map((ev) => {
       // Active registrations (CONFIRMED) count towards slot capacity
-      const activeCount = this.registrations.filter(
+      const activeRegistrations = this.registrations.filter(
         (r) => r.eventKey === ev.key && r.status !== 'CANCELLED'
-      ).length;
-
+      );
+      const activeCount = activeRegistrations.length;
       const remainingSlots = Math.max(0, ev.maxSlots - activeCount);
       const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
+
+      let quotasStats = null;
+      if (ev.key === 'demo-stall' && ev.quotas) {
+        const jecCseCount = activeRegistrations.filter(
+          (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
+        ).length;
+        const jecOtherCount = activeRegistrations.filter(
+          (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_other'
+        ).length;
+        const externalCount = activeRegistrations.filter(
+          (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'external'
+        ).length;
+
+        quotasStats = {
+          jecCse: {
+            quota: ev.quotas.jecCse,
+            registered: jecCseCount,
+            remaining: Math.max(0, ev.quotas.jecCse - jecCseCount)
+          },
+          jecOther: {
+            quota: ev.quotas.jecOther,
+            registered: jecOtherCount,
+            remaining: Math.max(0, ev.quotas.jecOther - jecOtherCount)
+          },
+          external: {
+            quota: ev.quotas.external,
+            registered: externalCount,
+            remaining: Math.max(0, ev.quotas.external - externalCount)
+          }
+        };
+      }
 
       return {
         ...ev,
         registeredCount: activeCount,
         remainingSlots,
+        quotasStats,
         status
       };
     });
@@ -123,15 +174,53 @@ class RegistrationService {
 
     try {
       // 1. Check current slots under lock
-      const activeCount = this.registrations.filter(
+      const activeRegistrations = this.registrations.filter(
         (r) => r.eventKey === eventKey && r.status !== 'CANCELLED'
-      ).length;
+      );
+      const activeCount = activeRegistrations.length;
 
       if (activeCount >= eventConfig.maxSlots) {
-        const err = new Error(`Sorry, this event just became full. Please select another event.`);
+        const err = new Error(`Sorry, this event just became full (${eventConfig.maxSlots}/${eventConfig.maxSlots} slots). Please select another event.`);
         err.statusCode = 409;
         err.code = 'EVENT_FULL';
         throw err;
+      }
+
+      // Check Demo Stall 3-tier quota criteria
+      let demoStallCategory = null;
+      if (eventKey === 'demo-stall' && eventConfig.quotas) {
+        demoStallCategory = getDemoStallCategory(teamLeader.college, teamLeader.department);
+        if (demoStallCategory === 'jec_cse') {
+          const jecCseCount = activeRegistrations.filter(
+            (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
+          ).length;
+          if (jecCseCount >= eventConfig.quotas.jecCse) {
+            const err = new Error(`Demo Stall slots for Jaya Engineering College CSE (${eventConfig.quotas.jecCse}/${eventConfig.quotas.jecCse}) are completely filled.`);
+            err.statusCode = 409;
+            err.code = 'QUOTA_FULL';
+            throw err;
+          }
+        } else if (demoStallCategory === 'jec_other') {
+          const jecOtherCount = activeRegistrations.filter(
+            (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_other'
+          ).length;
+          if (jecOtherCount >= eventConfig.quotas.jecOther) {
+            const err = new Error(`Demo Stall slots for Other Jaya Engineering College Departments (${eventConfig.quotas.jecOther}/${eventConfig.quotas.jecOther}) are completely filled.`);
+            err.statusCode = 409;
+            err.code = 'QUOTA_FULL';
+            throw err;
+          }
+        } else {
+          const externalCount = activeRegistrations.filter(
+            (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'external'
+          ).length;
+          if (externalCount >= eventConfig.quotas.external) {
+            const err = new Error(`Demo Stall slots for External Colleges (${eventConfig.quotas.external}/${eventConfig.quotas.external}) are completely filled.`);
+            err.statusCode = 409;
+            err.code = 'QUOTA_FULL';
+            throw err;
+          }
+        }
       }
 
       // 2. Duplicate check: Team Leader Email per event (and all members' emails)
@@ -193,6 +282,7 @@ class RegistrationService {
         paymentUtr: formData.paymentUtr || 'N/A',
         payerName: formData.payerName || '',
         paymentStatus: formData.paymentStatus || 'SUBMITTED',
+        demoStallCategory: demoStallCategory || (eventKey === 'demo-stall' ? getDemoStallCategory(teamLeader.college, teamLeader.department) : null),
         status: 'CONFIRMED'
       };
 
