@@ -9,7 +9,7 @@ const router = express.Router();
  * Checks Bearer token or x-admin-key header against ADMIN_PASSWORD env var
  */
 function requireAdmin(req, res, next) {
-  const adminPassword = process.env.ADMIN_PASSWORD || 'sfd2026admin';
+  const adminPassword = process.env.ADMIN_PASSWORD || '12345';
   const authHeader = req.headers['authorization'] || '';
   const keyHeader = req.headers['x-admin-key'] || '';
 
@@ -171,7 +171,7 @@ router.get('/registrations/:id', (req, res) => {
  */
 router.post('/admin/login', (req, res) => {
   const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'sfd2026admin';
+  const adminPassword = process.env.ADMIN_PASSWORD || '12345';
 
   if (password === adminPassword) {
     return res.json({
