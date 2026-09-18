@@ -132,21 +132,48 @@ export default function EventModal({ event, onClose }) {
 
           {/* Dedicated Event Coordinator Callout */}
           <div className="modal-coordinator-callout">
-            <div>
-              <span
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div
+                className="coordinator-avatar"
                 style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  color: 'var(--text-muted)',
-                  textTransform: 'uppercase'
+                  borderColor: event.color,
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
-                Track Coordinator
-              </span>
-              <h4 style={{ fontSize: '1.05rem', color: '#fff' }}>{event.coordinator.name}</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--accent-green)', fontFamily: 'var(--font-mono)' }}>
-                {event.coordinator.phone}
-              </p>
+                {event.coordinator.photo ? (
+                  <img
+                    src={event.coordinator.photo}
+                    alt={event.coordinator.name}
+                    className="coord-avatar-img"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>EC{event.number}</span>
+                )}
+              </div>
+              <div>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.72rem',
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  Track Coordinator
+                </span>
+                <h4 style={{ fontSize: '1.05rem', color: '#fff', margin: '2px 0 0 0' }}>{event.coordinator.name}</h4>
+                <p style={{ fontSize: '0.85rem', color: 'var(--accent-green)', fontFamily: 'var(--font-mono)', margin: '2px 0 0 0' }}>
+                  {event.coordinator.phone}
+                </p>
+              </div>
             </div>
 
             <a href={`tel:${event.coordinator.phone}`} className="btn btn-phone">
