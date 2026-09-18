@@ -36,11 +36,11 @@ export const events = [
       "Evaluation is based on innovation, open-source relevance, technical architecture, and demonstration clarity."
     ],
     coordinator: {
-      name: "Coordinator Name",
+      name: "D Hariprasath",
       role: "Demo Stall Coordinator",
       department: "Dept of CSE",
-      photo: null,
-      phone: "+919876543211",
+      photo: "/coordinators/d-hariprasath.jpg",
+      phone: "+919790851329",
       email: "demostall.sfd2026@gmail.com"
     }
   },
