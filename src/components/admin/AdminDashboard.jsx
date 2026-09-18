@@ -8,7 +8,8 @@ import {
   exportRegistrationsToExcel,
   getApiBase,
   setCustomBackendUrl,
-  getDemoStallCategory
+  getDemoStallCategory,
+  deleteRegistration
 } from '../../services/api';
 import {
   Shield,
@@ -26,7 +27,8 @@ import {
   Terminal,
   FileSpreadsheet,
   Server,
-  Globe
+  Globe,
+  Trash2
 } from 'lucide-react';
 import { EVENT_TRACKS } from '../../config/events';
 
@@ -139,6 +141,21 @@ export default function AdminDashboard({ onBackToHome }) {
       setTimeout(() => setActionMessage(''), 4000);
     } catch (err) {
       alert(`Failed to update status: ${err.message}`);
+    }
+  };
+
+  const handleDeleteRegistration = async (regId) => {
+    if (!window.confirm(`Are you sure you want to permanently delete registration ${regId}?\nThis cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await deleteRegistration(token, regId);
+      setActionMessage(`Registration ${regId} permanently removed.`);
+      loadData();
+      setTimeout(() => setActionMessage(''), 4000);
+    } catch (err) {
+      alert(`Failed to delete registration: ${err.message}`);
     }
   };
 
@@ -595,14 +612,37 @@ export default function AdminDashboard({ onBackToHome }) {
                                   </span>
                                 </td>
                                 <td>
-                                  <button
-                                    type="button"
-                                    className="btn-status-toggle"
-                                    onClick={() => handleStatusToggle(r.registrationId, r.status)}
-                                    title={isConfirmed ? 'Cancel registration (frees up 1 slot)' : 'Re-confirm registration'}
-                                  >
-                                    {isConfirmed ? 'Cancel Slot' : 'Re-confirm'}
-                                  </button>
+                                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                    <button
+                                      type="button"
+                                      className="btn-status-toggle"
+                                      onClick={() => handleStatusToggle(r.registrationId, r.status)}
+                                      title={isConfirmed ? 'Cancel registration (frees up 1 slot)' : 'Re-confirm registration'}
+                                    >
+                                      {isConfirmed ? 'Cancel' : 'Re-confirm'}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDeleteRegistration(r.registrationId)}
+                                      style={{
+                                        background: 'rgba(239, 68, 68, 0.12)',
+                                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                                        color: '#f87171',
+                                        borderRadius: '6px',
+                                        padding: '5px 8px',
+                                        cursor: 'pointer',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        fontSize: '0.74rem',
+                                        fontWeight: 600
+                                      }}
+                                      title={`Permanently delete ${r.registrationId}`}
+                                    >
+                                      <Trash2 size={12} />
+                                      <span>Delete</span>
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             );

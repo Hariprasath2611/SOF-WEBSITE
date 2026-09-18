@@ -37,7 +37,18 @@ const ADMIN_PASSWORD_FALLBACK = '12345';
 function getLocalRegistrations() {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    let list = JSON.parse(raw);
+    if (Array.isArray(list)) {
+      const filtered = list.filter(
+        (r) => r.registrationId !== 'REG-2026-00001' && r.registrationId !== 'REG-2026-00002'
+      );
+      if (filtered.length !== list.length) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
+      }
+      return filtered;
+    }
+    return [];
   } catch {
     return [];
   }
@@ -470,6 +481,35 @@ export async function updateRegistrationStatus(token, id, status) {
   target.statusUpdatedAt = new Date().toISOString();
   saveLocalRegistrations(regs);
   return target;
+}
+
+export async function deleteRegistration(token, id) {
+  try {
+    const res = await fetch(`${getApiBase()}/admin/registrations/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if (res.ok) {
+      const json = await res.json();
+      const regs = getLocalRegistrations().filter((r) => r.registrationId !== id);
+      saveLocalRegistrations(regs);
+      return json.registration || { registrationId: id };
+    }
+    if (res.status === 401) throw new Error('Unauthorized');
+  } catch (err) {
+    if (err.message === 'Unauthorized') throw err;
+  }
+
+  if (token !== ADMIN_PASSWORD_FALLBACK) {
+    throw new Error('Unauthorized');
+  }
+
+  const regs = getLocalRegistrations();
+  const filtered = regs.filter((r) => r.registrationId !== id);
+  saveLocalRegistrations(filtered);
+  return { registrationId: id };
 }
 
 export function getExportUrl(token, { event = '', status = '' } = {}) {

@@ -1,53 +1,5 @@
 {
-  "counter": 1,
-  "lastUpdated": "2026-09-18T08:37:15.271Z",
-  "registrations": [
-    {
-      "registrationId": "REG-2026-00001",
-      "timestamp": "18/9/2026, 2:06:06 pm",
-      "isoTimestamp": "2026-09-18T08:36:06.547Z",
-      "eventKey": "demo-stall",
-      "eventName": "Demo Stall – Team of 3",
-      "teamSize": 3,
-      "teamName": "Vynora",
-      "teamLeader": {
-        "name": "Hariprasath D",
-        "email": "hariprasathd26112006@gmail.com",
-        "college": "Jaya Engineering College",
-        "department": "CSE",
-        "year": "3rd Year"
-      },
-      "members": [
-        {
-          "name": "Hariprasath D",
-          "email": "hariprasathd26112006@gmail.com",
-          "college": "Jaya Engineering College",
-          "department": "CSE",
-          "year": "3rd Year",
-          "isLeader": true,
-          "memberIndex": 1
-        },
-        {
-          "name": "suma",
-          "email": "jnjfnef@gmail.com",
-          "college": "JEC",
-          "department": "CSE",
-          "year": "3rd Year",
-          "isLeader": false,
-          "memberIndex": 2
-        },
-        {
-          "name": "ha ",
-          "email": "hfhei@gmail.com",
-          "college": "com",
-          "department": "cse",
-          "year": "3rd Year",
-          "isLeader": false,
-          "memberIndex": 3
-        }
-      ],
-      "status": "CANCELLED",
-      "statusUpdatedAt": "2026-09-18T08:37:15.271Z"
-    }
-  ]
+  "counter": 0,
+  "lastUpdated": "2026-09-18T14:55:00.000Z",
+  "registrations": []
 }

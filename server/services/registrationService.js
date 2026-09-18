@@ -391,6 +391,39 @@ class RegistrationService {
   }
 
   /**
+   * Admin: Permanently delete a registration
+   */
+  async deleteRegistration(registrationId) {
+    const idx = this.registrations.findIndex((r) => r.registrationId === registrationId);
+    if (idx === -1) {
+      throw new Error(`Registration with ID "${registrationId}" not found.`);
+    }
+
+    const removed = this.registrations.splice(idx, 1)[0];
+    this.saveToDisk();
+
+    // Async sync to Google Sheets if configured
+    (async () => {
+      try {
+        await googleSheetsService.updateRegistrationStatus(registrationId, 'DELETED');
+        const statsMap = {};
+        this.getEventsWithSlots().forEach((e) => {
+          statsMap[e.key] = {
+            registeredCount: e.registeredCount,
+            remainingSlots: e.remainingSlots,
+            status: e.status
+          };
+        });
+        await googleSheetsService.updateEventSettings(statsMap);
+      } catch (err) {
+        console.error('Google Sheets delete sync error:', err.message);
+      }
+    })();
+
+    return removed;
+  }
+
+  /**
    * Admin: Overview KPI Metrics
    */
   getAdminOverview() {

@@ -231,6 +231,23 @@ router.patch('/admin/registrations/:id/status', requireAdmin, async (req, res) =
 });
 
 /**
+ * DELETE /api/admin/registrations/:id
+ * Permanently deletes a registration and releases capacity
+ */
+router.delete('/admin/registrations/:id', requireAdmin, async (req, res) => {
+  try {
+    const deleted = await registrationService.deleteRegistration(req.params.id);
+    res.json({
+      success: true,
+      message: `Registration ${req.params.id} permanently deleted.`,
+      registration: deleted
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+/**
  * GET /api/admin/export
  * Export registrations as CSV
  */
