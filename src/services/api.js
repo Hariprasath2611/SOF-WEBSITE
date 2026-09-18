@@ -5,6 +5,7 @@
  */
 
 import { EVENT_TRACKS, getTrackConfig } from '../config/events';
+import * as XLSX from 'xlsx';
 
 const API_BASE = '/api';
 const LOCAL_STORAGE_KEY = 'sfd_registrations_v1';
