@@ -177,8 +177,8 @@ export default function EventModal({ event, onClose }) {
             </div>
 
             <a href={`tel:${event.coordinator.phone}`} className="btn btn-phone">
-              <Phone size={14} />
-              <span>☎ Call Coordinator</span>
+              <Phone size={14} style={{ flexShrink: 0 }} />
+              <span>Call Coordinator</span>
             </a>
           </div>
         </div>
