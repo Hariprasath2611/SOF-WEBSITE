@@ -524,20 +524,27 @@ export default function AdminDashboard({ onBackToHome }) {
 
                 {/* Data Table */}
                 <div className="admin-table-panel">
+                  <div className="table-header-meta">
+                    <span>Showing <strong>{registrations.length}</strong> record{registrations.length !== 1 ? 's' : ''}</span>
+                    <span className="scroll-indicator-hint">
+                      <span>⇄ Scroll horizontally to view all columns</span>
+                    </span>
+                  </div>
+
                   <div className="admin-table-scroll">
                     <table className="admin-data-table">
                       <thead>
                         <tr>
-                          <th>Reg ID</th>
-                          <th>Timestamp</th>
-                          <th>Event</th>
-                          <th>Fee & UTR</th>
-                          <th>Team / Participant</th>
-                          <th>Leader Name & Email</th>
-                          <th>College & Dept</th>
-                          <th>Members</th>
-                          <th>Status</th>
-                          <th>Action</th>
+                          <th className="col-id">Reg ID</th>
+                          <th className="col-time">Timestamp</th>
+                          <th className="col-event">Event</th>
+                          <th className="col-fee">Fee & UTR</th>
+                          <th className="col-team">Team / Participant</th>
+                          <th className="col-leader">Leader Name & Email</th>
+                          <th className="col-college">College & Dept</th>
+                          <th className="col-members">Members</th>
+                          <th className="col-status">Status</th>
+                          <th className="col-action">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -554,13 +561,13 @@ export default function AdminDashboard({ onBackToHome }) {
 
                             return (
                               <tr key={r.registrationId}>
-                                <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#38bdf8' }}>
+                                <td className="col-id" style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#38bdf8' }}>
                                   {r.registrationId}
                                 </td>
-                                <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: '#94a3b8' }}>
+                                <td className="col-time">
                                   {r.timestamp}
                                 </td>
-                                <td style={{ fontWeight: 600 }}>
+                                <td className="col-event" style={{ fontWeight: 600 }}>
                                   <div>{r.eventName}</div>
                                   {r.eventKey === 'demo-stall' && (
                                     <div style={{ marginTop: '4px' }}>
@@ -577,7 +584,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                     </div>
                                   )}
                                 </td>
-                                <td>
+                                <td className="col-fee">
                                   <div style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
                                     ₹{r.paymentAmount || 0}
                                   </div>
@@ -590,29 +597,29 @@ export default function AdminDashboard({ onBackToHome }) {
                                     </div>
                                   )}
                                 </td>
-                                <td style={{ color: r.teamName && r.teamName !== 'N/A' ? '#38bdf8' : '#cbd5e1' }}>
+                                <td className="col-team" style={{ color: r.teamName && r.teamName !== 'N/A' ? '#38bdf8' : '#cbd5e1' }}>
                                   {r.teamName && r.teamName !== 'N/A' ? r.teamName : (leader.name || 'N/A')}
                                 </td>
-                                <td>
+                                <td className="col-leader">
                                   <div><strong>{leader.name || 'N/A'}</strong></div>
                                   <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{leader.email || ''}</div>
                                 </td>
-                                <td>
+                                <td className="col-college">
                                   <div>{leader.college || 'N/A'}</div>
                                   <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
                                     {leader.department || ''} {leader.year ? `(${leader.year})` : ''}
                                   </div>
                                 </td>
-                                <td style={{ fontFamily: 'var(--font-mono)', textAlign: 'center' }}>
+                                <td className="col-members" style={{ fontFamily: 'var(--font-mono)', textAlign: 'center' }}>
                                   {r.members ? r.members.length : 1}
                                 </td>
-                                <td>
+                                <td className="col-status">
                                   <span className={`status-badge ${isConfirmed ? 'confirmed' : 'cancelled'}`}>
                                     {r.status}
                                   </span>
                                 </td>
-                                <td>
-                                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                <td className="col-action">
+                                  <div className="action-btn-group">
                                     <button
                                       type="button"
                                       className="btn-status-toggle"
@@ -623,20 +630,8 @@ export default function AdminDashboard({ onBackToHome }) {
                                     </button>
                                     <button
                                       type="button"
+                                      className="btn-delete-row"
                                       onClick={() => handleDeleteRegistration(r.registrationId)}
-                                      style={{
-                                        background: 'rgba(239, 68, 68, 0.12)',
-                                        border: '1px solid rgba(239, 68, 68, 0.3)',
-                                        color: '#f87171',
-                                        borderRadius: '6px',
-                                        padding: '5px 8px',
-                                        cursor: 'pointer',
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '4px',
-                                        fontSize: '0.74rem',
-                                        fontWeight: 600
-                                      }}
                                       title={`Permanently delete ${r.registrationId}`}
                                     >
                                       <Trash2 size={12} />
