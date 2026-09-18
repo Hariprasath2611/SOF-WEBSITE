@@ -7,7 +7,6 @@ import Participation from './components/Participation';
 import EventGrid from './components/EventGrid';
 import OverallCoordinators from './components/OverallCoordinators';
 import OpenSourceNetwork from './components/OpenSourceNetwork';
-import ContributionGraph from './components/ContributionGraph';
 import RegistrationCTA from './components/RegistrationCTA';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
