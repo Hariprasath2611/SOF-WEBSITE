@@ -36,6 +36,9 @@ export default function DynamicRegistrationForm({
     if (!leader.email || !emailRegex.test(leader.email.trim())) {
       errs['leader_email'] = 'A valid email address is required';
     }
+    if (!leader.phone || leader.phone.trim().length < 10) {
+      errs['leader_phone'] = 'A valid 10-digit mobile number is required';
+    }
     if (!leader.college || leader.college.trim().length < 2) {
       errs['leader_college'] = 'College / Institution name is required';
     }
@@ -46,25 +49,13 @@ export default function DynamicRegistrationForm({
       errs['leader_year'] = 'Please select Year of Study';
     }
 
-    // 3. Team Members validation
+    // 3. Team Members validation: ONLY Full Name is required
     if (eventConfig.isTeam) {
       const neededMembers = eventConfig.teamSize - 1;
       for (let i = 0; i < neededMembers; i++) {
         const m = (formData.members && formData.members[i]) || {};
         if (!m.name || m.name.trim().length < 2) {
           errs[`member_${i}_name`] = `Member ${i + 2}: Full Name is required`;
-        }
-        if (!m.email || !emailRegex.test(m.email.trim())) {
-          errs[`member_${i}_email`] = `Member ${i + 2}: Valid email is required`;
-        }
-        if (!m.college || m.college.trim().length < 2) {
-          errs[`member_${i}_college`] = `Member ${i + 2}: College is required`;
-        }
-        if (!m.department || m.department.trim().length < 2) {
-          errs[`member_${i}_department`] = `Member ${i + 2}: Department is required`;
-        }
-        if (!m.year) {
-          errs[`member_${i}_year`] = `Member ${i + 2}: Please select Year of Study`;
         }
       }
     }
