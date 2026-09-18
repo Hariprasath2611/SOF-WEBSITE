@@ -1,6 +1,6 @@
 import React from 'react';
 import { overallCoordinators } from '../data/coordinators';
-import { Users, Phone, UserCheck } from 'lucide-react';
+import { Users, UserCheck } from 'lucide-react';
 
 export default function OverallCoordinators() {
   return (
@@ -45,19 +45,6 @@ export default function OverallCoordinators() {
                 <div className="coord-role">{coord.role}</div>
                 <div className="coord-designation">{coord.designation}</div>
                 <div className="coord-dept">{coord.department}</div>
-              </div>
-
-              {/* Direct 1-tap Phone Call */}
-              <div className="coord-contact-actions">
-                <a
-                  href={`tel:${coord.phone}`}
-                  className="coord-call-btn"
-                  title={`Call ${coord.name}`}
-                  aria-label={`Call coordinator ${coord.name} at ${coord.phone}`}
-                >
-                  <Phone size={13} />
-                  <span>{coord.phone}</span>
-                </a>
               </div>
             </article>
           ))}
