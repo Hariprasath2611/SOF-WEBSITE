@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Check, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { getTrackConfig } from '../../config/events';
+import PaymentCard from './PaymentCard';
+import { calculateEventFee } from '../../utils/feeCalculator';
 
 export default function RegistrationSummary({
   selectedEventKey,
@@ -11,18 +13,40 @@ export default function RegistrationSummary({
   submitError
 }) {
   const [agreed, setAgreed] = useState(true);
-  const eventConfig = getTrackConfig(selectedEventKey);
+  const [utrNumber, setUtrNumber] = useState('');
+  const [payerName, setPayerName] = useState('');
+  const [utrError, setUtrError] = useState('');
 
+  const eventConfig = getTrackConfig(selectedEventKey);
   if (!eventConfig) return null;
+
+  const feeInfo = calculateEventFee(selectedEventKey, formData.teamLeader?.college);
+
+  const handleFinalSubmit = (e) => {
+    e.preventDefault();
+    setUtrError('');
+
+    if (!utrNumber || utrNumber.trim().length < 8) {
+      setUtrError('Please enter the 12-digit UPI Reference / UTR Number from your payment receipt.');
+      return;
+    }
+
+    onSubmit({
+      paymentAmount: feeInfo.totalAmount,
+      paymentUtr: utrNumber.trim(),
+      payerName: payerName.trim(),
+      paymentStatus: 'SUBMITTED'
+    });
+  };
 
   return (
     <div className="summary-step">
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>
-          Review Registration Details
+          Review Registration & Complete Payment
         </h3>
         <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-          Please verify your information before final submission. Once registered, a unique Registration ID will be assigned.
+          Verify your details, scan the QR code to transfer the fee, and enter your 12-digit UPI transaction number.
         </p>
       </div>
 
@@ -117,14 +141,16 @@ export default function RegistrationSummary({
         </div>
       )}
 
-      {/* Payment Notice */}
-      <div className="fee-notice-banner">
-        <ShieldCheck size={22} color="#38bdf8" style={{ flexShrink: 0 }} />
-        <div>
-          <strong style={{ color: '#fff', display: 'block', marginBottom: '2px' }}>Registration Fee: ₹100</strong>
-          <span>Registration fee is collected per entry unit. Please ensure your payment has been completed and college ID card is ready on event day.</span>
-        </div>
-      </div>
+      {/* Official Payment Card with GPay QR and UTR Entry */}
+      <PaymentCard
+        eventKey={selectedEventKey}
+        collegeName={formData.teamLeader?.college}
+        utrNumber={utrNumber}
+        setUtrNumber={setUtrNumber}
+        payerName={payerName}
+        setPayerName={setPayerName}
+        utrError={utrError}
+      />
 
       {/* Declaration */}
       <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', margin: '20px 0', fontSize: '0.86rem', color: '#cbd5e1' }}>
@@ -135,7 +161,7 @@ export default function RegistrationSummary({
           style={{ marginTop: '3px', accentColor: '#10b981' }}
         />
         <span>
-          I confirm that the submitted participant information is accurate, and all registered participants will carry their physical College ID card for entry into Jaya Engineering College.
+          I confirm that the payment of <strong>₹{feeInfo.totalAmount}</strong> has been transferred via UPI, the entered UTR is authentic, and all participants will bring their college ID cards on event day.
         </span>
       </label>
 
@@ -149,19 +175,19 @@ export default function RegistrationSummary({
         <button
           type="button"
           className="btn-wizard-next"
-          onClick={onSubmit}
+          onClick={handleFinalSubmit}
           disabled={!agreed || isSubmitting}
-          style={{ minWidth: '180px', justifyContent: 'center' }}
+          style={{ minWidth: '220px', justifyContent: 'center' }}
         >
           {isSubmitting ? (
             <>
               <Loader2 size={16} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
-              <span>Reserving Slot...</span>
+              <span>Verifying & Reserving Slot...</span>
             </>
           ) : (
             <>
               <Check size={16} />
-              <span>Confirm & Submit</span>
+              <span>Confirm & Generate Pass</span>
             </>
           )}
         </button>

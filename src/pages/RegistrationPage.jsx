@@ -61,7 +61,7 @@ export default function RegistrationPage({ onBackToHome, preselectedTrack = null
   }, [preselectedTrack]);
 
   // Handle final submission
-  const handleSubmitRegistration = async () => {
+  const handleSubmitRegistration = async (paymentData = {}) => {
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -70,7 +70,11 @@ export default function RegistrationPage({ onBackToHome, preselectedTrack = null
         eventKey: selectedEventKey,
         teamName: formData.teamName,
         teamLeader: formData.teamLeader,
-        members: formData.members
+        members: formData.members,
+        paymentAmount: paymentData.paymentAmount,
+        paymentUtr: paymentData.paymentUtr,
+        payerName: paymentData.payerName,
+        paymentStatus: paymentData.paymentStatus || 'SUBMITTED'
       };
 
       const result = await submitRegistration(payload);
