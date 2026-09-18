@@ -1,14 +1,15 @@
 /**
  * VERCEL SERVERLESS API HANDLER FOR SFD 2026
- * Handles all /api/* routes natively on Vercel without a separate backend server.
- * Supports:
- *  1. Upstash Redis / Vercel KV (1-click free storage in Vercel)
- *  2. Supabase / REST DB (if env vars provided)
+ * Handles all /api/* routes natively on Vercel.
+ * Supported Storage:
+ *  1. Supabase PostgreSQL (via @supabase/supabase-js)
+ *  2. Upstash Redis / Vercel KV
  *  3. In-memory / /tmp fallback (ensures 100% uptime with zero 502 Bad Gateway errors)
  */
 
 import fs from 'fs';
 import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
 // Track configurations
 const EVENT_TRACKS = [
@@ -67,6 +68,27 @@ const EVENT_TRACKS = [
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '12345';
 const TMP_FILE = path.join('/tmp', 'sfd_registrations_store.json');
 
+// Supabase configuration
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY;
+
+let supabase = null;
+if (supabaseUrl && supabaseKey) {
+  try {
+    supabase = createClient(supabaseUrl, supabaseKey);
+    console.log('✅ Supabase Client initialized in serverless handler');
+  } catch (err) {
+    console.warn('Supabase initialization warning:', err.message);
+  }
+}
+
+// Upstash / Vercel KV
+const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
 // In-memory runtime cache
 let memoryStore = {
   counter: 1,
@@ -120,13 +142,35 @@ let memoryStore = {
 };
 
 // -----------------------------------------------------------------------------
-// CLOUD STORAGE ADAPTER (Upstash Redis / Vercel KV)
+// CLOUD STORAGE READ / WRITE (Supabase -> Upstash -> /tmp -> Memory)
 // -----------------------------------------------------------------------------
-const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-
 async function readStore() {
-  // 1. Try Upstash / Vercel KV if configured
+  // 1. Try Supabase
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('registrations')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+      if (!error && Array.isArray(data)) {
+        if (data.length > 0) {
+          const list = data.map((row) => row.payload || row);
+          memoryStore = {
+            counter: list.length,
+            registrations: list
+          };
+          return memoryStore;
+        }
+      } else if (error) {
+        console.warn('Supabase query notice:', error.message);
+      }
+    } catch (err) {
+      console.warn('Supabase read error:', err.message);
+    }
+  }
+
+  // 2. Try Upstash / Vercel KV
   if (kvUrl && kvToken) {
     try {
       const res = await fetch(`${kvUrl}/get/sfd_store`, {
@@ -147,7 +191,7 @@ async function readStore() {
     }
   }
 
-  // 2. Try /tmp file in serverless lambda
+  // 3. Try /tmp file in serverless lambda
   try {
     if (fs.existsSync(TMP_FILE)) {
       const raw = fs.readFileSync(TMP_FILE, 'utf-8');
@@ -167,7 +211,7 @@ async function readStore() {
 async function writeStore(data) {
   memoryStore = data;
 
-  // 1. Save to Upstash / Vercel KV if available
+  // 1. Save to Upstash / Vercel KV if configured
   if (kvUrl && kvToken) {
     try {
       await fetch(`${kvUrl}/set/sfd_store`, {
@@ -188,6 +232,33 @@ async function writeStore(data) {
     fs.writeFileSync(TMP_FILE, JSON.stringify(data, null, 2), 'utf-8');
   } catch (err) {
     console.warn('/tmp write warning:', err.message);
+  }
+}
+
+// Helper to save a single registration directly to Supabase
+async function saveRegistrationToSupabase(reg) {
+  if (!supabase) return;
+  try {
+    await supabase.from('registrations').upsert(
+      {
+        registration_id: reg.registrationId,
+        event_key: reg.eventKey,
+        event_name: reg.eventName,
+        team_name: reg.teamName || 'N/A',
+        team_size: reg.teamSize || 1,
+        leader_name: reg.teamLeader?.name || '',
+        leader_email: reg.teamLeader?.email || '',
+        leader_phone: reg.teamLeader?.phone || '',
+        leader_college: reg.teamLeader?.college || '',
+        payment_amount: reg.paymentAmount || 0,
+        payment_utr: reg.paymentUtr || 'N/A',
+        status: reg.status || 'CONFIRMED',
+        payload: reg
+      },
+      { onConflict: 'registration_id' }
+    );
+  } catch (err) {
+    console.warn('Supabase single write error:', err.message);
   }
 }
 
@@ -222,7 +293,7 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // Normalize URL Path (handles /api/events, /events, query strings)
+  // Normalize URL Path
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = parsedUrl.pathname.replace(/^\/api/, '');
   if (!pathname.startsWith('/')) pathname = '/' + pathname;
@@ -240,7 +311,7 @@ export default async function handler(req, res) {
     }
 
     // -------------------------------------------------------------
-    // 2. POST /api/registrations (Create new registration)
+    // 2. POST /api/registrations
     // -------------------------------------------------------------
     if (pathname === '/registrations' && req.method === 'POST') {
       let body = req.body;
@@ -252,7 +323,16 @@ export default async function handler(req, res) {
         }
       }
 
-      const { eventKey, teamName, teamLeader, members, paymentAmount, paymentUtr, payerName, paymentStatus } = body || {};
+      const {
+        eventKey,
+        teamName,
+        teamLeader,
+        members,
+        paymentAmount,
+        paymentUtr,
+        payerName,
+        paymentStatus
+      } = body || {};
 
       if (!eventKey) {
         return res.status(400).json({ success: false, error: 'Event key is required' });
@@ -325,7 +405,7 @@ export default async function handler(req, res) {
         eventKey,
         eventName: track.name,
         teamSize: track.teamSize,
-        teamName: track.isTeam ? (teamName || 'N/A') : 'N/A',
+        teamName: track.isTeam ? teamName || 'N/A' : 'N/A',
         teamLeader: { ...teamLeader },
         members: allMembers,
         paymentAmount: paymentAmount || 0,
@@ -339,6 +419,9 @@ export default async function handler(req, res) {
       store.counter = nextCount;
       store.registrations.push(newRegistration);
       await writeStore(store);
+
+      // Save to Supabase in parallel
+      await saveRegistrationToSupabase(newRegistration);
 
       return res.status(200).json({ success: true, registration: newRegistration });
     }
@@ -361,7 +444,11 @@ export default async function handler(req, res) {
     if (pathname === '/admin/login' && req.method === 'POST') {
       let body = req.body;
       if (typeof body === 'string') {
-        try { body = JSON.parse(body); } catch { body = {}; }
+        try {
+          body = JSON.parse(body);
+        } catch {
+          body = {};
+        }
       }
       const { password } = body || {};
 
@@ -387,7 +474,10 @@ export default async function handler(req, res) {
       if (pathname === '/admin/overview' && req.method === 'GET') {
         const confirmed = registrations.filter((r) => r.status === 'CONFIRMED');
         const cancelled = registrations.filter((r) => r.status === 'CANCELLED');
-        const totalParticipants = confirmed.reduce((acc, r) => acc + (r.members ? r.members.length : 1), 0);
+        const totalParticipants = confirmed.reduce(
+          (acc, r) => acc + (r.members ? r.members.length : 1),
+          0
+        );
         const eventsWithSlots = calculateEventSlots(registrations);
 
         return res.status(200).json({
@@ -397,7 +487,8 @@ export default async function handler(req, res) {
           cancelledRegistrations: cancelled.length,
           totalParticipants,
           events: eventsWithSlots,
-          recentRegistrations: [...registrations].reverse().slice(0, 10)
+          recentRegistrations: [...registrations].reverse().slice(0, 10),
+          storageProvider: supabase ? 'Supabase PostgreSQL' : kvUrl ? 'Upstash KV' : 'Serverless Cache'
         });
       }
 
@@ -423,11 +514,11 @@ export default async function handler(req, res) {
           filtered = filtered.filter((r) => {
             const mId = r.registrationId?.toLowerCase().includes(search);
             const mTeam = r.teamName?.toLowerCase().includes(search);
-            const mLeader = r.teamLeader && (
-              r.teamLeader.name?.toLowerCase().includes(search) ||
-              r.teamLeader.email?.toLowerCase().includes(search) ||
-              r.teamLeader.college?.toLowerCase().includes(search)
-            );
+            const mLeader =
+              r.teamLeader &&
+              (r.teamLeader.name?.toLowerCase().includes(search) ||
+                r.teamLeader.email?.toLowerCase().includes(search) ||
+                r.teamLeader.college?.toLowerCase().includes(search));
             return mId || mTeam || mLeader;
           });
         }
@@ -445,11 +536,14 @@ export default async function handler(req, res) {
       if (pathname.includes('/status') && (req.method === 'PATCH' || req.method === 'POST')) {
         let body = req.body;
         if (typeof body === 'string') {
-          try { body = JSON.parse(body); } catch { body = {}; }
+          try {
+            body = JSON.parse(body);
+          } catch {
+            body = {};
+          }
         }
         const { status } = body || {};
 
-        // Extract ID from path: /admin/registrations/:id/status
         const parts = pathname.split('/');
         const idIdx = parts.indexOf('registrations') + 1;
         const targetId = idIdx > 0 && idIdx < parts.length ? decodeURIComponent(parts[idIdx]) : null;
@@ -462,6 +556,18 @@ export default async function handler(req, res) {
         target.status = status || 'CONFIRMED';
         target.statusUpdatedAt = new Date().toISOString();
         await writeStore(store);
+
+        // Update in Supabase
+        if (supabase) {
+          try {
+            await supabase
+              .from('registrations')
+              .update({ status: target.status, payload: target })
+              .eq('registration_id', targetId);
+          } catch (err) {
+            console.warn('Supabase status update error:', err.message);
+          }
+        }
 
         return res.status(200).json({
           success: true,
@@ -508,7 +614,10 @@ export default async function handler(req, res) {
 
         const csv = [headers.join(','), ...rows].join('\n');
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="SFD_2026_Registrations_${Date.now()}.csv"`);
+        res.setHeader(
+          'Content-Disposition',
+          `attachment; filename="SFD_2026_Registrations_${Date.now()}.csv"`
+        );
         return res.status(200).send(csv);
       }
     }
