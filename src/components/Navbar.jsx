@@ -55,7 +55,7 @@ export default function Navbar() {
 
         {/* Action Button & Mobile Toggle */}
         <div className="header-actions">
-          <a href="#events" className="btn btn-primary nav-btn-register">
+          <a href="#register" className="btn btn-primary nav-btn-register">
             <span>Register</span>
             <span className="btn-arrow-icon">→</span>
           </a>
