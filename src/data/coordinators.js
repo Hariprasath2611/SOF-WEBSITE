@@ -15,7 +15,7 @@ export const overallCoordinators = [
     email: "nishanth.sfd@jaya.edu.in",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    photo: null,
+    photo: "/coordinators/nishanth.jpg",
     avatarBadge: "LEAD"
   },
   {

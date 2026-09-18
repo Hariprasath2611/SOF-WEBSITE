@@ -78,7 +78,7 @@ export const events = [
       name: "Nishanth",
       role: "Mini Hackathon Coordinator",
       department: "Dept of CSE",
-      photo: null,
+      photo: "/coordinators/nishanth.jpg",
       phone: "+919025877663",
       email: "hackathon.sfd2026@gmail.com"
     }
