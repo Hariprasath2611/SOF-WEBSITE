@@ -7,12 +7,13 @@
 import { EVENT_TRACKS, getTrackConfig } from '../config/events';
 import * as XLSX from 'xlsx';
 
-const DEFAULT_API_BASE = import.meta.env.VITE_API_URL || '/api';
+const RENDER_BACKEND_URL = 'https://sof-website-vhai.onrender.com/api';
+const DEFAULT_API_BASE = import.meta.env.VITE_API_URL || RENDER_BACKEND_URL;
 
 export function getApiBase() {
   const envUrl = import.meta.env.VITE_API_URL || '';
   const storedUrl = typeof localStorage !== 'undefined' ? localStorage.getItem('sfd_backend_url') || '' : '';
-  const base = storedUrl || envUrl || '/api';
+  const base = storedUrl || envUrl || DEFAULT_API_BASE;
   return base.replace(/\/+$/, '');
 }
 
