@@ -90,7 +90,7 @@ export default function Navbar() {
 
         <div className="mobile-drawer-footer">
           <a
-            href="#events"
+            href="#register"
             className="btn btn-primary"
             style={{ width: '100%' }}
             onClick={() => setMobileOpen(false)}
