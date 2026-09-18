@@ -20,7 +20,7 @@ export const events = [
     teamSize: "1 - 3 Members per team",
     duration: "Full Day Exhibition & Jury Evaluation",
     venue: "CSE Department Innovation Lab / Main Quadrangle",
-    registrationLink: "https://forms.gle/sfd2026-demo-stall",
+    registrationLink: "https://docs.google.com/forms/d/e/1FAIpQLSckdgQ_afqRJY3R4QxdiYmHrhwHXyL18fk-QHXypSsnnC75yA/viewform?usp=header",
     topics: [
       "Open Source Software & Tools",
       "Web & Mobile Applications",
@@ -59,7 +59,7 @@ export const events = [
     teamSize: "2 - 4 Members per team",
     duration: "4 - 5 Hours Intensive Sprint",
     venue: "Computing Center Lab 2 & 3",
-    registrationLink: "https://forms.gle/sfd2026-mini-hackathon",
+    registrationLink: "https://docs.google.com/forms/d/e/1FAIpQLSckdgQ_afqRJY3R4QxdiYmHrhwHXyL18fk-QHXypSsnnC75yA/viewform?usp=header",
     topics: [
       "Open Source Developer Productivity",
       "Campus Automation & Student Utilities",
@@ -98,7 +98,7 @@ export const events = [
     teamSize: "Individual or 2 Members per team",
     duration: "2.5 Hours",
     venue: "Design Studio / Multimedia Lab",
-    registrationLink: "https://forms.gle/sfd2026-poster-design",
+    registrationLink: "https://docs.google.com/forms/d/e/1FAIpQLSckdgQ_afqRJY3R4QxdiYmHrhwHXyL18fk-QHXypSsnnC75yA/viewform?usp=header",
     topics: [
       "Philosophy of Software Freedom & FOSS",
       "Open Source vs Proprietary Monopolies",
@@ -137,7 +137,7 @@ export const events = [
     teamSize: "Individual Participation",
     duration: "2 Hours Interactive Session",
     venue: "CSE Seminar Hall & Hands-on Terminal Lab",
-    registrationLink: "https://forms.gle/sfd2026-workshop",
+    registrationLink: "https://docs.google.com/forms/d/e/1FAIpQLSckdgQ_afqRJY3R4QxdiYmHrhwHXyL18fk-QHXypSsnnC75yA/viewform?usp=header",
     topics: [
       "Linux Command Line Mastery & Bash Scripting",
       "Git Internals, Rebase, Branching & Pull Requests",
@@ -175,7 +175,7 @@ export const events = [
     teamSize: "2 Members per team (For & Against rounds)",
     duration: "3 Rounds (Preliminary, Semi-Finals, Finals)",
     venue: "Auditorium Annex / Conference Hall",
-    registrationLink: "https://forms.gle/sfd2026-debate",
+    registrationLink: "https://docs.google.com/forms/d/e/1FAIpQLSckdgQ_afqRJY3R4QxdiYmHrhwHXyL18fk-QHXypSsnnC75yA/viewform?usp=header",
     topics: [
       "Open Weights vs Closed Gatekeepers: The Future of Frontier AI",
       "Right to Repair & Hardware Sovereignty in the IoT Age",

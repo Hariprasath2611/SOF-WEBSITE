@@ -18,7 +18,13 @@ export default function RegistrationCTA() {
           </p>
 
           <div className="cta-buttons">
-            <a href="#events" className="btn btn-primary" style={{ padding: '15px 32px', fontSize: '1.05rem' }}>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSckdgQ_afqRJY3R4QxdiYmHrhwHXyL18fk-QHXypSsnnC75yA/viewform?usp=header"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+              style={{ padding: '15px 32px', fontSize: '1.05rem' }}
+            >
               <Rocket size={18} />
               <span>REGISTER NOW</span>
               <span className="btn-arrow-icon">→</span>
@@ -47,7 +53,7 @@ export default function RegistrationCTA() {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle size={15} color="#10b981" />
-              <span>Free & Open Registration</span>
+              <span>₹100 Registration / Event</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle size={15} color="#10b981" />

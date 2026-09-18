@@ -85,7 +85,7 @@ export default function HeroTerminal() {
     } else if (lower === 'register') {
       newEntry.push({
         type: 'success',
-        text: 'Redirecting to events registration matrix... Scroll down or choose an event card!'
+        text: 'Opening official registration portal (Google Forms): https://docs.google.com/forms/d/e/1FAIpQLSckdgQ_afqRJY3R4QxdiYmHrhwHXyL18fk-QHXypSsnnC75yA/viewform?usp=header'
       });
     } else if (lower === 'clear') {
       setHistory([]);
