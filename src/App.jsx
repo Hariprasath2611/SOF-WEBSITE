@@ -8,7 +8,6 @@ import EventGrid from './components/EventGrid';
 import OverallCoordinators from './components/OverallCoordinators';
 import OpenSourceNetwork from './components/OpenSourceNetwork';
 import ContributionGraph from './components/ContributionGraph';
-import Timeline from './components/Timeline';
 import RegistrationCTA from './components/RegistrationCTA';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
