@@ -102,8 +102,8 @@ export default function EventCard({ event, onOpenDetails }) {
             className="btn btn-phone"
             aria-label={`Call coordinator for ${event.title}`}
           >
-            <Phone size={14} />
-            <span>☎ Call Coordinator</span>
+            <Phone size={13} style={{ flexShrink: 0 }} />
+            <span>Call Coordinator</span>
           </a>
 
           {/* Modal trigger button */}
@@ -113,7 +113,7 @@ export default function EventCard({ event, onOpenDetails }) {
             onClick={() => onOpenDetails(event)}
             aria-label={`View full details and rules for ${event.title}`}
           >
-            <Info size={14} />
+            <Info size={13} style={{ flexShrink: 0 }} />
             <span>View Details</span>
           </button>
         </div>
