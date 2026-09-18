@@ -6,11 +6,17 @@
 
 import { EVENT_TRACKS, getTrackConfig } from '../config/events';
 import * as XLSX from 'xlsx';
+import { createClient } from '@supabase/supabase-js';
 
 const API_BASE = '/api';
 const LOCAL_STORAGE_KEY = 'sfd_registrations_v1';
 const LOCAL_COUNTER_KEY = 'sfd_registration_counter_v1';
 const ADMIN_PASSWORD_FALLBACK = '12345';
+
+// Optional direct client-side Supabase connection
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+export const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 // -------------------------------------------------------------
 // LOCAL CLIENT STORE (Offline / Vercel Serverless Fallback)
@@ -265,6 +271,31 @@ export async function fetchAdminOverview(token) {
     throw new Error('Unauthorized');
   }
 
+  // Direct Supabase Client Query
+  if (supabase) {
+    try {
+      const { data } = await supabase.from('registrations').select('*').order('created_at', { ascending: false });
+      if (data && Array.isArray(data) && data.length > 0) {
+        const list = data.map((r) => r.payload || r);
+        const confirmed = list.filter((r) => r.status === 'CONFIRMED');
+        const cancelled = list.filter((r) => r.status === 'CANCELLED');
+        const totalParticipants = confirmed.reduce((acc, r) => acc + (r.members ? r.members.length : 1), 0);
+        return {
+          success: true,
+          totalRegistrations: list.length,
+          confirmedRegistrations: confirmed.length,
+          cancelledRegistrations: cancelled.length,
+          totalParticipants,
+          events: getLocalEventsWithSlots(),
+          recentRegistrations: list.slice(0, 10),
+          storageProvider: 'Supabase PostgreSQL'
+        };
+      }
+    } catch (err) {
+      console.warn('Client Supabase overview notice:', err.message);
+    }
+  }
+
   const regs = getLocalRegistrations();
   const confirmed = regs.filter((r) => r.status === 'CONFIRMED');
   const cancelled = regs.filter((r) => r.status === 'CANCELLED');
@@ -302,6 +333,34 @@ export async function fetchAdminRegistrations(token, { search = '', event = '', 
 
   if (token !== ADMIN_PASSWORD_FALLBACK) {
     throw new Error('Unauthorized');
+  }
+
+  // Direct Supabase Client Query
+  if (supabase) {
+    try {
+      const { data } = await supabase.from('registrations').select('*').order('created_at', { ascending: false });
+      if (data && Array.isArray(data) && data.length > 0) {
+        let list = data.map((r) => r.payload || r);
+        if (event) list = list.filter((r) => r.eventKey === event);
+        if (status) list = list.filter((r) => r.status === status);
+        if (search && search.trim()) {
+          const q = search.trim().toLowerCase();
+          list = list.filter((r) => {
+            const matchId = r.registrationId && r.registrationId.toLowerCase().includes(q);
+            const matchTeam = r.teamName && r.teamName.toLowerCase().includes(q);
+            const matchLeader = r.teamLeader && (
+              (r.teamLeader.name && r.teamLeader.name.toLowerCase().includes(q)) ||
+              (r.teamLeader.email && r.teamLeader.email.toLowerCase().includes(q)) ||
+              (r.teamLeader.college && r.teamLeader.college.toLowerCase().includes(q))
+            );
+            return matchId || matchTeam || matchLeader;
+          });
+        }
+        return list;
+      }
+    } catch (err) {
+      console.warn('Client Supabase registrations notice:', err.message);
+    }
   }
 
   let regs = getLocalRegistrations();
@@ -350,6 +409,14 @@ export async function updateRegistrationStatus(token, id, status) {
 
   if (token !== ADMIN_PASSWORD_FALLBACK) {
     throw new Error('Unauthorized');
+  }
+
+  if (supabase) {
+    try {
+      await supabase.from('registrations').update({ status }).eq('registration_id', id);
+    } catch (err) {
+      console.warn('Supabase status update error:', err.message);
+    }
   }
 
   const regs = getLocalRegistrations();
