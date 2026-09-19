@@ -235,17 +235,20 @@ function registerLocally(formData) {
 
   if (track.isTeam && Array.isArray(members)) {
     for (let i = 0; i < members.length; i++) {
-      allMembers.push({
-        ...members[i],
-        isLeader: false,
-        memberIndex: i + 2
-      });
+      if (members[i] && members[i].name && members[i].name.trim().length > 0) {
+        allMembers.push({
+          ...members[i],
+          isLeader: false,
+          memberIndex: allMembers.length + 1
+        });
+      }
     }
   }
 
+  const actualMembersCount = allMembers.length;
   const registrationId = getNextLocalId();
   const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-  const calculatedFee = calculateEventFee(eventKey, teamLeader.college).totalAmount;
+  const calculatedFee = calculateEventFee(eventKey, teamLeader.college, actualMembersCount).totalAmount;
   const finalPaidAmount = Number(paymentAmount) > 0 ? Number(paymentAmount) : calculatedFee;
 
   const newRegistration = {
@@ -254,8 +257,8 @@ function registerLocally(formData) {
     isoTimestamp: new Date().toISOString(),
     eventKey,
     eventName: track.name,
-    teamSize: track.teamSize,
-    teamName: track.isTeam ? (teamName || 'N/A') : 'N/A',
+    teamSize: actualMembersCount,
+    teamName: track.isTeam ? (teamName && teamName.trim() ? teamName.trim() : (actualMembersCount === 1 ? `${teamLeader.name.trim()} (Solo)` : 'Unnamed Team')) : 'N/A',
     teamLeader: { ...teamLeader },
     members: allMembers,
     paymentAmount: finalPaidAmount,
@@ -293,8 +296,9 @@ export async function fetchEvents() {
 }
 
 export async function submitRegistration(payload) {
-  // Compute safe non-zero fee based on event and college
-  const expectedFee = calculateEventFee(payload.eventKey, payload.teamLeader?.college).totalAmount;
+  // Compute safe non-zero fee based on event, college, and member count
+  const actualCount = ((payload.members && Array.isArray(payload.members)) ? payload.members.filter(m => m && m.name && m.name.trim().length > 0).length : 0) + 1;
+  const expectedFee = calculateEventFee(payload.eventKey, payload.teamLeader?.college, actualCount).totalAmount;
   const safePaymentAmount = Number(payload.paymentAmount) > 0 ? Number(payload.paymentAmount) : expectedFee;
   const safeUtr = (payload.paymentUtr || '').trim();
 
@@ -362,7 +366,8 @@ export async function fetchRegistrationById(id) {
       const json = await res.json();
       if (json.registration) {
         const reg = json.registration;
-        const fee = calculateEventFee(reg.eventKey, reg.teamLeader?.college).totalAmount;
+        const memCount = reg.members ? reg.members.length : (reg.teamSize || 1);
+        const fee = calculateEventFee(reg.eventKey, reg.teamLeader?.college, memCount).totalAmount;
         return {
           ...reg,
           paymentAmount: Number(reg.paymentAmount) > 0 ? Number(reg.paymentAmount) : fee
@@ -376,7 +381,8 @@ export async function fetchRegistrationById(id) {
   const regs = getLocalRegistrations();
   const match = regs.find((r) => r.registrationId === id);
   if (!match) throw new Error(`Registration pass ${id} not found.`);
-  const fee = calculateEventFee(match.eventKey, match.teamLeader?.college).totalAmount;
+  const matchCount = match.members ? match.members.length : (match.teamSize || 1);
+  const fee = calculateEventFee(match.eventKey, match.teamLeader?.college, matchCount).totalAmount;
   return {
     ...match,
     paymentAmount: Number(match.paymentAmount) > 0 ? Number(match.paymentAmount) : fee
