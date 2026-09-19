@@ -329,7 +329,12 @@ export async function submitRegistration(payload) {
     });
     const json = await res.json();
     if (res.ok && json.registration) {
-      return json.registration;
+      return {
+        ...json.registration,
+        paymentAmount: json.registration.paymentAmount ?? payload.paymentAmount,
+        paymentUtr: json.registration.paymentUtr ?? payload.paymentUtr,
+        payerName: json.registration.payerName ?? payload.payerName
+      };
     }
     if (res.status === 409 || res.status === 400) {
       const err = new Error(json.error || 'Registration failed');
