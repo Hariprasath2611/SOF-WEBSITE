@@ -14,8 +14,9 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
 
   const isTeam = registration.teamSize > 1;
 
+  const actualMembersCount = registration.members ? registration.members.length : (registration.teamSize || 1);
   // Guarantee accurate non-zero amount paid
-  const calculatedFee = calculateEventFee(registration.eventKey, registration.teamLeader?.college).totalAmount;
+  const calculatedFee = calculateEventFee(registration.eventKey, registration.teamLeader?.college, actualMembersCount).totalAmount;
   const paidAmount = Number(registration.paymentAmount) > 0 ? Number(registration.paymentAmount) : calculatedFee;
   const utrDisplay = (registration.paymentUtr && registration.paymentUtr !== 'N/A') ? registration.paymentUtr : 'SUBMITTED';
 
