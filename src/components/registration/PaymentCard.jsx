@@ -22,8 +22,6 @@ export default function PaymentCard({
     setTimeout(() => setCopied(false), 2500);
   };
 
-  // Removed &am=${feeInfo.totalAmount} to prevent GPay "limit exceeded" error for personal VPAs
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&cu=INR&tn=SFD2026_${eventKey}`;
 
   return (
     <div className="payment-card-box">
@@ -89,11 +87,6 @@ export default function PaymentCard({
               </button>
             </div>
 
-            {/* Mobile 1-Tap UPI Launch */}
-            <a href={upiDeepLink} className="btn-pay-upi-mobile">
-              <Smartphone size={16} />
-              <span>Pay ₹{feeInfo.totalAmount} via GPay / UPI App</span>
-            </a>
           </div>
 
           <ol className="payment-instructions-list">
