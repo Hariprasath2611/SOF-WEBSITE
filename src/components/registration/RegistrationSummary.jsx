@@ -26,14 +26,35 @@ export default function RegistrationSummary({
     e.preventDefault();
     setUtrError('');
 
-    if (!utrNumber || utrNumber.trim().length < 8) {
-      setUtrError('Please enter the 12-digit UPI Reference / UTR Number from your payment receipt.');
+    const cleanUtr = (utrNumber || '').trim();
+
+    if (!cleanUtr || cleanUtr.length !== 12) {
+      setUtrError(`Please enter the complete 12-digit UPI Transaction ID / UTR (${cleanUtr.length}/12 entered).`);
       return;
+    }
+
+    // Client-side quick duplicate pre-check
+    try {
+      const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('sfd_registrations_v1') : null;
+      if (raw) {
+        const localList = JSON.parse(raw);
+        if (Array.isArray(localList)) {
+          const dup = localList.find(
+            (r) => r.status !== 'CANCELLED' && r.paymentUtr && r.paymentUtr.trim().toLowerCase() === cleanUtr.toLowerCase()
+          );
+          if (dup) {
+            setUtrError(`This UPI Transaction ID / UTR "${cleanUtr}" has already been submitted for registration ${dup.registrationId}. Each transaction ID can only be used once.`);
+            return;
+          }
+        }
+      }
+    } catch {
+      // non-blocking
     }
 
     onSubmit({
       paymentAmount: feeInfo.totalAmount,
-      paymentUtr: utrNumber.trim(),
+      paymentUtr: cleanUtr,
       payerName: payerName.trim(),
       paymentStatus: 'SUBMITTED'
     });
@@ -65,8 +86,11 @@ export default function RegistrationSummary({
             fontSize: '0.9rem'
           }}
         >
-          <AlertCircle size={18} style={{ flexShrink: 0 }} />
-          <span>{submitError}</span>
+          <AlertCircle size={20} style={{ flexShrink: 0, color: '#f87171' }} />
+          <div>
+            <strong style={{ display: 'block', color: '#fff', marginBottom: '2px' }}>Registration Incomplete</strong>
+            <span>{submitError}</span>
+          </div>
         </div>
       )}
 
@@ -139,12 +163,15 @@ export default function RegistrationSummary({
         </div>
       )}
 
-      {/* Official Payment Card with GPay QR and UTR Entry */}
+      {/* Official Payment Card with GPay QR, Mobile Pay, and UTR Entry */}
       <PaymentCard
         eventKey={selectedEventKey}
         collegeName={formData.teamLeader?.college}
         utrNumber={utrNumber}
-        setUtrNumber={setUtrNumber}
+        setUtrNumber={(val) => {
+          setUtrNumber(val);
+          if (utrError) setUtrError('');
+        }}
         payerName={payerName}
         setPayerName={setPayerName}
         utrError={utrError}
@@ -159,7 +186,7 @@ export default function RegistrationSummary({
           style={{ marginTop: '3px', accentColor: '#10b981' }}
         />
         <span>
-          I confirm that the payment of <strong>₹{feeInfo.totalAmount}</strong> has been transferred via UPI, the entered UTR is authentic, and all participants will bring their college ID cards on event day.
+          I confirm that the payment of <strong>₹{feeInfo.totalAmount}</strong> has been transferred via UPI, the entered 12-digit UTR is authentic and unused, and all participants will bring their college ID cards on event day.
         </span>
       </label>
 
@@ -174,8 +201,9 @@ export default function RegistrationSummary({
           type="button"
           className="btn-wizard-next"
           onClick={handleFinalSubmit}
-          disabled={!agreed || isSubmitting}
+          disabled={!agreed || isSubmitting || utrNumber.length !== 12}
           style={{ minWidth: '220px', justifyContent: 'center' }}
+          title={utrNumber.length !== 12 ? 'Please enter all 12 digits of the UTR number' : ''}
         >
           {isSubmitting ? (
             <>
