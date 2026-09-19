@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle, Printer, ArrowLeft, Calendar, MapPin, Building, Users, ShieldCheck, Copy, Check, Receipt } from 'lucide-react';
+import { CheckCircle, Printer, ArrowLeft, ShieldCheck, Copy, Check, Receipt } from 'lucide-react';
 import { calculateEventFee } from '../../utils/feeCalculator';
 
 export default function ConfirmationPass({ registration, onReset, onBackToHome }) {

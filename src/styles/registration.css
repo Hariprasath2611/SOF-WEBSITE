@@ -528,6 +528,22 @@
   margin-bottom: 16px;
 }
 
+.payment-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.2);
+}
+
 .reg-id-display {
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.35);
@@ -539,7 +555,111 @@
   font-weight: 800;
   color: #10b981;
   letter-spacing: 0.08em;
-  margin: 12px 0 6px;
+}
+
+.btn-copy-id {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  padding: 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-id:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* Payment Receipt Box */
+.conf-receipt-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1.5px solid rgba(16, 185, 129, 0.35);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.conf-receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed rgba(16, 185, 129, 0.25);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.conf-receipt-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.74rem;
+  color: #10b981;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.conf-receipt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+.conf-receipt-lbl {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.conf-receipt-val {
+  font-family: var(--font-mono, monospace);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: block;
+}
+
+.conf-receipt-val.amount {
+  font-size: 1.35rem;
+  color: #10b981;
+  font-weight: 800;
+}
+
+.conf-receipt-val.utr {
+  color: #38bdf8;
+  letter-spacing: 0.04em;
+}
+
+.conf-receipt-sub {
+  font-size: 0.72rem;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+
+.btn-copy-mini {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-copy-mini:hover {
+  color: #fff;
 }
 
 .conf-specs-grid {
@@ -747,16 +867,37 @@
   transform: translateY(-2px);
 }
 
-.payment-instructions-list {
-  font-size: 0.8rem;
-  color: #94a3b8;
-  line-height: 1.6;
-  margin: 12px 0 16px;
-  padding-left: 18px;
+.payment-steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 18px;
 }
 
-.payment-instructions-list li {
-  margin-bottom: 4px;
+.payment-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.84rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.payment-step-num {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-family: var(--font-mono, monospace);
 }
 
 .utr-field-box {
@@ -771,6 +912,26 @@
   font-weight: 700;
   color: #f1f5f9;
   margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn-utr-help {
+  background: transparent;
+  border: none;
+  color: #38bdf8;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.btn-utr-help:hover {
+  color: #7dd3fc;
+  text-decoration: underline;
 }
 
 .utr-input-field {
@@ -781,15 +942,65 @@
   padding: 12px 14px;
   border-radius: 8px;
   font-family: var(--font-mono, monospace);
-  font-size: 1rem;
-  letter-spacing: 0.05em;
-  transition: border-color 0.2s;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  transition: all 0.2s ease;
 }
 
 .utr-input-field:focus {
   outline: none;
   border-color: var(--accent-green, #10b981);
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.utr-input-field.valid-utr {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+
+.utr-input-field.error-utr {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
+}
+
+.utr-error-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  padding: 9px 13px;
+  border-radius: 6px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.utr-guide-card {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.utr-guide-grid {
+  display: grid;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.utr-guide-item {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.utr-guide-item strong {
+  color: #38bdf8;
+  min-width: 85px;
 }
 
 /* Printable Styles */
@@ -823,7 +1034,17 @@
     padding: 24px !important;
     margin: 0 !important;
   }
-  .conf-header h2, .conf-header p, .reg-id-display, .roster-table td, .roster-table th, .conf-specs-grid h4, .conf-specs-grid span {
+  .conf-header h2, .conf-header p, .reg-id-display, .roster-table td, .roster-table th, .conf-specs-grid h4, .conf-specs-grid span, .conf-receipt-val {
+    color: #000 !important;
+  }
+  .conf-receipt-box {
+    border: 1.5px solid #000 !important;
+    background: #f8f9fa !important;
+  }
+  .conf-receipt-val.amount {
+    color: #000 !important;
+  }
+  .conf-receipt-val.utr {
     color: #000 !important;
   }
   .conf-team-roster h4 {
