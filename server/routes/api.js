@@ -108,32 +108,36 @@ router.post('/registrations', async (req, res) => {
         const m = members[i];
         const num = i + 2;
 
-        if (!m.name || m.name.trim().length < 2) {
-          return res.status(400).json({ success: false, error: `Member ${num}: Name is required (minimum 2 characters).` });
+        if (!m || !m.name || m.name.trim().length < 2) {
+          return res.status(400).json({ success: false, error: `Member ${num}: Full Name is required (minimum 2 characters).` });
         }
-        if (!m.email || !emailRegex.test(m.email.trim())) {
-          return res.status(400).json({ success: false, error: `Member ${num}: Valid email is required.` });
-        }
-        if (!m.college || m.college.trim().length < 2) {
-          return res.status(400).json({ success: false, error: `Member ${num}: College is required.` });
-        }
-        if (!m.department || m.department.trim().length < 2) {
-          return res.status(400).json({ success: false, error: `Member ${num}: Department is required.` });
-        }
-        if (!m.year) {
-          return res.status(400).json({ success: false, error: `Member ${num}: Year of Study is required.` });
-        }
+        // Auto-fill member contact/college/year from team leader if not provided individually
+        m.name = m.name.trim();
+        m.email = (m.email && emailRegex.test(m.email.trim())) ? m.email.trim() : teamLeader.email.trim();
+        m.college = (m.college && m.college.trim().length >= 2) ? m.college.trim() : teamLeader.college.trim();
+        m.department = (m.department && m.department.trim().length >= 2) ? m.department.trim() : teamLeader.department.trim();
+        m.year = m.year || teamLeader.year;
       }
     }
 
-    // 5. Execute Atomic Registration
+    // 5. Validate UPI Reference / Transaction ID (UTR)
+    const cleanedUtr = (paymentUtr || '').trim();
+    if (!cleanedUtr || cleanedUtr.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please provide the authentic 12-digit UPI Transaction ID / UTR number from your payment receipt.',
+        code: 'INVALID_UTR'
+      });
+    }
+
+    // 6. Execute Atomic Registration
     const registration = await registrationService.register({
       eventKey,
       teamName,
       teamLeader,
       members,
       paymentAmount,
-      paymentUtr,
+      paymentUtr: cleanedUtr,
       payerName,
       paymentStatus
     });

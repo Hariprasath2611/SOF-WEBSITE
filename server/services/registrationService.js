@@ -55,6 +55,20 @@ export function getDemoStallCategory(college = '', department = '') {
   return 'external';
 }
 
+export function calculateServerFee(eventKey, collegeName = '') {
+  const isJaya = /(jaya|\bjec\b)/i.test((collegeName || '').trim());
+  const perHeadFee = isJaya ? 100 : 200;
+  const teamSizes = {
+    'demo-stall': 3,
+    'mini-hackathon': 4,
+    'poster-design': 2,
+    'panel-discussion': 5,
+    'workshop': 1
+  };
+  const membersCount = teamSizes[eventKey] || 1;
+  return perHeadFee * membersCount;
+}
+
 class RegistrationService {
   constructor() {
     this.lock = new AsyncLock();
@@ -239,6 +253,31 @@ class RegistrationService {
         throw err;
       }
 
+      // 2b. Strict Duplicate UTR / Transaction ID check across all active registrations
+      const rawUtr = (formData.paymentUtr || '').trim();
+      if (!rawUtr || rawUtr === 'N/A') {
+        const err = new Error('UPI Transaction ID / 12-digit UTR is required to confirm registration.');
+        err.statusCode = 400;
+        err.code = 'MISSING_UTR';
+        throw err;
+      }
+
+      const cleanUtr = rawUtr.toLowerCase();
+      const existingUtr = this.registrations.find(
+        (r) => r.status !== 'CANCELLED' && r.paymentUtr && r.paymentUtr.trim().toLowerCase() === cleanUtr
+      );
+
+      if (existingUtr) {
+        const err = new Error(`This UPI Transaction ID / UTR "${rawUtr}" has already been submitted for registration ${existingUtr.registrationId} (${existingUtr.eventName}). Reusing transaction IDs is strictly prohibited.`);
+        err.statusCode = 409;
+        err.code = 'DUPLICATE_UTR';
+        throw err;
+      }
+
+      // Calculate guaranteed fee so paymentAmount is never 0
+      const expectedAmount = calculateServerFee(eventKey, teamLeader.college);
+      const paymentAmount = Number(formData.paymentAmount) > 0 ? Number(formData.paymentAmount) : expectedAmount;
+
       // 3. Assemble validated members list
       const allMembers = [];
       // Member 1 is Team Leader
@@ -278,9 +317,9 @@ class RegistrationService {
           year: teamLeader.year
         },
         members: allMembers,
-        paymentAmount: formData.paymentAmount || 0,
-        paymentUtr: formData.paymentUtr || 'N/A',
-        payerName: formData.payerName || '',
+        paymentAmount,
+        paymentUtr: rawUtr,
+        payerName: (formData.payerName || '').trim(),
         paymentStatus: formData.paymentStatus || 'SUBMITTED',
         demoStallCategory: demoStallCategory || (eventKey === 'demo-stall' ? getDemoStallCategory(teamLeader.college, teamLeader.department) : null),
         status: 'CONFIRMED'
