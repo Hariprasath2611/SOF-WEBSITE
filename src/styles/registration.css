@@ -794,33 +794,58 @@
 
 /* Printable Styles */
 @media print {
-  body * {
-    visibility: hidden;
+  body {
+    background: #fff !important;
+    color: #000 !important;
   }
-  .confirmation-card,
-  .confirmation-card * {
-    visibility: visible;
+  .no-print {
+    display: none !important;
+  }
+  .reg-page-container {
+    background: none !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+  .reg-card-panel {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
   }
   .confirmation-card {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    position: static !important;
+    width: 100% !important;
     border: 2px solid #000 !important;
     background: #fff !important;
     color: #000 !important;
     box-shadow: none !important;
     padding: 24px !important;
+    margin: 0 !important;
   }
-  .conf-header h2, .conf-header p, .reg-id-display, .roster-table td, .roster-table th {
+  .conf-header h2, .conf-header p, .reg-id-display, .roster-table td, .roster-table th, .conf-specs-grid h4, .conf-specs-grid span {
+    color: #000 !important;
+  }
+  .conf-team-roster h4 {
     color: #000 !important;
   }
   .reg-id-display {
     border: 2px solid #000 !important;
     background: #f0f0f0 !important;
   }
-  .no-print {
-    display: none !important;
+  .conf-specs-grid {
+    border: 1px solid #ccc !important;
+    background: transparent !important;
+  }
+  .roster-table {
+    border: 1px solid #ccc !important;
+  }
+  .roster-table th {
+    background: #f8f9fa !important;
+    border-bottom: 2px solid #000 !important;
+  }
+  .roster-table td {
+    border-bottom: 1px solid #ccc !important;
   }
 }
 
