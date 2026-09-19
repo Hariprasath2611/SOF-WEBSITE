@@ -48,7 +48,7 @@ router.get('/events', (req, res) => {
  */
 router.post('/registrations', async (req, res) => {
   try {
-    const { eventKey, teamName, teamLeader, members } = req.body;
+    const { eventKey, teamName, teamLeader, members, paymentAmount, paymentUtr, payerName, paymentStatus } = req.body;
 
     // 1. Basic validation
     if (!eventKey) {
@@ -131,7 +131,11 @@ router.post('/registrations', async (req, res) => {
       eventKey,
       teamName,
       teamLeader,
-      members
+      members,
+      paymentAmount,
+      paymentUtr,
+      payerName,
+      paymentStatus
     });
 
     res.status(201).json({
