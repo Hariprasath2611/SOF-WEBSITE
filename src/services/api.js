@@ -5,6 +5,7 @@
  */
 
 import { EVENT_TRACKS, getTrackConfig } from '../config/events';
+import { calculateEventFee } from '../utils/feeCalculator';
 import * as XLSX from 'xlsx';
 
 const RENDER_BACKEND_URL = 'https://sof-website-vhai.onrender.com/api';
@@ -248,7 +249,7 @@ function registerLocally(formData) {
       (r) => r.status !== 'CANCELLED' && r.paymentUtr && r.paymentUtr.trim().toLowerCase() === cleanUtr
     );
     if (dupUtr) {
-      const err = new Error(`The UPI Reference / UTR "${paymentUtr}" has already been submitted for another registration.`);
+      const err = new Error(`This UPI Transaction ID / UTR "${paymentUtr}" has already been submitted for registration ${dupUtr.registrationId} (${dupUtr.eventName}). Reusing transaction IDs is strictly prohibited.`);
       err.code = 'DUPLICATE_UTR';
       throw err;
     }
@@ -275,6 +276,8 @@ function registerLocally(formData) {
 
   const registrationId = getNextLocalId();
   const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  const calculatedFee = calculateEventFee(eventKey, teamLeader.college).totalAmount;
+  const finalPaidAmount = Number(paymentAmount) > 0 ? Number(paymentAmount) : calculatedFee;
 
   const newRegistration = {
     registrationId,
@@ -286,7 +289,7 @@ function registerLocally(formData) {
     teamName: track.isTeam ? (teamName || 'N/A') : 'N/A',
     teamLeader: { ...teamLeader },
     members: allMembers,
-    paymentAmount: paymentAmount || 0,
+    paymentAmount: finalPaidAmount,
     paymentUtr: paymentUtr || 'N/A',
     payerName: payerName || '',
     paymentStatus: paymentStatus || 'SUBMITTED',
@@ -321,20 +324,54 @@ export async function fetchEvents() {
 }
 
 export async function submitRegistration(payload) {
+  // Compute safe non-zero fee based on event and college
+  const expectedFee = calculateEventFee(payload.eventKey, payload.teamLeader?.college).totalAmount;
+  const safePaymentAmount = Number(payload.paymentAmount) > 0 ? Number(payload.paymentAmount) : expectedFee;
+  const safeUtr = (payload.paymentUtr || '').trim();
+
+  const preparedPayload = {
+    ...payload,
+    paymentAmount: safePaymentAmount,
+    paymentUtr: safeUtr
+  };
+
   try {
     const res = await fetch(`${getApiBase()}/registrations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(preparedPayload)
     });
     const json = await res.json();
     if (res.ok && json.registration) {
-      return {
-        ...json.registration,
-        paymentAmount: json.registration.paymentAmount ?? payload.paymentAmount,
-        paymentUtr: json.registration.paymentUtr ?? payload.paymentUtr,
-        payerName: json.registration.payerName ?? payload.payerName
+      const reg = json.registration;
+      const finalAmount = (Number(reg.paymentAmount) > 0)
+        ? Number(reg.paymentAmount)
+        : safePaymentAmount;
+      const finalUtr = (reg.paymentUtr && reg.paymentUtr !== 'N/A' && reg.paymentUtr.trim().length > 0)
+        ? reg.paymentUtr
+        : safeUtr;
+      const finalPayer = (reg.payerName && reg.payerName.trim().length > 0)
+        ? reg.payerName
+        : (preparedPayload.payerName || '');
+
+      const mergedRegistration = {
+        ...reg,
+        paymentAmount: finalAmount,
+        paymentUtr: finalUtr,
+        payerName: finalPayer
       };
+
+      // Also mirror into local client storage for offline pass retrieval
+      const localRegs = getLocalRegistrations();
+      const existingIdx = localRegs.findIndex((r) => r.registrationId === mergedRegistration.registrationId);
+      if (existingIdx >= 0) {
+        localRegs[existingIdx] = mergedRegistration;
+      } else {
+        localRegs.unshift(mergedRegistration);
+      }
+      saveLocalRegistrations(localRegs);
+
+      return mergedRegistration;
     }
     if (res.status === 409 || res.status === 400) {
       const err = new Error(json.error || 'Registration failed');
@@ -346,7 +383,7 @@ export async function submitRegistration(payload) {
     // If backend isn't reachable, use local fallback
   }
 
-  return registerLocally(payload);
+  return registerLocally(preparedPayload);
 }
 
 export async function fetchRegistrationById(id) {
@@ -354,7 +391,14 @@ export async function fetchRegistrationById(id) {
     const res = await fetch(`${getApiBase()}/registrations/${encodeURIComponent(id)}`);
     if (res.ok) {
       const json = await res.json();
-      if (json.registration) return json.registration;
+      if (json.registration) {
+        const reg = json.registration;
+        const fee = calculateEventFee(reg.eventKey, reg.teamLeader?.college).totalAmount;
+        return {
+          ...reg,
+          paymentAmount: Number(reg.paymentAmount) > 0 ? Number(reg.paymentAmount) : fee
+        };
+      }
     }
   } catch {
     // Fallback to local store
@@ -363,7 +407,11 @@ export async function fetchRegistrationById(id) {
   const regs = getLocalRegistrations();
   const match = regs.find((r) => r.registrationId === id);
   if (!match) throw new Error(`Registration pass ${id} not found.`);
-  return match;
+  const fee = calculateEventFee(match.eventKey, match.teamLeader?.college).totalAmount;
+  return {
+    ...match,
+    paymentAmount: Number(match.paymentAmount) > 0 ? Number(match.paymentAmount) : fee
+  };
 }
 
 // -------------------------------------------------------------
