@@ -701,60 +701,60 @@ export default function AdminDashboard({ onBackToHome }) {
                         {ev.key === 'demo-stall' && (
                           <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                              Quota Allocation Breakdown (50 Total)
+                              Category Distribution (60 Total Stalls)
                             </div>
 
-                            {/* 1. Jaya CSE (30) */}
+                            {/* 1. Jaya CSE */}
                             <div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
-                                <span style={{ color: '#6ee7b7' }}>Jaya CSE (Max 30)</span>
+                                <span style={{ color: '#6ee7b7' }}>Jaya CSE</span>
                                 <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
-                                  {ev.quotasStats ? `${ev.quotasStats.jecCse.registered} / 30 (${ev.quotasStats.jecCse.remaining} left)` : '30 slots'}
+                                  {ev.quotasStats ? `${ev.quotasStats.jecCse.registered} teams` : '0 teams'}
                                 </span>
                               </div>
                               <div className="event-slot-bar-bg" style={{ height: '4px' }}>
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / 30) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / (ev.maxSlots || 60)) * 100)) : 0}%`,
                                     background: '#10b981'
                                   }}
                                 />
                               </div>
                             </div>
 
-                            {/* 2. Jaya Other Depts (10) */}
+                            {/* 2. Jaya Other Depts */}
                             <div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
-                                <span style={{ color: '#7dd3fc' }}>Jaya Other Depts (Max 10)</span>
+                                <span style={{ color: '#7dd3fc' }}>Jaya Other Depts</span>
                                 <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
-                                  {ev.quotasStats ? `${ev.quotasStats.jecOther.registered} / 10 (${ev.quotasStats.jecOther.remaining} left)` : '10 slots'}
+                                  {ev.quotasStats ? `${ev.quotasStats.jecOther.registered} teams` : '0 teams'}
                                 </span>
                               </div>
                               <div className="event-slot-bar-bg" style={{ height: '4px' }}>
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecOther.registered / 10) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecOther.registered / (ev.maxSlots || 60)) * 100)) : 0}%`,
                                     background: '#38bdf8'
                                   }}
                                 />
                               </div>
                             </div>
 
-                            {/* 3. External Colleges (10) */}
+                            {/* 3. External Colleges */}
                             <div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
-                                <span style={{ color: '#c084fc' }}>External Colleges (Max 10)</span>
+                                <span style={{ color: '#c084fc' }}>External Colleges</span>
                                 <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
-                                  {ev.quotasStats ? `${ev.quotasStats.external.registered} / 10 (${ev.quotasStats.external.remaining} left)` : '10 slots'}
+                                  {ev.quotasStats ? `${ev.quotasStats.external.registered} teams` : '0 teams'}
                                 </span>
                               </div>
                               <div className="event-slot-bar-bg" style={{ height: '4px' }}>
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.external.registered / 10) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.external.registered / (ev.maxSlots || 60)) * 100)) : 0}%`,
                                     background: '#a855f7'
                                   }}
                                 />

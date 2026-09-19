@@ -10,12 +10,7 @@ export const EVENTS = [
     title: 'Demo Stall',
     tagline: 'Build. Demonstrate. Inspire.',
     teamSize: 3,
-    maxSlots: 50,
-    quotas: {
-      jecCse: 30,
-      jecOther: 10,
-      external: 10
-    },
+    maxSlots: 60,
     isTeam: true,
     sheetEnvKey: 'DEMO_STALL_SHEET_ID',
     sheetName: 'Demo_Stall_Registrations',

@@ -11,12 +11,7 @@ export const EVENT_TRACKS = [
     tagline: 'Build. Demonstrate. Inspire.',
     trackNumber: '01',
     teamSize: 3,
-    maxSlots: 50,
-    quotas: {
-      jecCse: 30,
-      jecOther: 10,
-      external: 10
-    },
+    maxSlots: 60,
     isTeam: true,
     accentColor: '#10b981', // Terminal emerald
     badge: 'TEAM OF 3',
@@ -24,7 +19,7 @@ export const EVENT_TRACKS = [
     summary: 'Showcase working software projects, open-source utilities, and AI prototypes to industry juries.',
     requirements: [
       'Team of exactly 3 members (1 Team Leader + 2 Members)',
-      'Quota: 30 Jaya CSE • 10 Other Jaya Depts • 10 External Colleges',
+      'Capacity: 60 Project Stalls (Open to Jaya CSE, Other Depts & External Colleges)',
       'Live working prototype or application demonstration',
       'Open-source repository (GitHub/GitLab) recommended'
     ]

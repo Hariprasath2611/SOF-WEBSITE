@@ -132,7 +132,7 @@ function getLocalEventsWithSlots() {
     const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
 
     let quotasStats = null;
-    if (track.key === 'demo-stall' && track.quotas) {
+    if (track.key === 'demo-stall') {
       const jecCseCount = activeRegistrations.filter(
         (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
       ).length;
@@ -145,19 +145,16 @@ function getLocalEventsWithSlots() {
 
       quotasStats = {
         jecCse: {
-          quota: track.quotas.jecCse,
           registered: jecCseCount,
-          remaining: Math.max(0, track.quotas.jecCse - jecCseCount)
+          remaining: Math.max(0, track.maxSlots - activeCount)
         },
         jecOther: {
-          quota: track.quotas.jecOther,
           registered: jecOtherCount,
-          remaining: Math.max(0, track.quotas.jecOther - jecOtherCount)
+          remaining: Math.max(0, track.maxSlots - activeCount)
         },
         external: {
-          quota: track.quotas.external,
           registered: externalCount,
-          remaining: Math.max(0, track.quotas.external - externalCount)
+          remaining: Math.max(0, track.maxSlots - activeCount)
         }
       };
     }
@@ -193,38 +190,10 @@ function registerLocally(formData) {
     throw err;
   }
 
-  // Check Demo Stall 3-tier quota criteria
+  // Category classification for Demo Stall (Open 60-team capacity, no sub-bucket rejection)
   let demoStallCategory = null;
-  if (eventKey === 'demo-stall' && track.quotas) {
+  if (eventKey === 'demo-stall') {
     demoStallCategory = getDemoStallCategory(teamLeader.college, teamLeader.department);
-    if (demoStallCategory === 'jec_cse') {
-      const jecCseCount = activeRegistrations.filter(
-        (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
-      ).length;
-      if (jecCseCount >= track.quotas.jecCse) {
-        const err = new Error(`Demo Stall slots for Jaya Engineering College CSE (${track.quotas.jecCse}/${track.quotas.jecCse}) are completely filled.`);
-        err.code = 'QUOTA_FULL';
-        throw err;
-      }
-    } else if (demoStallCategory === 'jec_other') {
-      const jecOtherCount = activeRegistrations.filter(
-        (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_other'
-      ).length;
-      if (jecOtherCount >= track.quotas.jecOther) {
-        const err = new Error(`Demo Stall slots for Other Jaya Engineering College Departments (${track.quotas.jecOther}/${track.quotas.jecOther}) are completely filled.`);
-        err.code = 'QUOTA_FULL';
-        throw err;
-      }
-    } else {
-      const externalCount = activeRegistrations.filter(
-        (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'external'
-      ).length;
-      if (externalCount >= track.quotas.external) {
-        const err = new Error(`Demo Stall slots for External Colleges (${track.quotas.external}/${track.quotas.external}) are completely filled.`);
-        err.code = 'QUOTA_FULL';
-        throw err;
-      }
-    }
   }
 
   // 2. Duplicate check (Leader and Members)
@@ -738,9 +707,9 @@ export function exportRegistrationsToExcel(registrations, filename = 'SFD_2026_R
       'Timestamp': r.timestamp,
       'Event Track': r.eventName,
       'Demo Stall Category': r.eventKey === 'demo-stall' ? (
-        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_cse' ? 'Jaya CSE (Quota: 30)' :
-        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_other' ? 'Jaya Other Dept (Quota: 10)' :
-        'External College (Quota: 10)'
+        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_cse' ? 'Jaya CSE' :
+        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_other' ? 'Jaya Other Dept' :
+        'External College'
       ) : 'N/A',
       'Status': r.status,
       'Fee (INR)': r.paymentAmount || 0,
