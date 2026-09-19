@@ -226,13 +226,6 @@ export default function DynamicRegistrationForm({
           </div>
         </div>
       )}
-              <span className="form-error-msg">
-                <AlertCircle size={13} /> {errors.teamName}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* TEAM LEADER / PARTICIPANT FORM */}
       <div className="form-section-title">
