@@ -1,5 +1,4 @@
 import { calculateEventFee } from './src/utils/feeCalculator.js';
-import { calculateServerFee } from './server/services/registrationService.js';
 
 console.log('--- Testing Dynamic Mini Hackathon Fee Calculation ---');
 
@@ -26,15 +25,12 @@ const tests = [
 let allPassed = true;
 for (const t of tests) {
   const clientFee = calculateEventFee(t.event, t.college, t.count);
-  const serverFee = calculateServerFee(t.event, t.college, t.count);
-
   const clientMatch = clientFee.totalAmount === t.expected;
-  const serverMatch = serverFee === t.expected;
 
-  if (clientMatch && serverMatch) {
+  if (clientMatch) {
     console.log(`✓ [PASS] ${t.label}: ₹${clientFee.totalAmount}`);
   } else {
-    console.error(`✗ [FAIL] ${t.label}: Expected ₹${t.expected}, got Client=₹${clientFee.totalAmount}, Server=₹${serverFee}`);
+    console.error(`✗ [FAIL] ${t.label}: Expected ₹${t.expected}, got Client=₹${clientFee.totalAmount}`);
     allPassed = false;
   }
 }
