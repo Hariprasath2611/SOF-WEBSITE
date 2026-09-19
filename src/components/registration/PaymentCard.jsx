@@ -22,7 +22,8 @@ export default function PaymentCard({
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${feeInfo.totalAmount}&cu=INR&tn=SFD2026_${eventKey}`;
+  // Removed &am=${feeInfo.totalAmount} to prevent GPay "limit exceeded" error for personal VPAs
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&cu=INR&tn=SFD2026_${eventKey}`;
 
   return (
     <div className="payment-card-box">
