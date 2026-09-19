@@ -18,10 +18,12 @@ export const EVENTS = [
   },
   {
     key: 'mini-hackathon',
-    name: 'Mini Hackathon – Team of 4',
+    name: 'Mini Hackathon – 1 to 4 Members',
     title: 'Mini Hackathon',
     tagline: 'Code. Collaborate. Create.',
     teamSize: 4,
+    minTeamSize: 1,
+    maxTeamSize: 4,
     maxSlots: 25,
     isTeam: true,
     sheetEnvKey: 'MINI_HACKATHON_SHEET_ID',

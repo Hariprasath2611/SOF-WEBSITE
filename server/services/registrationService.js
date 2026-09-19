@@ -240,10 +240,6 @@ class RegistrationService {
         throw err;
       }
 
-      // Calculate guaranteed fee so paymentAmount is never 0
-      const expectedAmount = calculateServerFee(eventKey, teamLeader.college);
-      const paymentAmount = Number(formData.paymentAmount) > 0 ? Number(formData.paymentAmount) : expectedAmount;
-
       // 3. Assemble validated members list
       const allMembers = [];
       // Member 1 is Team Leader
@@ -255,13 +251,21 @@ class RegistrationService {
 
       if (eventConfig.isTeam && Array.isArray(members)) {
         for (let i = 0; i < members.length; i++) {
-          allMembers.push({
-            ...members[i],
-            isLeader: false,
-            memberIndex: i + 2
-          });
+          if (members[i] && members[i].name && members[i].name.trim().length > 0) {
+            allMembers.push({
+              ...members[i],
+              isLeader: false,
+              memberIndex: allMembers.length + 1
+            });
+          }
         }
       }
+
+      const actualMembersCount = allMembers.length;
+
+      // Calculate guaranteed fee so paymentAmount is never 0
+      const expectedAmount = calculateServerFee(eventKey, teamLeader.college, actualMembersCount);
+      const paymentAmount = Number(formData.paymentAmount) > 0 ? Number(formData.paymentAmount) : expectedAmount;
 
       // 4. Generate Unique Registration ID
       const registrationId = this.generateRegistrationId();
@@ -273,8 +277,8 @@ class RegistrationService {
         isoTimestamp: new Date().toISOString(),
         eventKey,
         eventName: eventConfig.name,
-        teamSize: eventConfig.teamSize,
-        teamName: eventConfig.isTeam ? (teamName ? teamName.trim() : 'Unnamed Team') : 'N/A',
+        teamSize: actualMembersCount,
+        teamName: eventConfig.isTeam ? (teamName && teamName.trim() ? teamName.trim() : (actualMembersCount === 1 ? `${teamLeader.name.trim()} (Solo)` : 'Unnamed Team')) : 'N/A',
         teamLeader: {
           name: teamLeader.name.trim(),
           email: leaderEmail,
