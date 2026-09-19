@@ -20,7 +20,8 @@ export default function RegistrationSummary({
   const eventConfig = getTrackConfig(selectedEventKey);
   if (!eventConfig) return null;
 
-  const feeInfo = calculateEventFee(selectedEventKey, formData.teamLeader?.college);
+  const actualMembersCount = (formData.members ? formData.members.filter(m => m && m.name && m.name.trim().length > 0).length : 0) + 1;
+  const feeInfo = calculateEventFee(selectedEventKey, formData.teamLeader?.college, actualMembersCount);
 
   const handleFinalSubmit = (e) => {
     e.preventDefault();
@@ -167,6 +168,7 @@ export default function RegistrationSummary({
       <PaymentCard
         eventKey={selectedEventKey}
         collegeName={formData.teamLeader?.college}
+        membersCount={actualMembersCount}
         utrNumber={utrNumber}
         setUtrNumber={(val) => {
           setUtrNumber(val);
