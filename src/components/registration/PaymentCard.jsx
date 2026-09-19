@@ -5,6 +5,7 @@ import { calculateEventFee } from '../../utils/feeCalculator';
 export default function PaymentCard({
   eventKey,
   collegeName,
+  membersCount = null,
   utrNumber,
   setUtrNumber,
   payerName,
@@ -13,7 +14,7 @@ export default function PaymentCard({
 }) {
   const [copied, setCopied] = useState(false);
   const [showUtrHelp, setShowUtrHelp] = useState(false);
-  const feeInfo = calculateEventFee(eventKey, collegeName);
+  const feeInfo = calculateEventFee(eventKey, collegeName, membersCount);
   const upiId = 'nishanth7326@oksbi';
   const payeeName = 'Nishanth .I';
 
