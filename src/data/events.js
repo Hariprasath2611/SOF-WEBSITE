@@ -117,7 +117,7 @@ export const events = [
       name: "Rajeshwari",
       role: "Poster Design Coordinator",
       department: "Dept of CSE",
-      photo: null,
+      photo: "/coordinators/Rajeshwari.jpeg",
       phone: "+919884256512",
       email: "poster.sfd2026@gmail.com"
     }
@@ -155,7 +155,7 @@ export const events = [
       name: "Ram siva Sundara Karthikeyan",
       role: "Workshop Coordinator",
       department: "Dept of CSE",
-      photo: null,
+      photo: "/coordinators/Ram-siva-sundara-Karthikeyan.jpeg",
       phone: "+917305077196",
       email: "workshop.sfd2026@gmail.com"
     }

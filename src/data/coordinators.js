@@ -41,7 +41,7 @@ export const overallCoordinators = [
     email: "allwyn.sfd@jaya.edu.in",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    photo: null,
+    photo: "/coordinators/V. Allwyn.jpeg",
     avatarBadge: "LOGISTICS"
   },
   {
@@ -106,7 +106,7 @@ export const overallCoordinators = [
     email: "karthick.sfd@jaya.edu.in",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    photo: null,
+    photo: "/coordinators/Karthik J.jpeg",
     avatarBadge: "FINANCE"
   },
   {
