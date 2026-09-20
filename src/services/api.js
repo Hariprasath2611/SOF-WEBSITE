@@ -34,16 +34,11 @@ const LOCAL_DELETED_KEY = 'sfd_deleted_ids_v1';
 const ADMIN_PASSWORD_FALLBACK = '12345';
 
 export function getDeletedIds() {
-  const testIds = ['REG-2026-00001', 'REG-2026-00002', 'REG-2026-00003', 'REG-2026-00004', 'REG-2026-00005', 'REG-2026-00006'];
   try {
     const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(LOCAL_DELETED_KEY) : null;
-    const list = raw ? JSON.parse(raw) : [];
-    testIds.forEach((id) => {
-      if (!list.includes(id)) list.push(id);
-    });
-    return list;
+    return raw ? JSON.parse(raw) : [];
   } catch {
-    return testIds;
+    return [];
   }
 }
 
@@ -70,13 +65,7 @@ function getLocalRegistrations() {
     if (!raw) return [];
     let list = JSON.parse(raw);
     if (Array.isArray(list)) {
-      const filtered = list.filter(
-        (r) => r.registrationId !== 'REG-2026-00001' && r.registrationId !== 'REG-2026-00002'
-      );
-      if (filtered.length !== list.length) {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
-      }
-      return filtered;
+      return list;
     }
     return [];
   } catch {
