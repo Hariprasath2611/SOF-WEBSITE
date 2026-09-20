@@ -39,6 +39,19 @@ export function getDeletedIds() {
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
+<<<<<<< HEAD
+=======
+  }
+}
+
+export function clearDeletedIds() {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(LOCAL_DELETED_KEY);
+    }
+  } catch (err) {
+    console.error('Failed to clear deleted IDs:', err);
+>>>>>>> 8101665e0e8cd891a9eb89745d74e5953158d9a2
   }
 }
 
@@ -63,11 +76,16 @@ function getLocalRegistrations() {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) return [];
+<<<<<<< HEAD
     let list = JSON.parse(raw);
     if (Array.isArray(list)) {
       return list;
     }
     return [];
+=======
+    const list = JSON.parse(raw);
+    return Array.isArray(list) ? list : [];
+>>>>>>> 8101665e0e8cd891a9eb89745d74e5953158d9a2
   } catch {
     return [];
   }
@@ -278,13 +296,7 @@ function enrichEventData(ev) {
 
   // Authoritative maxSlots from configuration (e.g. 60 for demo-stall)
   const maxSlots = ev.key === 'demo-stall' ? 60 : (localTrack.maxSlots || ev.maxSlots || 1);
-  let registeredCount = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
-
-  // Guard against legacy test registrations in remote server memory until redeploy
-  if (ev.key === 'workshop' && registeredCount <= 5) {
-    registeredCount = Math.max(0, registeredCount - 5);
-  }
-
+  const registeredCount = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
   const remainingSlots = Math.max(0, maxSlots - registeredCount);
   const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
   const teamSize = ev.key === 'mini-hackathon' ? '1 - 4' : (localTrack.teamSize || ev.teamSize);
@@ -514,6 +526,9 @@ export async function fetchAdminOverview(token) {
 
 export async function fetchAdminRegistrations(token, { search = '', event = '', status = '' } = {}) {
   const deletedIds = getDeletedIds();
+  let serverRegs = [];
+  let isServerConnected = false;
+
   try {
     const params = new URLSearchParams();
     if (search) params.set('search', search);
@@ -525,38 +540,69 @@ export async function fetchAdminRegistrations(token, { search = '', event = '', 
     });
     if (res.ok) {
       const json = await res.json();
-      if (json.registrations) {
-        return json.registrations.filter((r) => !deletedIds.includes(r.registrationId));
+      if (Array.isArray(json.registrations)) {
+        serverRegs = json.registrations;
+        isServerConnected = true;
       }
+    } else if (res.status === 401) {
+      throw new Error('Unauthorized');
     }
-    if (res.status === 401) throw new Error('Unauthorized');
   } catch (err) {
     if (err.message === 'Unauthorized') throw err;
+    console.warn('Backend fetchAdminRegistrations notice, reading local store:', err.message);
   }
 
-  let regs = getLocalRegistrations().filter((r) => !deletedIds.includes(r.registrationId));
+  // Get local registrations
+  const localRegs = getLocalRegistrations();
 
+  // Merge map: registrationId -> registration
+  const map = new Map();
+  // Add local registrations first
+  localRegs.forEach((r) => {
+    if (r && r.registrationId) {
+      map.set(r.registrationId, { ...r, isLocal: true });
+    }
+  });
+  // Overlay server registrations (authoritative)
+  serverRegs.forEach((r) => {
+    if (r && r.registrationId) {
+      map.set(r.registrationId, { ...r, isLocal: false });
+    }
+  });
+
+  let merged = Array.from(map.values()).filter((r) => !deletedIds.includes(r.registrationId));
+
+  // If server is connected and returned results without local discrepancies, return formatted
+  if (isServerConnected && localRegs.length === 0) {
+    return merged;
+  }
+
+  // Apply filters if we merged offline/local registrations
   if (event) {
-    regs = regs.filter((r) => r.eventKey === event);
+    merged = merged.filter((r) => r.eventKey === event);
   }
   if (status) {
-    regs = regs.filter((r) => r.status === status);
+    merged = merged.filter((r) => r.status === status);
   }
   if (search && search.trim()) {
     const q = search.trim().toLowerCase();
-    regs = regs.filter((r) => {
-      const matchId = r.registrationId && r.registrationId.toLowerCase().includes(q);
-      const matchTeam = r.teamName && r.teamName.toLowerCase().includes(q);
-      const matchLeader = r.teamLeader && (
+    merged = merged.filter((r) => {
+      const inId = r.registrationId && r.registrationId.toLowerCase().includes(q);
+      const inTeam = r.teamName && r.teamName.toLowerCase().includes(q);
+      const inLeader = r.teamLeader && (
         (r.teamLeader.name && r.teamLeader.name.toLowerCase().includes(q)) ||
         (r.teamLeader.email && r.teamLeader.email.toLowerCase().includes(q)) ||
         (r.teamLeader.college && r.teamLeader.college.toLowerCase().includes(q))
       );
-      return matchId || matchTeam || matchLeader;
+      const inMember = r.members && r.members.some((m) =>
+        (m.name && m.name.toLowerCase().includes(q)) ||
+        (m.email && m.email.toLowerCase().includes(q))
+      );
+      return inId || inTeam || inLeader || inMember;
     });
   }
 
-  return [...regs].reverse();
+  return merged;
 }
 
 export async function updateRegistrationStatus(token, id, status) {

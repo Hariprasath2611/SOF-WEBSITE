@@ -10,7 +10,8 @@ import {
   setCustomBackendUrl,
   getDemoStallCategory,
   deleteRegistration,
-  getDeletedIds
+  getDeletedIds,
+  clearDeletedIds
 } from '../../services/api';
 import {
   Shield,
@@ -82,10 +83,7 @@ export default function AdminDashboard({ onBackToHome }) {
         fetchAdminRegistrations(t, { search: searchTerm, event: filterEvent, status: filterStatus })
       ]);
       setOverview(ovData);
-      const cleanRegistrations = (regData || []).filter(
-        (r) => !getDeletedIds().includes(r.registrationId)
-      );
-      setRegistrations(cleanRegistrations);
+      setRegistrations(regData || []);
     } catch (err) {
       if (err.message && err.message.toLowerCase().includes('unauthorized')) {
         setToken('');
@@ -97,6 +95,13 @@ export default function AdminDashboard({ onBackToHome }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRestoreAllDeleted = () => {
+    clearDeletedIds();
+    setActionMessage('Restored all previously hidden / deleted registrations.');
+    loadData();
+    setTimeout(() => setActionMessage(''), 4000);
   };
 
   useEffect(() => {
@@ -526,6 +531,18 @@ export default function AdminDashboard({ onBackToHome }) {
                       <option value="CONFIRMED">CONFIRMED</option>
                       <option value="CANCELLED">CANCELLED</option>
                     </select>
+
+                    {getDeletedIds().length > 0 && (
+                      <button
+                        type="button"
+                        className="btn-wizard-back"
+                        onClick={handleRestoreAllDeleted}
+                        style={{ color: '#fbbf24', borderColor: 'rgba(251, 191, 36, 0.4)', fontSize: '0.8rem', padding: '6px 12px' }}
+                        title="Unhide registrations previously removed from this browser"
+                      >
+                        <span>Unhide All ({getDeletedIds().length})</span>
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -569,7 +586,14 @@ export default function AdminDashboard({ onBackToHome }) {
                             return (
                               <tr key={r.registrationId}>
                                 <td className="col-id" style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#38bdf8' }}>
-                                  {r.registrationId}
+                                  <div>{r.registrationId}</div>
+                                  {r.isLocal && (
+                                    <div style={{ marginTop: '2px' }}>
+                                      <span style={{ fontSize: '0.66rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.3)' }}>
+                                        Local
+                                      </span>
+                                    </div>
+                                  )}
                                 </td>
                                 <td className="col-time">
                                   {r.timestamp}
