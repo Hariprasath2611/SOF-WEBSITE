@@ -193,7 +193,7 @@ export const events = [
       name: "Rahul Raj",
       role: "Discussion Panel Coordinator",
       department: "Dept of CSE",
-      photo: null,
+      photo: "/coordinators/Rahul Raj.jpeg",
       phone: "+918925529539",
       email: "debate.sfd2026@gmail.com"
     }
