@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { EVENTS, getEventByKey } from '../config/events.js';
 import { googleSheetsService } from './googleSheetsService.js';
+import { connectToDatabase, getDatabase } from './mongodbService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -75,6 +76,49 @@ class RegistrationService {
     this.registrations = [];
     this.counter = 0;
     this.loadFromDisk();
+    this.syncWithMongoDB();
+  }
+
+  async syncWithMongoDB() {
+    const db = await connectToDatabase();
+    if (!db) return;
+
+    try {
+      const col = db.collection("registrations");
+      
+      // Migrate local registrations to MongoDB if they are not already there
+      for (const reg of [...this.registrations].reverse()) {
+        await col.updateOne(
+          { registrationId: reg.registrationId },
+          { $setOnInsert: reg },
+          { upsert: true }
+        );
+      }
+
+      // Load definitive list from MongoDB
+      const data = await col.find({}).sort({ registrationId: -1 }).toArray();
+      this.registrations = data.map(d => {
+        const { _id, ...rest } = d;
+        return rest;
+      });
+      
+      // Sync counter
+      const counterDoc = await db.collection("settings").findOne({ _id: "counter" });
+      if (counterDoc && counterDoc.value > this.counter) {
+        this.counter = counterDoc.value;
+      } else if (this.counter > (counterDoc ? counterDoc.value : 0)) {
+        await db.collection("settings").updateOne(
+          { _id: "counter" },
+          { $set: { value: this.counter } },
+          { upsert: true }
+        );
+      }
+      
+      console.log(`Synced ${this.registrations.length} registrations from MongoDB.`);
+      this.saveToDisk(); // Update local backup
+    } catch (err) {
+      console.error('Error syncing with MongoDB:', err.message);
+    }
   }
 
   loadFromDisk() {
@@ -106,6 +150,35 @@ class RegistrationService {
       fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), 'utf-8');
     } catch (err) {
       console.error('Failed to write to local store:', err.message);
+    }
+  }
+
+  async saveToMongoDB(registration) {
+    const db = getDatabase();
+    if (!db) return;
+    try {
+      await db.collection("registrations").updateOne(
+        { registrationId: registration.registrationId },
+        { $set: registration },
+        { upsert: true }
+      );
+      await db.collection("settings").updateOne(
+        { _id: "counter" },
+        { $set: { value: this.counter } },
+        { upsert: true }
+      );
+    } catch (err) {
+      console.error('Failed to write to MongoDB:', err.message);
+    }
+  }
+
+  async deleteFromMongoDB(registrationId) {
+    const db = getDatabase();
+    if (!db) return;
+    try {
+      await db.collection("registrations").deleteOne({ registrationId });
+    } catch (err) {
+      console.error('Failed to delete from MongoDB:', err.message);
     }
   }
 
@@ -298,6 +371,9 @@ class RegistrationService {
       // 5. Store registration locally
       this.registrations.unshift(newRegistration);
       this.saveToDisk();
+      
+      // Async save to MongoDB
+      this.saveToMongoDB(newRegistration);
 
       // 6. Write asynchronously to Google Sheets without blocking response
       (async () => {
@@ -377,6 +453,7 @@ class RegistrationService {
     reg.status = newStatus;
     reg.statusUpdatedAt = new Date().toISOString();
     this.saveToDisk();
+    this.saveToMongoDB(reg);
 
     // Async sync to Google Sheets
     (async () => {
@@ -410,6 +487,7 @@ class RegistrationService {
 
     const removed = this.registrations.splice(idx, 1)[0];
     this.saveToDisk();
+    this.deleteFromMongoDB(registrationId);
 
     // Async sync to Google Sheets if configured
     (async () => {
