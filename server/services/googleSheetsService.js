@@ -89,6 +89,12 @@ class GoogleSheetsService {
       // 3. Dashboard header
       const dashHeader = ['Metric', 'Value', 'Last Updated'];
       await this.ensureSheetWithHeaders(masterId, 'Dashboard', dashHeader);
+
+      // 4. Initialize Event-specific tabs in the Master Sheet
+      for (const ev of EVENTS) {
+        const headers = this.buildEventHeaders(ev);
+        await this.ensureSheetWithHeaders(masterId, ev.sheetName, headers);
+      }
     } catch (err) {
       console.error('Error initializing Master Spreadsheet:', err.message);
     }
@@ -98,16 +104,8 @@ class GoogleSheetsService {
    * Initializes headers on an event-specific sheet
    */
   async initEventSpreadsheet(eventConfig) {
-    if (!this.isConfigured()) return;
-    const sheetId = process.env[eventConfig.sheetEnvKey];
-    if (!sheetId) return;
-
-    try {
-      const headers = this.buildEventHeaders(eventConfig);
-      await this.ensureSheetWithHeaders(sheetId, eventConfig.sheetName, headers);
-    } catch (err) {
-      console.error(`Error initializing sheet for ${eventConfig.name}:`, err.message);
-    }
+    // Deprecated: Event tabs are now created inside initMasterSpreadsheet
+    return;
   }
 
   buildEventHeaders(eventConfig) {
@@ -268,39 +266,36 @@ class GoogleSheetsService {
         requestBody: { values: [masterRow] }
       });
 
-      // 2. Append to event-specific spreadsheet
-      const eventSheetId = process.env[eventConfig.sheetEnvKey];
-      if (eventSheetId) {
-        const eventRow = [
-          registration.registrationId,
-          registration.timestamp
-        ];
+      // 2. Append to event-specific tab in Master Sheet
+      const eventRow = [
+        registration.registrationId,
+        registration.timestamp
+      ];
 
-        if (eventConfig.isTeam) {
-          eventRow.push(registration.teamName || '');
-        }
-
-        // Add all members in order (Team Leader is member 0)
-        for (let i = 0; i < eventConfig.teamSize; i++) {
-          const m = registration.members[i] || {};
-          eventRow.push(
-            m.name || '',
-            m.email || '',
-            m.college || '',
-            m.department || '',
-            m.year || ''
-          );
-        }
-
-        eventRow.push(registration.status || 'CONFIRMED');
-
-        await this.sheets.spreadsheets.values.append({
-          spreadsheetId: eventSheetId,
-          range: `${eventConfig.sheetName}!A:Z`,
-          valueInputOption: 'USER_ENTERED',
-          requestBody: { values: [eventRow] }
-        });
+      if (eventConfig.isTeam) {
+        eventRow.push(registration.teamName || '');
       }
+
+      // Add all members in order (Team Leader is member 0)
+      for (let i = 0; i < eventConfig.teamSize; i++) {
+        const m = registration.members[i] || {};
+        eventRow.push(
+          m.name || '',
+          m.email || '',
+          m.college || '',
+          m.department || '',
+          m.year || ''
+        );
+      }
+
+      eventRow.push(registration.status || 'CONFIRMED');
+
+      await this.sheets.spreadsheets.values.append({
+        spreadsheetId: masterId,
+        range: `${eventConfig.sheetName}!A:Z`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: { values: [eventRow] }
+      });
     } catch (err) {
       console.error('Error writing registration to Google Sheets:', err.message);
       // Fail gracefully so user's registration still succeeds in local store
