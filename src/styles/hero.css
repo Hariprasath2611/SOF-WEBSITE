@@ -169,6 +169,8 @@
   .hero-section {
     padding-top: calc(var(--header-height) + 16px);
     padding-bottom: 40px;
+    align-items: flex-start;
+    height: auto;
   }
   .hero-description {
     font-size: 0.95rem;

@@ -124,7 +124,7 @@ export default function RegistrationPage({ onBackToHome, preselectedTrack = null
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto', fontSize: '0.78rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
             <Shield size={14} color="#10b981" />
-            <span>Secure Verification System</span>
+            <span className="hide-on-mobile">Secure Verification System</span>
           </div>
         </div>
 

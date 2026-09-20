@@ -206,12 +206,18 @@ code, pre, .mono {
 }
 
 .section-title {
-  font-size: clamp(2rem, 3.8vw, 2.9rem);
+  font-size: clamp(1.4rem, 5vw, 2.9rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   margin-bottom: 14px;
   color: #ffffff;
   line-height: 1.18;
+}
+
+@media (max-width: 640px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
 }
 
 .section-subtitle {
