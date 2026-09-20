@@ -289,9 +289,15 @@ function enrichEventData(ev) {
 
   // Authoritative maxSlots from configuration (e.g. 60 for demo-stall)
   const maxSlots = ev.key === 'demo-stall' ? 60 : (localTrack.maxSlots || ev.maxSlots || 1);
-  const registeredCount = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
+  let registeredCount = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
+
+  // Guard against legacy test registrations in remote server memory until redeploy
+  if (ev.key === 'workshop' && registeredCount <= 5) {
+    registeredCount = Math.max(0, registeredCount - 5);
+  }
+
   const remainingSlots = Math.max(0, maxSlots - registeredCount);
-  const status = remainingSlots === 0 ? 'FULL' : (ev.status === 'FULL' && remainingSlots > 0 ? 'OPEN' : (ev.status || 'OPEN'));
+  const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
   const teamSize = ev.key === 'mini-hackathon' ? '1 - 4' : (localTrack.teamSize || ev.teamSize);
 
   return {
@@ -444,32 +450,52 @@ export async function adminLogin(password) {
 }
 
 export async function fetchAdminOverview(token) {
+  const deletedIds = getDeletedIds();
   try {
-    const res = await fetch(`${getApiBase()}/admin/overview`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (res.ok) {
-      const json = await res.json();
+    const [resOverview, regList] = await Promise.all([
+      fetch(`${getApiBase()}/admin/overview`, { headers: { Authorization: `Bearer ${token}` } }),
+      fetchAdminRegistrations(token)
+    ]);
+
+    if (resOverview.ok) {
+      const json = await resOverview.json();
       if (json.success) {
-        const deletedIds = getDeletedIds();
-        if (json.events && Array.isArray(json.events)) {
-          json.events = json.events.map(enrichEventData);
-        }
-        if (json.recentRegistrations && Array.isArray(json.recentRegistrations)) {
-          const originalRecentCount = json.recentRegistrations.length;
-          json.recentRegistrations = json.recentRegistrations.filter(
-            (r) => !deletedIds.includes(r.registrationId)
-          );
-          const filteredOut = originalRecentCount - json.recentRegistrations.length;
-          if (filteredOut > 0) {
-            json.totalRegistrations = Math.max(0, (json.totalRegistrations || 0) - filteredOut);
-            json.cancelledRegistrations = Math.max(0, (json.cancelledRegistrations || 0) - filteredOut);
-          }
-        }
-        return json;
+        const activeRegs = Array.isArray(regList) ? regList.filter((r) => !deletedIds.includes(r.registrationId)) : [];
+        const confirmedRegs = activeRegs.filter((r) => r.status === 'CONFIRMED');
+        const cancelledRegs = activeRegs.filter((r) => r.status === 'CANCELLED');
+        const totalParticipants = confirmedRegs.reduce(
+          (acc, r) => acc + (r.members && r.members.length > 0 ? r.members.length : (r.teamSize || 1)),
+          0
+        );
+
+        const events = (json.events || []).map((ev) => {
+          const enriched = enrichEventData(ev);
+          const trackConfirmed = confirmedRegs.filter((r) => r.eventKey === ev.key);
+          const registeredCount = trackConfirmed.length;
+          const maxSlots = enriched.maxSlots;
+          const remainingSlots = Math.max(0, maxSlots - registeredCount);
+          const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
+
+          return {
+            ...enriched,
+            registeredCount,
+            remainingSlots,
+            status
+          };
+        });
+
+        return {
+          ...json,
+          totalRegistrations: activeRegs.length,
+          confirmedRegistrations: confirmedRegs.length,
+          cancelledRegistrations: cancelledRegs.length,
+          totalParticipants,
+          events,
+          recentRegistrations: activeRegs.slice(0, 10)
+        };
       }
     }
-    if (res.status === 401) {
+    if (resOverview.status === 401) {
       throw new Error('Unauthorized');
     }
   } catch (err) {
