@@ -33,7 +33,7 @@ export const EVENT_TRACKS = [
     teamSize: 4,
     minTeamSize: 1,
     maxTeamSize: 4,
-    maxSlots: 25,
+    maxSlots: 50,
     isTeam: true,
     accentColor: '#3b82f6', // Electric blue
     badge: '1 - 4 MEMBERS',

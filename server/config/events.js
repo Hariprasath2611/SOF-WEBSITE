@@ -24,7 +24,7 @@ export const EVENTS = [
     teamSize: 4,
     minTeamSize: 1,
     maxTeamSize: 4,
-    maxSlots: 25,
+    maxSlots: 50,
     isTeam: true,
     sheetEnvKey: 'MINI_HACKATHON_SHEET_ID',
     sheetName: 'Mini_Hackathon_Registrations',
