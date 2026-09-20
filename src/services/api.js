@@ -280,19 +280,42 @@ function registerLocally(formData) {
 // PUBLIC API FUNCTIONS (With automatic fallback)
 // -------------------------------------------------------------
 
+function enrichEventData(ev) {
+  if (!ev || !ev.key) return ev;
+  const localTrack = getTrackConfig(ev.key);
+  if (!localTrack) return ev;
+
+  // Authoritative maxSlots from configuration (e.g. 60 for demo-stall)
+  const maxSlots = ev.key === 'demo-stall' ? 60 : (localTrack.maxSlots || ev.maxSlots || 1);
+  const registeredCount = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
+  const remainingSlots = Math.max(0, maxSlots - registeredCount);
+  const status = remainingSlots === 0 ? 'FULL' : (ev.status === 'FULL' && remainingSlots > 0 ? 'OPEN' : (ev.status || 'OPEN'));
+  const teamSize = ev.key === 'mini-hackathon' ? '1 - 4' : (localTrack.teamSize || ev.teamSize);
+
+  return {
+    ...localTrack,
+    ...ev,
+    maxSlots,
+    registeredCount,
+    remainingSlots,
+    status,
+    teamSize
+  };
+}
+
 export async function fetchEvents() {
   try {
     const res = await fetch(`${getApiBase()}/events`);
     if (res.ok) {
       const json = await res.json();
       if (json.events && Array.isArray(json.events)) {
-        return json.events;
+        return json.events.map(enrichEventData);
       }
     }
   } catch {
     // Network or server error -> use client storage
   }
-  return getLocalEventsWithSlots();
+  return getLocalEventsWithSlots().map(enrichEventData);
 }
 
 export async function submitRegistration(payload) {
@@ -425,7 +448,12 @@ export async function fetchAdminOverview(token) {
     });
     if (res.ok) {
       const json = await res.json();
-      if (json.success) return json;
+      if (json.success) {
+        if (json.events && Array.isArray(json.events)) {
+          json.events = json.events.map(enrichEventData);
+        }
+        return json;
+      }
     }
     if (res.status === 401) {
       throw new Error('Unauthorized');
@@ -449,7 +477,7 @@ export async function fetchAdminOverview(token) {
     confirmedRegistrations: confirmed.length,
     cancelledRegistrations: cancelled.length,
     totalParticipants,
-    events: getLocalEventsWithSlots(),
+    events: getLocalEventsWithSlots().map(enrichEventData),
     recentRegistrations: [...regs].reverse().slice(0, 10),
     isLocalFallback: true
   };

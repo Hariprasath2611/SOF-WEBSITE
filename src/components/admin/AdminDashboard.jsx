@@ -665,20 +665,25 @@ export default function AdminDashboard({ onBackToHome }) {
 
                 <div className="admin-events-slots-grid">
                   {(overview.events || []).map((ev) => {
-                    const percent = Math.min(100, Math.round((ev.registeredCount / (ev.maxSlots || 1)) * 100));
-                    const isFull = ev.status === 'FULL';
+                    const localTrack = EVENT_TRACKS.find((t) => t.key === ev.key);
+                    const effectiveMaxSlots = ev.key === 'demo-stall' ? 60 : (localTrack?.maxSlots || ev.maxSlots || 1);
+                    const effectiveRegistered = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
+                    const effectiveRemaining = Math.max(0, effectiveMaxSlots - effectiveRegistered);
+                    const effectiveTeamSize = ev.key === 'mini-hackathon' ? '1 - 4' : (localTrack?.teamSize || ev.teamSize);
+                    const percent = Math.min(100, Math.round((effectiveRegistered / effectiveMaxSlots) * 100));
+                    const isFull = effectiveRemaining === 0 || ev.status === 'FULL';
 
                     return (
                       <div key={ev.key} className={`event-slot-card ${isFull ? 'full-border' : ''}`}>
                         <div className="event-slot-header">
                           <div>
-                            <div className="event-slot-name">{ev.title}</div>
+                            <div className="event-slot-name">{ev.title || localTrack?.title}</div>
                             <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
-                              Team Size: {ev.teamSize}
+                              Team Size: {effectiveTeamSize}
                             </span>
                           </div>
                           <span className={`status-badge ${isFull ? 'cancelled' : 'confirmed'}`}>
-                            {ev.status}
+                            {isFull ? 'FULL' : 'OPEN'}
                           </span>
                         </div>
 
@@ -691,10 +696,10 @@ export default function AdminDashboard({ onBackToHome }) {
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
                           <span style={{ color: '#fff', fontWeight: 700 }}>
-                            {ev.registeredCount} / {ev.maxSlots}
+                            {effectiveRegistered} / {effectiveMaxSlots}
                           </span>
                           <span style={{ color: isFull ? '#f87171' : '#10b981' }}>
-                            {ev.remainingSlots} Left
+                            {effectiveRemaining} Left
                           </span>
                         </div>
 
@@ -716,7 +721,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / (ev.maxSlots || 60)) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / 60) * 100)) : 0}%`,
                                     background: '#10b981'
                                   }}
                                 />
@@ -735,7 +740,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecOther.registered / (ev.maxSlots || 60)) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecOther.registered / 60) * 100)) : 0}%`,
                                     background: '#38bdf8'
                                   }}
                                 />
@@ -754,7 +759,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.external.registered / (ev.maxSlots || 60)) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.external.registered / 60) * 100)) : 0}%`,
                                     background: '#a855f7'
                                   }}
                                 />

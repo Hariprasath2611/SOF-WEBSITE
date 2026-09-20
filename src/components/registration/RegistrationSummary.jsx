@@ -103,7 +103,7 @@ export default function RegistrationSummary({
         </div>
         <div className="summary-row">
           <span className="summary-key">Category</span>
-          <span className="summary-val">{eventConfig.isTeam ? `Team Event (${eventConfig.teamSize} Members)` : 'Individual Masterclass'}</span>
+          <span className="summary-val">{eventConfig.isTeam ? `Team Event (${actualMembersCount} ${actualMembersCount > 1 ? 'Members' : 'Member'})` : 'Individual Masterclass'}</span>
         </div>
         {eventConfig.isTeam && (
           <div className="summary-row">
@@ -129,7 +129,7 @@ export default function RegistrationSummary({
       {eventConfig.isTeam && (
         <div style={{ marginBottom: '24px' }}>
           <h4 style={{ fontSize: '0.95rem', color: '#cbd5e1', marginBottom: '12px', fontFamily: 'var(--font-mono)' }}>
-            CONFIRMED TEAM ROSTER ({eventConfig.teamSize} PARTICIPANTS)
+            CONFIRMED TEAM ROSTER ({actualMembersCount} {actualMembersCount > 1 ? 'PARTICIPANTS' : 'PARTICIPANT'})
           </h4>
 
           <div style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '10px', overflow: 'hidden' }}>
