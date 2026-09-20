@@ -449,8 +449,20 @@ export async function fetchAdminOverview(token) {
     if (res.ok) {
       const json = await res.json();
       if (json.success) {
+        const deletedIds = getDeletedIds();
         if (json.events && Array.isArray(json.events)) {
           json.events = json.events.map(enrichEventData);
+        }
+        if (json.recentRegistrations && Array.isArray(json.recentRegistrations)) {
+          const originalRecentCount = json.recentRegistrations.length;
+          json.recentRegistrations = json.recentRegistrations.filter(
+            (r) => !deletedIds.includes(r.registrationId)
+          );
+          const filteredOut = originalRecentCount - json.recentRegistrations.length;
+          if (filteredOut > 0) {
+            json.totalRegistrations = Math.max(0, (json.totalRegistrations || 0) - filteredOut);
+            json.cancelledRegistrations = Math.max(0, (json.cancelledRegistrations || 0) - filteredOut);
+          }
         }
         return json;
       }
