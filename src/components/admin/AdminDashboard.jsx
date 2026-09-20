@@ -440,7 +440,11 @@ export default function AdminDashboard({ onBackToHome }) {
 
               <div className="kpi-metric-card">
                 <span className="kpi-title">Total Amount</span>
-                <span className="kpi-number" style={{ color: '#fbbf24' }}>₹{overview.totalAmountCollected || 0}</span>
+                <span className="kpi-number" style={{ color: '#fbbf24' }}>
+                  ₹{overview.totalAmountCollected !== undefined 
+                      ? overview.totalAmountCollected 
+                      : registrations.filter(r => r.status === 'CONFIRMED').reduce((sum, r) => sum + (Number(r.paymentAmount) || 0), 0)}
+                </span>
                 <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Revenue collected</span>
               </div>
             </div>
