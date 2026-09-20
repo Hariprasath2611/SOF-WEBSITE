@@ -93,7 +93,7 @@ export const overallCoordinators = [
     email: "john.sfd@jaya.edu.in",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    photo: null,
+    photo: "/coordinators/John Danel Paul.jpeg",
     avatarBadge: "DESIGN"
   },
   {
