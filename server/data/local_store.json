@@ -1,5 +1,57 @@
 {
-  "counter": 0,
-  "lastUpdated": "2026-09-18T14:55:00.000Z",
-  "registrations": []
+  "counter": 1,
+  "lastUpdated": "2026-09-20T14:55:00.000Z",
+  "registrations": [
+    {
+      "registrationId": "REG-2026-00001",
+      "timestamp": "20/9/2026, 2:07:01 pm",
+      "isoTimestamp": "2026-09-20T08:37:01.000Z",
+      "eventKey": "demo-stall",
+      "eventName": "Demo Stall",
+      "teamSize": 3,
+      "teamName": "TechVeer",
+      "teamLeader": {
+        "name": "Manju Netam",
+        "email": "manjunetam@example.com",
+        "college": "Jaya Engineering College",
+        "department": "CSE",
+        "year": "N/A"
+      },
+      "members": [
+        {
+          "name": "Manju Netam",
+          "email": "manjunetam@example.com",
+          "college": "Jaya Engineering College",
+          "department": "CSE",
+          "year": "N/A",
+          "isLeader": true,
+          "memberIndex": 1
+        },
+        {
+          "name": "Baby Shalini",
+          "email": "babyshalini@example.com",
+          "college": "Jaya Engineering College",
+          "department": "CSE",
+          "year": "N/A",
+          "isLeader": false,
+          "memberIndex": 2
+        },
+        {
+          "name": "Logeshwari",
+          "email": "logeshwari@example.com",
+          "college": "Jaya Engineering College",
+          "department": "CSE",
+          "year": "N/A",
+          "isLeader": false,
+          "memberIndex": 3
+        }
+      ],
+      "paymentAmount": 300,
+      "paymentUtr": "626300946686",
+      "payerName": "Manju Netam",
+      "paymentStatus": "SUBMITTED",
+      "demoStallCategory": "jec_cse",
+      "status": "CONFIRMED"
+    }
+  ]
 }
