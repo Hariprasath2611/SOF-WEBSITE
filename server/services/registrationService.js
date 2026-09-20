@@ -55,6 +55,20 @@ export function getDemoStallCategory(college = '', department = '') {
   return 'external';
 }
 
+export function calculateServerFee(eventKey, collegeName = '', actualMembersCount = null) {
+  const isJaya = /(jaya|\bjec\b)/i.test((collegeName || '').trim());
+  const perHeadFee = isJaya ? 100 : 200;
+  const teamSizes = {
+    'demo-stall': 3,
+    'mini-hackathon': 4,
+    'poster-design': 2,
+    'panel-discussion': 5,
+    'workshop': 1
+  };
+  const count = Number(actualMembersCount) > 0 ? Number(actualMembersCount) : (teamSizes[eventKey] || 1);
+  return perHeadFee * count;
+}
+
 class RegistrationService {
   constructor() {
     this.lock = new AsyncLock();
@@ -118,7 +132,7 @@ class RegistrationService {
       const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
 
       let quotasStats = null;
-      if (ev.key === 'demo-stall' && ev.quotas) {
+      if (ev.key === 'demo-stall') {
         const jecCseCount = activeRegistrations.filter(
           (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
         ).length;
@@ -131,19 +145,16 @@ class RegistrationService {
 
         quotasStats = {
           jecCse: {
-            quota: ev.quotas.jecCse,
             registered: jecCseCount,
-            remaining: Math.max(0, ev.quotas.jecCse - jecCseCount)
+            remaining: Math.max(0, ev.maxSlots - activeCount)
           },
           jecOther: {
-            quota: ev.quotas.jecOther,
             registered: jecOtherCount,
-            remaining: Math.max(0, ev.quotas.jecOther - jecOtherCount)
+            remaining: Math.max(0, ev.maxSlots - activeCount)
           },
           external: {
-            quota: ev.quotas.external,
             registered: externalCount,
-            remaining: Math.max(0, ev.quotas.external - externalCount)
+            remaining: Math.max(0, ev.maxSlots - activeCount)
           }
         };
       }
@@ -186,41 +197,10 @@ class RegistrationService {
         throw err;
       }
 
-      // Check Demo Stall 3-tier quota criteria
+      // Category classification for Demo Stall (Open 60-team capacity, no sub-bucket rejection)
       let demoStallCategory = null;
-      if (eventKey === 'demo-stall' && eventConfig.quotas) {
+      if (eventKey === 'demo-stall') {
         demoStallCategory = getDemoStallCategory(teamLeader.college, teamLeader.department);
-        if (demoStallCategory === 'jec_cse') {
-          const jecCseCount = activeRegistrations.filter(
-            (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
-          ).length;
-          if (jecCseCount >= eventConfig.quotas.jecCse) {
-            const err = new Error(`Demo Stall slots for Jaya Engineering College CSE (${eventConfig.quotas.jecCse}/${eventConfig.quotas.jecCse}) are completely filled.`);
-            err.statusCode = 409;
-            err.code = 'QUOTA_FULL';
-            throw err;
-          }
-        } else if (demoStallCategory === 'jec_other') {
-          const jecOtherCount = activeRegistrations.filter(
-            (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_other'
-          ).length;
-          if (jecOtherCount >= eventConfig.quotas.jecOther) {
-            const err = new Error(`Demo Stall slots for Other Jaya Engineering College Departments (${eventConfig.quotas.jecOther}/${eventConfig.quotas.jecOther}) are completely filled.`);
-            err.statusCode = 409;
-            err.code = 'QUOTA_FULL';
-            throw err;
-          }
-        } else {
-          const externalCount = activeRegistrations.filter(
-            (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'external'
-          ).length;
-          if (externalCount >= eventConfig.quotas.external) {
-            const err = new Error(`Demo Stall slots for External Colleges (${eventConfig.quotas.external}/${eventConfig.quotas.external}) are completely filled.`);
-            err.statusCode = 409;
-            err.code = 'QUOTA_FULL';
-            throw err;
-          }
-        }
       }
 
       // 2. Duplicate check: Team Leader Email per event (and all members' emails)
@@ -239,6 +219,27 @@ class RegistrationService {
         throw err;
       }
 
+      // 2b. Strict Duplicate UTR / Transaction ID check across all active registrations
+      const rawUtr = (formData.paymentUtr || '').trim();
+      if (!rawUtr || rawUtr === 'N/A') {
+        const err = new Error('UPI Transaction ID / 12-digit UTR is required to confirm registration.');
+        err.statusCode = 400;
+        err.code = 'MISSING_UTR';
+        throw err;
+      }
+
+      const cleanUtr = rawUtr.toLowerCase();
+      const existingUtr = this.registrations.find(
+        (r) => r.status !== 'CANCELLED' && r.paymentUtr && r.paymentUtr.trim().toLowerCase() === cleanUtr
+      );
+
+      if (existingUtr) {
+        const err = new Error(`This UPI Transaction ID / UTR "${rawUtr}" has already been submitted for registration ${existingUtr.registrationId} (${existingUtr.eventName}). Reusing transaction IDs is strictly prohibited.`);
+        err.statusCode = 409;
+        err.code = 'DUPLICATE_UTR';
+        throw err;
+      }
+
       // 3. Assemble validated members list
       const allMembers = [];
       // Member 1 is Team Leader
@@ -250,13 +251,21 @@ class RegistrationService {
 
       if (eventConfig.isTeam && Array.isArray(members)) {
         for (let i = 0; i < members.length; i++) {
-          allMembers.push({
-            ...members[i],
-            isLeader: false,
-            memberIndex: i + 2
-          });
+          if (members[i] && members[i].name && members[i].name.trim().length > 0) {
+            allMembers.push({
+              ...members[i],
+              isLeader: false,
+              memberIndex: allMembers.length + 1
+            });
+          }
         }
       }
+
+      const actualMembersCount = allMembers.length;
+
+      // Calculate guaranteed fee so paymentAmount is never 0
+      const expectedAmount = calculateServerFee(eventKey, teamLeader.college, actualMembersCount);
+      const paymentAmount = Number(formData.paymentAmount) > 0 ? Number(formData.paymentAmount) : expectedAmount;
 
       // 4. Generate Unique Registration ID
       const registrationId = this.generateRegistrationId();
@@ -268,8 +277,8 @@ class RegistrationService {
         isoTimestamp: new Date().toISOString(),
         eventKey,
         eventName: eventConfig.name,
-        teamSize: eventConfig.teamSize,
-        teamName: eventConfig.isTeam ? (teamName ? teamName.trim() : 'Unnamed Team') : 'N/A',
+        teamSize: actualMembersCount,
+        teamName: eventConfig.isTeam ? (teamName && teamName.trim() ? teamName.trim() : (actualMembersCount === 1 ? `${teamLeader.name.trim()} (Solo)` : 'Unnamed Team')) : 'N/A',
         teamLeader: {
           name: teamLeader.name.trim(),
           email: leaderEmail,
@@ -278,9 +287,9 @@ class RegistrationService {
           year: teamLeader.year
         },
         members: allMembers,
-        paymentAmount: formData.paymentAmount || 0,
-        paymentUtr: formData.paymentUtr || 'N/A',
-        payerName: formData.payerName || '',
+        paymentAmount,
+        paymentUtr: rawUtr,
+        payerName: (formData.payerName || '').trim(),
         paymentStatus: formData.paymentStatus || 'SUBMITTED',
         demoStallCategory: demoStallCategory || (eventKey === 'demo-stall' ? getDemoStallCategory(teamLeader.college, teamLeader.department) : null),
         status: 'CONFIRMED'

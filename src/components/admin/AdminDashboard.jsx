@@ -9,7 +9,8 @@ import {
   getApiBase,
   setCustomBackendUrl,
   getDemoStallCategory,
-  deleteRegistration
+  deleteRegistration,
+  getDeletedIds
 } from '../../services/api';
 import {
   Shield,
@@ -82,7 +83,7 @@ export default function AdminDashboard({ onBackToHome }) {
       ]);
       setOverview(ovData);
       const cleanRegistrations = (regData || []).filter(
-        (r) => r.registrationId !== 'REG-2026-00001' && r.registrationId !== 'REG-2026-00002'
+        (r) => !getDeletedIds().includes(r.registrationId)
       );
       setRegistrations(cleanRegistrations);
     } catch (err) {
@@ -665,20 +666,25 @@ export default function AdminDashboard({ onBackToHome }) {
 
                 <div className="admin-events-slots-grid">
                   {(overview.events || []).map((ev) => {
-                    const percent = Math.min(100, Math.round((ev.registeredCount / (ev.maxSlots || 1)) * 100));
-                    const isFull = ev.status === 'FULL';
+                    const localTrack = EVENT_TRACKS.find((t) => t.key === ev.key);
+                    const effectiveMaxSlots = ev.key === 'demo-stall' ? 60 : (localTrack?.maxSlots || ev.maxSlots || 1);
+                    const effectiveRegistered = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
+                    const effectiveRemaining = Math.max(0, effectiveMaxSlots - effectiveRegistered);
+                    const effectiveTeamSize = ev.key === 'mini-hackathon' ? '1 - 4' : (localTrack?.teamSize || ev.teamSize);
+                    const percent = Math.min(100, Math.round((effectiveRegistered / effectiveMaxSlots) * 100));
+                    const isFull = effectiveRemaining === 0 || ev.status === 'FULL';
 
                     return (
                       <div key={ev.key} className={`event-slot-card ${isFull ? 'full-border' : ''}`}>
                         <div className="event-slot-header">
                           <div>
-                            <div className="event-slot-name">{ev.title}</div>
+                            <div className="event-slot-name">{ev.title || localTrack?.title}</div>
                             <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
-                              Team Size: {ev.teamSize}
+                              Team Size: {effectiveTeamSize}
                             </span>
                           </div>
                           <span className={`status-badge ${isFull ? 'cancelled' : 'confirmed'}`}>
-                            {ev.status}
+                            {isFull ? 'FULL' : 'OPEN'}
                           </span>
                         </div>
 
@@ -691,70 +697,70 @@ export default function AdminDashboard({ onBackToHome }) {
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
                           <span style={{ color: '#fff', fontWeight: 700 }}>
-                            {ev.registeredCount} / {ev.maxSlots}
+                            {effectiveRegistered} / {effectiveMaxSlots}
                           </span>
                           <span style={{ color: isFull ? '#f87171' : '#10b981' }}>
-                            {ev.remainingSlots} Left
+                            {effectiveRemaining} Left
                           </span>
                         </div>
 
                         {ev.key === 'demo-stall' && (
                           <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                              Quota Allocation Breakdown (50 Total)
+                              Category Distribution (60 Total Stalls)
                             </div>
 
-                            {/* 1. Jaya CSE (30) */}
+                            {/* 1. Jaya CSE */}
                             <div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
-                                <span style={{ color: '#6ee7b7' }}>Jaya CSE (Max 30)</span>
+                                <span style={{ color: '#6ee7b7' }}>Jaya CSE</span>
                                 <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
-                                  {ev.quotasStats ? `${ev.quotasStats.jecCse.registered} / 30 (${ev.quotasStats.jecCse.remaining} left)` : '30 slots'}
+                                  {ev.quotasStats ? `${ev.quotasStats.jecCse.registered} teams` : '0 teams'}
                                 </span>
                               </div>
                               <div className="event-slot-bar-bg" style={{ height: '4px' }}>
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / 30) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / 60) * 100)) : 0}%`,
                                     background: '#10b981'
                                   }}
                                 />
                               </div>
                             </div>
 
-                            {/* 2. Jaya Other Depts (10) */}
+                            {/* 2. Jaya Other Depts */}
                             <div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
-                                <span style={{ color: '#7dd3fc' }}>Jaya Other Depts (Max 10)</span>
+                                <span style={{ color: '#7dd3fc' }}>Jaya Other Depts</span>
                                 <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
-                                  {ev.quotasStats ? `${ev.quotasStats.jecOther.registered} / 10 (${ev.quotasStats.jecOther.remaining} left)` : '10 slots'}
+                                  {ev.quotasStats ? `${ev.quotasStats.jecOther.registered} teams` : '0 teams'}
                                 </span>
                               </div>
                               <div className="event-slot-bar-bg" style={{ height: '4px' }}>
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecOther.registered / 10) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecOther.registered / 60) * 100)) : 0}%`,
                                     background: '#38bdf8'
                                   }}
                                 />
                               </div>
                             </div>
 
-                            {/* 3. External Colleges (10) */}
+                            {/* 3. External Colleges */}
                             <div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '3px' }}>
-                                <span style={{ color: '#c084fc' }}>External Colleges (Max 10)</span>
+                                <span style={{ color: '#c084fc' }}>External Colleges</span>
                                 <span style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
-                                  {ev.quotasStats ? `${ev.quotasStats.external.registered} / 10 (${ev.quotasStats.external.remaining} left)` : '10 slots'}
+                                  {ev.quotasStats ? `${ev.quotasStats.external.registered} teams` : '0 teams'}
                                 </span>
                               </div>
                               <div className="event-slot-bar-bg" style={{ height: '4px' }}>
                                 <div
                                   className="event-slot-bar-fill"
                                   style={{
-                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.external.registered / 10) * 100)) : 0}%`,
+                                    width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.external.registered / 60) * 100)) : 0}%`,
                                     background: '#a855f7'
                                   }}
                                 />

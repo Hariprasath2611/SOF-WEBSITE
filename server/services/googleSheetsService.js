@@ -1,4 +1,3 @@
-import { google } from 'googleapis';
 import dotenv from 'dotenv';
 import { EVENTS } from '../config/events.js';
 
@@ -12,7 +11,7 @@ class GoogleSheetsService {
     this.initAuth();
   }
 
-  initAuth() {
+  async initAuth() {
     try {
       const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
       let privateKey = process.env.GOOGLE_PRIVATE_KEY;
@@ -21,6 +20,9 @@ class GoogleSheetsService {
         this.authError = 'Google Sheets credentials not configured in environment variables.';
         return;
       }
+
+      // Dynamically load googleapis
+      const { google } = await import('googleapis');
 
       // Handle escaped newlines in private key string
       if (privateKey.includes('\\n')) {

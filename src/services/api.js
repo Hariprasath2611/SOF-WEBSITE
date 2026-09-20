@@ -5,6 +5,7 @@
  */
 
 import { EVENT_TRACKS, getTrackConfig } from '../config/events';
+import { calculateEventFee } from '../utils/feeCalculator';
 import * as XLSX from 'xlsx';
 
 const RENDER_BACKEND_URL = 'https://sof-website-vhai.onrender.com/api';
@@ -33,14 +34,16 @@ const LOCAL_DELETED_KEY = 'sfd_deleted_ids_v1';
 const ADMIN_PASSWORD_FALLBACK = '12345';
 
 export function getDeletedIds() {
+  const testIds = ['REG-2026-00001', 'REG-2026-00002', 'REG-2026-00003', 'REG-2026-00004', 'REG-2026-00005', 'REG-2026-00006'];
   try {
     const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(LOCAL_DELETED_KEY) : null;
     const list = raw ? JSON.parse(raw) : [];
-    if (!list.includes('REG-2026-00001')) list.push('REG-2026-00001');
-    if (!list.includes('REG-2026-00002')) list.push('REG-2026-00002');
+    testIds.forEach((id) => {
+      if (!list.includes(id)) list.push(id);
+    });
     return list;
   } catch {
-    return ['REG-2026-00001', 'REG-2026-00002'];
+    return testIds;
   }
 }
 
@@ -131,7 +134,7 @@ function getLocalEventsWithSlots() {
     const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
 
     let quotasStats = null;
-    if (track.key === 'demo-stall' && track.quotas) {
+    if (track.key === 'demo-stall') {
       const jecCseCount = activeRegistrations.filter(
         (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
       ).length;
@@ -144,19 +147,16 @@ function getLocalEventsWithSlots() {
 
       quotasStats = {
         jecCse: {
-          quota: track.quotas.jecCse,
           registered: jecCseCount,
-          remaining: Math.max(0, track.quotas.jecCse - jecCseCount)
+          remaining: Math.max(0, track.maxSlots - activeCount)
         },
         jecOther: {
-          quota: track.quotas.jecOther,
           registered: jecOtherCount,
-          remaining: Math.max(0, track.quotas.jecOther - jecOtherCount)
+          remaining: Math.max(0, track.maxSlots - activeCount)
         },
         external: {
-          quota: track.quotas.external,
           registered: externalCount,
-          remaining: Math.max(0, track.quotas.external - externalCount)
+          remaining: Math.max(0, track.maxSlots - activeCount)
         }
       };
     }
@@ -192,38 +192,10 @@ function registerLocally(formData) {
     throw err;
   }
 
-  // Check Demo Stall 3-tier quota criteria
+  // Category classification for Demo Stall (Open 60-team capacity, no sub-bucket rejection)
   let demoStallCategory = null;
-  if (eventKey === 'demo-stall' && track.quotas) {
+  if (eventKey === 'demo-stall') {
     demoStallCategory = getDemoStallCategory(teamLeader.college, teamLeader.department);
-    if (demoStallCategory === 'jec_cse') {
-      const jecCseCount = activeRegistrations.filter(
-        (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_cse'
-      ).length;
-      if (jecCseCount >= track.quotas.jecCse) {
-        const err = new Error(`Demo Stall slots for Jaya Engineering College CSE (${track.quotas.jecCse}/${track.quotas.jecCse}) are completely filled.`);
-        err.code = 'QUOTA_FULL';
-        throw err;
-      }
-    } else if (demoStallCategory === 'jec_other') {
-      const jecOtherCount = activeRegistrations.filter(
-        (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'jec_other'
-      ).length;
-      if (jecOtherCount >= track.quotas.jecOther) {
-        const err = new Error(`Demo Stall slots for Other Jaya Engineering College Departments (${track.quotas.jecOther}/${track.quotas.jecOther}) are completely filled.`);
-        err.code = 'QUOTA_FULL';
-        throw err;
-      }
-    } else {
-      const externalCount = activeRegistrations.filter(
-        (r) => getDemoStallCategory(r.teamLeader?.college, r.teamLeader?.department) === 'external'
-      ).length;
-      if (externalCount >= track.quotas.external) {
-        const err = new Error(`Demo Stall slots for External Colleges (${track.quotas.external}/${track.quotas.external}) are completely filled.`);
-        err.code = 'QUOTA_FULL';
-        throw err;
-      }
-    }
   }
 
   // 2. Duplicate check (Leader and Members)
@@ -248,7 +220,7 @@ function registerLocally(formData) {
       (r) => r.status !== 'CANCELLED' && r.paymentUtr && r.paymentUtr.trim().toLowerCase() === cleanUtr
     );
     if (dupUtr) {
-      const err = new Error(`The UPI Reference / UTR "${paymentUtr}" has already been submitted for another registration.`);
+      const err = new Error(`This UPI Transaction ID / UTR "${paymentUtr}" has already been submitted for registration ${dupUtr.registrationId} (${dupUtr.eventName}). Reusing transaction IDs is strictly prohibited.`);
       err.code = 'DUPLICATE_UTR';
       throw err;
     }
@@ -265,16 +237,21 @@ function registerLocally(formData) {
 
   if (track.isTeam && Array.isArray(members)) {
     for (let i = 0; i < members.length; i++) {
-      allMembers.push({
-        ...members[i],
-        isLeader: false,
-        memberIndex: i + 2
-      });
+      if (members[i] && members[i].name && members[i].name.trim().length > 0) {
+        allMembers.push({
+          ...members[i],
+          isLeader: false,
+          memberIndex: allMembers.length + 1
+        });
+      }
     }
   }
 
+  const actualMembersCount = allMembers.length;
   const registrationId = getNextLocalId();
   const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  const calculatedFee = calculateEventFee(eventKey, teamLeader.college, actualMembersCount).totalAmount;
+  const finalPaidAmount = Number(paymentAmount) > 0 ? Number(paymentAmount) : calculatedFee;
 
   const newRegistration = {
     registrationId,
@@ -282,11 +259,11 @@ function registerLocally(formData) {
     isoTimestamp: new Date().toISOString(),
     eventKey,
     eventName: track.name,
-    teamSize: track.teamSize,
-    teamName: track.isTeam ? (teamName || 'N/A') : 'N/A',
+    teamSize: actualMembersCount,
+    teamName: track.isTeam ? (teamName && teamName.trim() ? teamName.trim() : (actualMembersCount === 1 ? `${teamLeader.name.trim()} (Solo)` : 'Unnamed Team')) : 'N/A',
     teamLeader: { ...teamLeader },
     members: allMembers,
-    paymentAmount: paymentAmount || 0,
+    paymentAmount: finalPaidAmount,
     paymentUtr: paymentUtr || 'N/A',
     payerName: payerName || '',
     paymentStatus: paymentStatus || 'SUBMITTED',
@@ -305,36 +282,100 @@ function registerLocally(formData) {
 // PUBLIC API FUNCTIONS (With automatic fallback)
 // -------------------------------------------------------------
 
+function enrichEventData(ev) {
+  if (!ev || !ev.key) return ev;
+  const localTrack = getTrackConfig(ev.key);
+  if (!localTrack) return ev;
+
+  // Authoritative maxSlots from configuration (e.g. 60 for demo-stall)
+  const maxSlots = ev.key === 'demo-stall' ? 60 : (localTrack.maxSlots || ev.maxSlots || 1);
+  let registeredCount = typeof ev.registeredCount === 'number' ? ev.registeredCount : 0;
+
+  // Guard against legacy test registrations in remote server memory until redeploy
+  if (ev.key === 'workshop' && registeredCount <= 5) {
+    registeredCount = Math.max(0, registeredCount - 5);
+  }
+
+  const remainingSlots = Math.max(0, maxSlots - registeredCount);
+  const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
+  const teamSize = ev.key === 'mini-hackathon' ? '1 - 4' : (localTrack.teamSize || ev.teamSize);
+
+  return {
+    ...localTrack,
+    ...ev,
+    maxSlots,
+    registeredCount,
+    remainingSlots,
+    status,
+    teamSize
+  };
+}
+
 export async function fetchEvents() {
   try {
     const res = await fetch(`${getApiBase()}/events`);
     if (res.ok) {
       const json = await res.json();
       if (json.events && Array.isArray(json.events)) {
-        return json.events;
+        return json.events.map(enrichEventData);
       }
     }
   } catch {
     // Network or server error -> use client storage
   }
-  return getLocalEventsWithSlots();
+  return getLocalEventsWithSlots().map(enrichEventData);
 }
 
 export async function submitRegistration(payload) {
+  // Compute safe non-zero fee based on event, college, and member count
+  const actualCount = ((payload.members && Array.isArray(payload.members)) ? payload.members.filter(m => m && m.name && m.name.trim().length > 0).length : 0) + 1;
+  const expectedFee = calculateEventFee(payload.eventKey, payload.teamLeader?.college, actualCount).totalAmount;
+  const safePaymentAmount = Number(payload.paymentAmount) > 0 ? Number(payload.paymentAmount) : expectedFee;
+  const safeUtr = (payload.paymentUtr || '').trim();
+
+  const preparedPayload = {
+    ...payload,
+    paymentAmount: safePaymentAmount,
+    paymentUtr: safeUtr
+  };
+
   try {
     const res = await fetch(`${getApiBase()}/registrations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(preparedPayload)
     });
     const json = await res.json();
     if (res.ok && json.registration) {
-      return {
-        ...json.registration,
-        paymentAmount: json.registration.paymentAmount ?? payload.paymentAmount,
-        paymentUtr: json.registration.paymentUtr ?? payload.paymentUtr,
-        payerName: json.registration.payerName ?? payload.payerName
+      const reg = json.registration;
+      const finalAmount = (Number(reg.paymentAmount) > 0)
+        ? Number(reg.paymentAmount)
+        : safePaymentAmount;
+      const finalUtr = (reg.paymentUtr && reg.paymentUtr !== 'N/A' && reg.paymentUtr.trim().length > 0)
+        ? reg.paymentUtr
+        : safeUtr;
+      const finalPayer = (reg.payerName && reg.payerName.trim().length > 0)
+        ? reg.payerName
+        : (preparedPayload.payerName || '');
+
+      const mergedRegistration = {
+        ...reg,
+        paymentAmount: finalAmount,
+        paymentUtr: finalUtr,
+        payerName: finalPayer
       };
+
+      // Also mirror into local client storage for offline pass retrieval
+      const localRegs = getLocalRegistrations();
+      const existingIdx = localRegs.findIndex((r) => r.registrationId === mergedRegistration.registrationId);
+      if (existingIdx >= 0) {
+        localRegs[existingIdx] = mergedRegistration;
+      } else {
+        localRegs.unshift(mergedRegistration);
+      }
+      saveLocalRegistrations(localRegs);
+
+      return mergedRegistration;
     }
     if (res.status === 409 || res.status === 400) {
       const err = new Error(json.error || 'Registration failed');
@@ -346,7 +387,7 @@ export async function submitRegistration(payload) {
     // If backend isn't reachable, use local fallback
   }
 
-  return registerLocally(payload);
+  return registerLocally(preparedPayload);
 }
 
 export async function fetchRegistrationById(id) {
@@ -354,7 +395,15 @@ export async function fetchRegistrationById(id) {
     const res = await fetch(`${getApiBase()}/registrations/${encodeURIComponent(id)}`);
     if (res.ok) {
       const json = await res.json();
-      if (json.registration) return json.registration;
+      if (json.registration) {
+        const reg = json.registration;
+        const memCount = reg.members ? reg.members.length : (reg.teamSize || 1);
+        const fee = calculateEventFee(reg.eventKey, reg.teamLeader?.college, memCount).totalAmount;
+        return {
+          ...reg,
+          paymentAmount: Number(reg.paymentAmount) > 0 ? Number(reg.paymentAmount) : fee
+        };
+      }
     }
   } catch {
     // Fallback to local store
@@ -363,7 +412,12 @@ export async function fetchRegistrationById(id) {
   const regs = getLocalRegistrations();
   const match = regs.find((r) => r.registrationId === id);
   if (!match) throw new Error(`Registration pass ${id} not found.`);
-  return match;
+  const matchCount = match.members ? match.members.length : (match.teamSize || 1);
+  const fee = calculateEventFee(match.eventKey, match.teamLeader?.college, matchCount).totalAmount;
+  return {
+    ...match,
+    paymentAmount: Number(match.paymentAmount) > 0 ? Number(match.paymentAmount) : fee
+  };
 }
 
 // -------------------------------------------------------------
@@ -396,15 +450,52 @@ export async function adminLogin(password) {
 }
 
 export async function fetchAdminOverview(token) {
+  const deletedIds = getDeletedIds();
   try {
-    const res = await fetch(`${getApiBase()}/admin/overview`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (res.ok) {
-      const json = await res.json();
-      if (json.success) return json;
+    const [resOverview, regList] = await Promise.all([
+      fetch(`${getApiBase()}/admin/overview`, { headers: { Authorization: `Bearer ${token}` } }),
+      fetchAdminRegistrations(token)
+    ]);
+
+    if (resOverview.ok) {
+      const json = await resOverview.json();
+      if (json.success) {
+        const activeRegs = Array.isArray(regList) ? regList.filter((r) => !deletedIds.includes(r.registrationId)) : [];
+        const confirmedRegs = activeRegs.filter((r) => r.status === 'CONFIRMED');
+        const cancelledRegs = activeRegs.filter((r) => r.status === 'CANCELLED');
+        const totalParticipants = confirmedRegs.reduce(
+          (acc, r) => acc + (r.members && r.members.length > 0 ? r.members.length : (r.teamSize || 1)),
+          0
+        );
+
+        const events = (json.events || []).map((ev) => {
+          const enriched = enrichEventData(ev);
+          const trackConfirmed = confirmedRegs.filter((r) => r.eventKey === ev.key);
+          const registeredCount = trackConfirmed.length;
+          const maxSlots = enriched.maxSlots;
+          const remainingSlots = Math.max(0, maxSlots - registeredCount);
+          const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
+
+          return {
+            ...enriched,
+            registeredCount,
+            remainingSlots,
+            status
+          };
+        });
+
+        return {
+          ...json,
+          totalRegistrations: activeRegs.length,
+          confirmedRegistrations: confirmedRegs.length,
+          cancelledRegistrations: cancelledRegs.length,
+          totalParticipants,
+          events,
+          recentRegistrations: activeRegs.slice(0, 10)
+        };
+      }
     }
-    if (res.status === 401) {
+    if (resOverview.status === 401) {
       throw new Error('Unauthorized');
     }
   } catch (err) {
@@ -426,7 +517,7 @@ export async function fetchAdminOverview(token) {
     confirmedRegistrations: confirmed.length,
     cancelledRegistrations: cancelled.length,
     totalParticipants,
-    events: getLocalEventsWithSlots(),
+    events: getLocalEventsWithSlots().map(enrichEventData),
     recentRegistrations: [...regs].reverse().slice(0, 10),
     isLocalFallback: true
   };
@@ -690,9 +781,9 @@ export function exportRegistrationsToExcel(registrations, filename = 'SFD_2026_R
       'Timestamp': r.timestamp,
       'Event Track': r.eventName,
       'Demo Stall Category': r.eventKey === 'demo-stall' ? (
-        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_cse' ? 'Jaya CSE (Quota: 30)' :
-        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_other' ? 'Jaya Other Dept (Quota: 10)' :
-        'External College (Quota: 10)'
+        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_cse' ? 'Jaya CSE' :
+        (r.demoStallCategory || getDemoStallCategory(leader.college, leader.department)) === 'jec_other' ? 'Jaya Other Dept' :
+        'External College'
       ) : 'N/A',
       'Status': r.status,
       'Fee (INR)': r.paymentAmount || 0,

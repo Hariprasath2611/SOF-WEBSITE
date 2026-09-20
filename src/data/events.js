@@ -55,8 +55,8 @@ export const events = [
     color: "#3b82f6", // Electric blue
     summary: "A high-intensity rapid prototyping sprint to solve real-world problems using free and open-source software stacks.",
     description: "The Mini Hackathon is a time-boxed sprint challenging engineering minds to ideate, architect, and ship functional open-source solutions under rapid constraints. Teams collaborate dynamically, leveraging modern FOSS libraries, APIs, and frameworks to crack problem statements.",
-    eligibility: "Open to students from ANY engineering discipline (CSE, IT, ECE, EEE, Mech, Civil, etc.).",
-    teamSize: "2 - 4 Members per team",
+    eligibility: "Open to solo coders and teams up to 4 members from ANY engineering discipline.",
+    teamSize: "1 - 4 Members per team (Solo or Squad)",
     duration: "4 - 5 Hours Intensive Sprint",
     venue: "Computing Center Lab 2 & 3",
     registrationLink: "#register?track=mini-hackathon",

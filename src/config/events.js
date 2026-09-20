@@ -11,12 +11,7 @@ export const EVENT_TRACKS = [
     tagline: 'Build. Demonstrate. Inspire.',
     trackNumber: '01',
     teamSize: 3,
-    maxSlots: 50,
-    quotas: {
-      jecCse: 30,
-      jecOther: 10,
-      external: 10
-    },
+    maxSlots: 60,
     isTeam: true,
     accentColor: '#10b981', // Terminal emerald
     badge: 'TEAM OF 3',
@@ -24,26 +19,29 @@ export const EVENT_TRACKS = [
     summary: 'Showcase working software projects, open-source utilities, and AI prototypes to industry juries.',
     requirements: [
       'Team of exactly 3 members (1 Team Leader + 2 Members)',
-      'Quota: 30 Jaya CSE • 10 Other Jaya Depts • 10 External Colleges',
+      'Capacity: 60 Project Stalls (Open to Jaya CSE, Other Depts & External Colleges)',
       'Live working prototype or application demonstration',
       'Open-source repository (GitHub/GitLab) recommended'
     ]
   },
   {
     key: 'mini-hackathon',
-    name: 'Mini Hackathon – Team of 4',
+    name: 'Mini Hackathon – 1 to 4 Members',
     title: 'Mini Hackathon',
     tagline: 'Code. Collaborate. Create.',
     trackNumber: '02',
     teamSize: 4,
+    minTeamSize: 1,
+    maxTeamSize: 4,
     maxSlots: 25,
     isTeam: true,
     accentColor: '#3b82f6', // Electric blue
-    badge: 'TEAM OF 4',
+    badge: '1 - 4 MEMBERS',
     icon: 'Terminal',
     summary: 'High-intensity rapid prototyping sprint solving real-world challenges using FOSS stacks.',
     requirements: [
-      'Team of exactly 4 members (1 Team Leader + 3 Members)',
+      'Flexible Team Size: 1 to 4 Members (Solo coders to 4-member teams)',
+      'Fee: Calculated per member (₹100/head for Jaya, ₹200/head for External)',
       '4-5 hours intensive sprint in computing labs',
       'Code hosted in public open-source Git repo'
     ]
