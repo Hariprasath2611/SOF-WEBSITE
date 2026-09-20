@@ -524,11 +524,17 @@ class RegistrationService {
       .filter((r) => r.status === 'CONFIRMED')
       .reduce((acc, curr) => acc + (curr.members ? curr.members.length : 1), 0);
 
+    // Total amount collected across all confirmed registrations
+    const totalAmountCollected = this.registrations
+      .filter((r) => r.status === 'CONFIRMED')
+      .reduce((acc, curr) => acc + (Number(curr.paymentAmount) || 0), 0);
+
     return {
       totalRegistrations,
       confirmedRegistrations,
       cancelledRegistrations,
       totalParticipants,
+      totalAmountCollected,
       events,
       recentRegistrations: this.registrations.slice(0, 8)
     };

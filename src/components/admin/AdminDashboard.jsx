@@ -437,6 +437,12 @@ export default function AdminDashboard({ onBackToHome }) {
                 <span className="kpi-number" style={{ color: '#38bdf8' }}>{overview.totalParticipants}</span>
                 <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Total students attending</span>
               </div>
+
+              <div className="kpi-metric-card">
+                <span className="kpi-title">Total Amount</span>
+                <span className="kpi-number" style={{ color: '#fbbf24' }}>₹{overview.totalAmountCollected || 0}</span>
+                <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Revenue collected</span>
+              </div>
             </div>
 
             {/* Dashboard Tab Switcher & Quick Export */}
