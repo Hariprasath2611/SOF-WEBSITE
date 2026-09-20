@@ -39,8 +39,6 @@ export function getDeletedIds() {
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
-<<<<<<< HEAD
-=======
   }
 }
 
@@ -51,7 +49,6 @@ export function clearDeletedIds() {
     }
   } catch (err) {
     console.error('Failed to clear deleted IDs:', err);
->>>>>>> 8101665e0e8cd891a9eb89745d74e5953158d9a2
   }
 }
 
@@ -76,16 +73,8 @@ function getLocalRegistrations() {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) return [];
-<<<<<<< HEAD
-    let list = JSON.parse(raw);
-    if (Array.isArray(list)) {
-      return list;
-    }
-    return [];
-=======
     const list = JSON.parse(raw);
     return Array.isArray(list) ? list : [];
->>>>>>> 8101665e0e8cd891a9eb89745d74e5953158d9a2
   } catch {
     return [];
   }
