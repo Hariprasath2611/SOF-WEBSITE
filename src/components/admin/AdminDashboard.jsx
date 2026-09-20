@@ -9,7 +9,8 @@ import {
   getApiBase,
   setCustomBackendUrl,
   getDemoStallCategory,
-  deleteRegistration
+  deleteRegistration,
+  getDeletedIds
 } from '../../services/api';
 import {
   Shield,
@@ -82,7 +83,7 @@ export default function AdminDashboard({ onBackToHome }) {
       ]);
       setOverview(ovData);
       const cleanRegistrations = (regData || []).filter(
-        (r) => r.registrationId !== 'REG-2026-00001' && r.registrationId !== 'REG-2026-00002'
+        (r) => !getDeletedIds().includes(r.registrationId)
       );
       setRegistrations(cleanRegistrations);
     } catch (err) {

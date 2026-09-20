@@ -82,6 +82,11 @@ router.post('/registrations', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Please provide a valid email address.' });
     }
 
+    const phoneDigits = (teamLeader.phone || '').trim().replace(/\D/g, '');
+    if (phoneDigits.length !== 10) {
+      return res.status(400).json({ success: false, error: 'A valid 10-digit mobile phone number is required.' });
+    }
+
     if (!teamLeader.college || teamLeader.college.trim().length < 2) {
       return res.status(400).json({ success: false, error: 'College / Institution name is required.' });
     }
@@ -95,34 +100,44 @@ router.post('/registrations', async (req, res) => {
     }
 
     // 4. Validate Team Members (if team-based)
+    const isHackathon = eventKey === 'mini-hackathon';
     const expectedMembersCount = eventConfig.teamSize - 1; // excluding leader
     if (eventConfig.isTeam) {
-      if (!Array.isArray(members) || members.length !== expectedMembersCount) {
+      if (!isHackathon && (!Array.isArray(members) || members.length !== expectedMembersCount)) {
         return res.status(400).json({
           success: false,
           error: `${eventConfig.name} requires exactly ${eventConfig.teamSize} members (1 Leader + ${expectedMembersCount} Members).`
         });
       }
 
-      for (let i = 0; i < members.length; i++) {
-        const m = members[i];
-        const num = i + 2;
+      if (isHackathon && Array.isArray(members) && members.length > expectedMembersCount) {
+        return res.status(400).json({
+          success: false,
+          error: `${eventConfig.name} accepts a maximum of 4 members.`
+        });
+      }
 
-        if (!m || !m.name || m.name.trim().length < 2) {
-          return res.status(400).json({ success: false, error: `Member ${num}: Full Name is required (minimum 2 characters).` });
+      if (Array.isArray(members)) {
+        for (let i = 0; i < members.length; i++) {
+          const m = members[i];
+          const num = i + 2;
+
+          if (!m || !m.name || m.name.trim().length < 2) {
+            return res.status(400).json({ success: false, error: `Member ${num}: Full Name is required (minimum 2 characters).` });
+          }
+          // Auto-fill member contact/college/year from team leader if not provided individually
+          m.name = m.name.trim();
+          m.email = (m.email && emailRegex.test(m.email.trim())) ? m.email.trim() : teamLeader.email.trim();
+          m.college = (m.college && m.college.trim().length >= 2) ? m.college.trim() : teamLeader.college.trim();
+          m.department = (m.department && m.department.trim().length >= 2) ? m.department.trim() : teamLeader.department.trim();
+          m.year = m.year || teamLeader.year;
         }
-        // Auto-fill member contact/college/year from team leader if not provided individually
-        m.name = m.name.trim();
-        m.email = (m.email && emailRegex.test(m.email.trim())) ? m.email.trim() : teamLeader.email.trim();
-        m.college = (m.college && m.college.trim().length >= 2) ? m.college.trim() : teamLeader.college.trim();
-        m.department = (m.department && m.department.trim().length >= 2) ? m.department.trim() : teamLeader.department.trim();
-        m.year = m.year || teamLeader.year;
       }
     }
 
     // 5. Validate UPI Reference / Transaction ID (UTR)
     const cleanedUtr = (paymentUtr || '').trim();
-    if (!cleanedUtr || cleanedUtr.length < 8) {
+    if (!cleanedUtr || cleanedUtr.length !== 12 || !/^[a-zA-Z0-9]{12}$/.test(cleanedUtr)) {
       return res.status(400).json({
         success: false,
         error: 'Please provide the authentic 12-digit UPI Transaction ID / UTR number from your payment receipt.',

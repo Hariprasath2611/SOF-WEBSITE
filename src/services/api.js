@@ -34,14 +34,16 @@ const LOCAL_DELETED_KEY = 'sfd_deleted_ids_v1';
 const ADMIN_PASSWORD_FALLBACK = '12345';
 
 export function getDeletedIds() {
+  const testIds = ['REG-2026-00001', 'REG-2026-00002', 'REG-2026-00003', 'REG-2026-00004', 'REG-2026-00005', 'REG-2026-00006'];
   try {
     const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(LOCAL_DELETED_KEY) : null;
     const list = raw ? JSON.parse(raw) : [];
-    if (!list.includes('REG-2026-00001')) list.push('REG-2026-00001');
-    if (!list.includes('REG-2026-00002')) list.push('REG-2026-00002');
+    testIds.forEach((id) => {
+      if (!list.includes(id)) list.push(id);
+    });
     return list;
   } catch {
-    return ['REG-2026-00001', 'REG-2026-00002'];
+    return testIds;
   }
 }
 
