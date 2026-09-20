@@ -28,7 +28,7 @@ export const overallCoordinators = [
     email: "sakthikumar.sfd@jaya.edu.in",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    photo: "/coordinators/sakthi-kumar.jpg",
+    photo: "/coordinators/sakthikumar.jpeg",
     avatarBadge: "OPS"
   },
   {
