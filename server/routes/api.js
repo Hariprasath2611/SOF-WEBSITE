@@ -101,19 +101,21 @@ router.post('/registrations', async (req, res) => {
 
     // 4. Validate Team Members (if team-based)
     const isHackathon = eventKey === 'mini-hackathon';
+    const isDemoStall = eventKey === 'demo-stall';
+    const isFlexible = isHackathon || isDemoStall;
     const expectedMembersCount = eventConfig.teamSize - 1; // excluding leader
     if (eventConfig.isTeam) {
-      if (!isHackathon && (!Array.isArray(members) || members.length !== expectedMembersCount)) {
+      if (!isFlexible && (!Array.isArray(members) || members.length !== expectedMembersCount)) {
         return res.status(400).json({
           success: false,
           error: `${eventConfig.name} requires exactly ${eventConfig.teamSize} members (1 Leader + ${expectedMembersCount} Members).`
         });
       }
 
-      if (isHackathon && Array.isArray(members) && members.length > expectedMembersCount) {
+      if (isFlexible && Array.isArray(members) && members.length > expectedMembersCount) {
         return res.status(400).json({
           success: false,
-          error: `${eventConfig.name} accepts a maximum of 4 members.`
+          error: `${eventConfig.name} accepts a maximum of ${eventConfig.teamSize} members.`
         });
       }
 

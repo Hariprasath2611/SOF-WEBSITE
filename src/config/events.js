@@ -6,15 +6,17 @@
 export const EVENT_TRACKS = [
   {
     key: 'demo-stall',
-    name: 'Demo Stall – Team of 3',
+    name: 'Demo Stall – 1 to 3 Members',
     title: 'Demo Stall',
     tagline: 'Build. Demonstrate. Inspire.',
     trackNumber: '01',
     teamSize: 3,
+    minTeamSize: 1,
+    maxTeamSize: 3,
     maxSlots: 60,
     isTeam: true,
     accentColor: '#10b981', // Terminal emerald
-    badge: 'TEAM OF 3',
+    badge: '1 - 3 MEMBERS',
     icon: 'Layers',
     summary: 'Showcase working software projects, open-source utilities, and AI prototypes to industry juries.',
     requirements: [

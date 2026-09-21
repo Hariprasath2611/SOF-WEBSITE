@@ -6,10 +6,12 @@
 export const EVENTS = [
   {
     key: 'demo-stall',
-    name: 'Demo Stall – Team of 3',
+    name: 'Demo Stall – 1 to 3 Members',
     title: 'Demo Stall',
     tagline: 'Build. Demonstrate. Inspire.',
     teamSize: 3,
+    minTeamSize: 1,
+    maxTeamSize: 3,
     maxSlots: 60,
     isTeam: true,
     sheetEnvKey: 'DEMO_STALL_SHEET_ID',
