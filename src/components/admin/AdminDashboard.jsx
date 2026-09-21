@@ -33,6 +33,8 @@ import {
   Trash2
 } from 'lucide-react';
 import { EVENT_TRACKS } from '../../config/events';
+import ConfirmationPass from '../registration/ConfirmationPass';
+import { downloadConfirmationPDF } from '../../utils/pdfGenerator';
 
 export default function AdminDashboard({ onBackToHome }) {
   const [token, setToken] = useState(sessionStorage.getItem('sfd_admin_token') || '');
@@ -51,6 +53,7 @@ export default function AdminDashboard({ onBackToHome }) {
   const [filterStatus, setFilterStatus] = useState('');
   const [actionMessage, setActionMessage] = useState('');
   const [adminTab, setAdminTab] = useState('registrations'); // 'registrations' | 'slots'
+  const [pdfDownloadReg, setPdfDownloadReg] = useState(null);
 
   // Backend URL Configuration
   const [showServerModal, setShowServerModal] = useState(false);
@@ -179,6 +182,16 @@ export default function AdminDashboard({ onBackToHome }) {
   const handleExportExcel = () => {
     const filename = `SFD_2026_Registrations_${filterEvent || 'all'}_${filterStatus || 'all'}.xlsx`;
     exportRegistrationsToExcel(registrations, filename);
+  };
+
+  const handleDownloadAdminPDF = (reg) => {
+    setPdfDownloadReg(reg);
+    // Wait for the hidden component to render
+    setTimeout(() => {
+      downloadConfirmationPDF('confirmation-pass-card', `SFD_Pass_${reg.registrationId}.pdf`).then(() => {
+        setPdfDownloadReg(null);
+      });
+    }, 150);
   };
 
   // If not authenticated, show password prompt
@@ -671,6 +684,15 @@ export default function AdminDashboard({ onBackToHome }) {
                                     </button>
                                     <button
                                       type="button"
+                                      className="btn-wizard-back"
+                                      style={{ padding: '4px 8px', fontSize: '0.72rem', borderColor: '#38bdf8', color: '#38bdf8' }}
+                                      onClick={() => handleDownloadAdminPDF(r)}
+                                      title={`Download PDF Pass for ${r.registrationId}`}
+                                    >
+                                      <Download size={12} />
+                                    </button>
+                                    <button
+                                      type="button"
                                       className="btn-delete-row"
                                       onClick={() => handleDeleteRegistration(r.registrationId)}
                                       title={`Permanently delete ${r.registrationId}`}
@@ -811,6 +833,13 @@ export default function AdminDashboard({ onBackToHome }) {
           </>
         )}
       </div>
+
+      {/* Hidden container for PDF rendering */}
+      {pdfDownloadReg && (
+        <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', width: '1000px' }}>
+          <ConfirmationPass registration={pdfDownloadReg} />
+        </div>
+      )}
     </div>
   );
 }
