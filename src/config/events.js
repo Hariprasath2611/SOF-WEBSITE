@@ -43,7 +43,7 @@ export const EVENT_TRACKS = [
     summary: 'High-intensity rapid prototyping sprint solving real-world challenges using FOSS stacks.',
     requirements: [
       'Flexible Team Size: 1 to 4 Members (Solo coders to 4-member teams)',
-      'Fee: Calculated per member (₹100/head for Jaya, ₹200/head for External)',
+      'Fee: Calculated per member (₹100/head for all colleges)',
       '4-5 hours intensive sprint in computing labs',
       'Code hosted in public open-source Git repo'
     ]
