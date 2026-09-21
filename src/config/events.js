@@ -71,19 +71,21 @@ export const EVENT_TRACKS = [
   },
   {
     key: 'panel-discussion',
-    name: 'Panel of Discussion – Team of 5',
+    name: 'Panel of Discussion – 1 to 5 Members',
     title: 'Panel of Discussion',
     tagline: 'Think. Question. Defend.',
     trackNumber: '04',
     teamSize: 5,
+    minTeamSize: 1,
+    maxTeamSize: 5,
     maxSlots: 10,
     isTeam: true,
     accentColor: '#f59e0b', // Amber
-    badge: 'TEAM OF 5',
+    badge: '1 - 5 MEMBERS',
     icon: 'MessageSquareCode',
     summary: 'Spirited debate deconstructing modern technology ethics, open AI vs closed gatekeepers, and privacy.',
     requirements: [
-      'Team of exactly 5 members (1 Team Leader + 4 Members)',
+      'Flexible Team Size: 1 to 5 Members (Solo to 5-member team)',
       'Structured rounds exploring ethics and tech sovereignty',
       'Decorum and factual articulation evaluated by jury'
     ]

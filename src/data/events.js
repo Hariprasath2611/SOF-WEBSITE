@@ -172,7 +172,7 @@ export const events = [
     summary: "Spirited battle of intellect debating pivotal technology ethics, open vs closed AI, software patents, and digital privacy.",
     description: "Step into the arena of critical thought. The Debate event pits articulate technical minds against one another in structured parliamentary-style rounds, deconstructing the most urgent ethical, philosophical, and systemic dilemmas confronting modern technology and developer freedom.",
     eligibility: "Open to all engineering students passionate about tech discourse and policy.",
-    teamSize: "2 Members per team (For & Against rounds)",
+    teamSize: "1 - 5 Members per team",
     duration: "3 Rounds (Preliminary, Semi-Finals, Finals)",
     venue: "Auditorium Annex / Conference Hall",
     registrationLink: "#register?track=panel-discussion",
