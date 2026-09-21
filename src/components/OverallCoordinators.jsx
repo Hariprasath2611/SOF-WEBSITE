@@ -22,15 +22,12 @@ function CoordinatorCard({ coord }) {
             <Users size={32} />
           )}
         </div>
-        <span className="coord-avatar-badge">{coord.avatarBadge}</span>
       </div>
 
       {/* Coordinator Metadata */}
       <div className="coord-meta">
         <h4 className="coord-name">{coord.name}</h4>
-        <div className="coord-role">{coord.role}</div>
         <div className="coord-designation">{coord.designation}</div>
-        <div className="coord-dept">{coord.department}</div>
       </div>
     </article>
   );
@@ -52,11 +49,24 @@ export default function OverallCoordinators() {
           </p>
         </div>
 
-        {/* 10 Coordinators Team Grid (5x2 Desktop) */}
-        <div className="coordinators-grid">
-          {overallCoordinators.map((coord) => (
-            <CoordinatorCard key={coord.id} coord={coord} />
-          ))}
+        {/* 10 Coordinators Team Big Box (One unified container) */}
+        <div className="coordinators-big-box">
+          {/* Top Center Title Header */}
+          <div className="coordinators-box-header">
+            <span className="coordinators-box-title">OVERALL EVENT COORDINATORS</span>
+          </div>
+
+          {/* 10 Coordinators Grid */}
+          <div className="coordinators-grid">
+            {overallCoordinators.map((coord) => (
+              <CoordinatorCard key={coord.id} coord={coord} />
+            ))}
+          </div>
+
+          {/* Bottom Right Dept Footer */}
+          <div className="coordinators-box-footer">
+            <span className="coordinators-box-dept">Dept of Computer Science &amp; Engineering</span>
+          </div>
         </div>
       </div>
     </section>

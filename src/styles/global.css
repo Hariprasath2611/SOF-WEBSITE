@@ -1,59 +1,69 @@
 /* ==========================================================================
-   SOFTWARE FREEDOM DAY 2026 - GLOBAL DESIGN SYSTEM
-   Human-Crafted Modern Dark Theme (Clean, Solid, Editorial)
+   SOFTWARE FREEDOM DAY 2026 - GTA 6 / VICE CITY DESIGN SYSTEM
+   Signature Sunset Neon Noir: Hot Magenta Pink, Electric Cyan & Dusk Obsidian
    ========================================================================== */
 
 :root {
-  /* Color Palette - Solid, Deep, Premium Surfaces */
-  --bg-black: #080b11;
-  --bg-primary: #0a0d14;
-  --bg-secondary: #0e1320;
-  --bg-tertiary: #131a29;
-  --bg-card: #0e1320;
-  --bg-card-hover: #131a2c;
-  --bg-glass: rgba(10, 13, 20, 0.94);
+  /* Vice City Color Palette - Deep Obsidian & Sunset Night Surfaces */
+  --bg-black: #07040d;
+  --bg-primary: #0a0514;
+  --bg-secondary: #110822;
+  --bg-tertiary: #190c30;
+  --bg-card: linear-gradient(135deg, rgba(46, 17, 74, 0.72) 0%, rgba(22, 9, 40, 0.8) 100%);
+  --bg-card-hover: linear-gradient(135deg, rgba(58, 22, 92, 0.78) 0%, rgba(28, 11, 50, 0.86) 100%);
+  --bg-glass: rgba(30, 12, 50, 0.72);
 
-  /* Clean Borders & Subtle Separators */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.15);
-  --border-focus: #10b981;
+  /* Clean Neon Borders & Cyber Dividers */
+  --border-subtle: rgba(255, 42, 133, 0.18);
+  --border-medium: rgba(255, 42, 133, 0.32);
+  --border-cyan: rgba(0, 240, 255, 0.35);
+  --border-focus: #00f0ff;
 
-  /* Refined Accent Palette */
-  --accent-green: #10b981;
-  --accent-green-bright: #34d399;
-  --accent-blue: #3b82f6;
-  --accent-violet: #8b5cf6;
-  --accent-cyan: #06b6d4;
-  --accent-amber: #f59e0b;
+  /* GTA 6 Iconic Neon Accents */
+  --accent-pink: #ff2a85;
+  --accent-pink-bright: #ff5ea5;
+  --accent-cyan: #00f0ff;
+  --accent-cyan-bright: #38fdfd;
+  --accent-coral: #ff7e40;
+  --accent-violet: #a855f7;
+  --accent-amber: #fbbf24;
+
+  /* Backward Compatibility Mappings mapped to GTA 6 Palette */
+  --accent-green: #ff2a85;
+  --accent-green-bright: #ff5ea5;
+  --accent-blue: #00f0ff;
 
   /* Typography Colors */
   --text-primary: #ffffff;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-code: #10b981;
+  --text-secondary: #c4b5fd;
+  --text-muted: #8b7ca8;
+  --text-code: #00f0ff;
 
-  /* Modern Human Typography: Plus Jakarta Sans + Inter */
-  --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* GTA 6 High-Impact Typography */
+  --font-heading: 'Montserrat', 'Outfit', 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-script: 'Yellowtail', cursive;
 
   /* Layout & Spacing */
   --max-width: 1240px;
   --header-height: 72px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
   --radius-full: 9999px;
 
-  /* Subtle, Natural Transitions */
+  /* Transitions */
   --transition-fast: 150ms ease;
-  --transition-normal: 220ms ease;
-  --transition-smooth: 320ms ease;
+  --transition-normal: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 350ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Natural Physical Drop Shadows (No Radioactive Glows) */
-  --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
-  --shadow-elevated: 0 12px 32px -4px rgba(0, 0, 0, 0.55);
+  /* Natural Clean Drop Shadows (No Neon Halos) */
+  --glow-pink: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --glow-cyan: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* Reset & Box Sizing */
@@ -76,6 +86,11 @@ html {
 
 body {
   background-color: var(--bg-black);
+  background-image: 
+    radial-gradient(ellipse 95% 65% at 50% -5%, rgba(236, 72, 153, 0.38), transparent 75%),
+    radial-gradient(circle at 15% 25%, rgba(244, 63, 94, 0.22), transparent 55%),
+    radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.22), transparent 55%),
+    radial-gradient(circle at 50% 65%, rgba(255, 42, 133, 0.12), transparent 60%);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 16px;
@@ -91,37 +106,37 @@ body {
   overflow-x: hidden;
   width: 100%;
   max-width: 100%;
+  position: relative;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Vice Sunset Gradient */
 ::-webkit-scrollbar {
-  width: 9px;
+  width: 10px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-black);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: linear-gradient(180deg, #ff2a85 0%, #a855f7 50%, #00f0ff 100%);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: linear-gradient(180deg, #ff5ea5 0%, #c026d3 50%, #38fdfd 100%);
 }
 
-/* Text Selection */
+/* Text Selection - Vice Hot Pink */
 ::selection {
-  background: rgba(16, 185, 129, 0.35);
-  color: #fff;
+  background: rgba(255, 42, 133, 0.45);
+  color: #ffffff;
 }
 
-/* Global Typography Elements */
+/* Global Typography Elements - GTA VI Bold Aesthetic */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--text-primary);
-  line-height: 1.2;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  text-transform: none;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 p {
@@ -153,65 +168,85 @@ code, pre, .mono {
 }
 
 .section {
-  padding: 88px 0;
+  padding: 92px 0;
   position: relative;
   z-index: 2;
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 56px 0;
+    padding: 60px 0;
   }
 }
 
 @media (max-width: 480px) {
   .section {
-    padding: 42px 0;
+    padding: 44px 0;
   }
 }
 
 /* Section Header Utility */
 .section-header {
   text-align: center;
-  max-width: 760px;
-  margin: 0 auto 48px auto;
+  max-width: 780px;
+  margin: 0 auto 52px auto;
+  position: relative;
 }
 
+/* GTA 6 Slanted HUD Section Tag */
 .section-tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-body);
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--accent-green);
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.22);
-  padding: 5px 14px;
-  border-radius: var(--radius-full);
-  margin-bottom: 16px;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(255, 42, 133, 0.2), rgba(168, 85, 247, 0.2));
+  border: 1px solid rgba(255, 42, 133, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  transform: skewX(-4deg);
+  margin-bottom: 18px;
+}
+
+.section-tag > * {
+  transform: skewX(4deg);
+}
+
+.section-tag svg {
+  color: #ff2a85;
 }
 
 .section-tag.blue {
-  color: var(--accent-blue);
-  background: rgba(59, 130, 246, 0.08);
-  border-color: rgba(59, 130, 246, 0.22);
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.section-tag.blue svg {
+  color: #00f0ff;
 }
 
 .section-tag.violet {
-  color: var(--accent-violet);
-  background: rgba(139, 92, 246, 0.08);
-  border-color: rgba(139, 92, 246, 0.22);
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .section-title {
-  font-size: clamp(1.4rem, 5vw, 2.9rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.6rem, 5vw, 3.1rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
   margin-bottom: 14px;
   color: #ffffff;
-  line-height: 1.18;
+  line-height: 1.15;
+  text-transform: uppercase;
 }
 
 @media (max-width: 640px) {
@@ -226,17 +261,23 @@ code, pre, .mono {
   line-height: 1.65;
 }
 
-/* Button System - Human-Crafted, Clear, Non-Monospace */
+/* ==========================================================================
+   BUTTON SYSTEM - GTA 6 ICONIC AESTHETIC
+   Clean, Solid, High-Impact (No Blurry Neon Halos)
+   ========================================================================== */
+
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: var(--font-body);
+  font-family: var(--font-heading);
   font-size: 0.92rem;
-  font-weight: 600;
-  padding: 11px 22px;
-  border-radius: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 13px 26px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   cursor: pointer;
   position: relative;
@@ -245,66 +286,76 @@ code, pre, .mono {
   white-space: nowrap;
 }
 
+/* Iconic Electric Cyan Button */
 .btn-primary {
-  background: #10b981;
-  color: #032117;
-  font-weight: 600;
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #00e5ff;
+  color: #02070f;
+  font-weight: 900;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 .btn-primary:hover {
-  background: #059669;
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  background: #38bdf8;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
+/* Secondary Button - Vice Noir */
 .btn-secondary {
-  background: #131927;
-  color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(26, 12, 44, 0.85);
+  color: #ffffff;
+  border: 1px solid rgba(255, 42, 133, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
-  background: #182236;
-  border-color: rgba(255, 255, 255, 0.24);
-  transform: translateY(-1px);
-  color: #fff;
+  background: rgba(255, 42, 133, 0.2);
+  border-color: #ff2a85;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
 .btn-outline-green {
-  background: transparent;
-  color: var(--accent-green);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: rgba(255, 42, 133, 0.08);
+  color: #ff2a85;
+  border: 1px solid rgba(255, 42, 133, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .btn-outline-green:hover {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: var(--accent-green);
+  background: rgba(255, 42, 133, 0.2);
+  border-color: #ff2a85;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   transform: translateY(-1px);
 }
 
 .btn-phone {
-  background: rgba(16, 185, 129, 0.08);
-  color: var(--accent-green);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(0, 240, 255, 0.08);
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.4);
   font-size: 0.84rem;
   padding: 8px 16px;
-  border-radius: 7px;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-weight: 700;
   text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   transition: all var(--transition-fast);
 }
 
 .btn-phone:hover {
-  background: rgba(16, 185, 129, 0.18);
-  border-color: var(--accent-green);
-  color: #34d399;
+  background: rgba(0, 240, 255, 0.2);
+  border-color: #00f0ff;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   transform: translateY(-1px);
 }
 
@@ -315,12 +366,15 @@ code, pre, .mono {
 }
 
 .btn:hover .btn-arrow-icon {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
-/* Generic Form Styles */
+/* ==========================================================================
+   FORM CONTROLS - VICE CITY CYBER HUD
+   ========================================================================== */
+
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .form-label {
@@ -328,44 +382,48 @@ code, pre, .mono {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
+  font-family: var(--font-heading);
   font-size: 0.88rem;
-  font-weight: 600;
-  color: #e2e8f0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f1f5f9;
 }
 
 .required-asterisk {
-  color: #ef4444;
+  color: #ff2a85;
   margin-left: 3px;
 }
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  background: #0b0f19;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(14, 7, 28, 0.95);
+  border: 1px solid rgba(255, 42, 133, 0.25);
   color: #ffffff;
-  padding: 11px 14px;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 0.94rem;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
-  border-color: var(--accent-green);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  background: rgba(22, 11, 44, 0.98);
+  border-color: #00f0ff;
+  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.35);
 }
 
 .form-input.has-error, .form-select.has-error {
-  border-color: #ef4444;
+  border-color: #ff2a85;
+  box-shadow: 0 0 0 2px rgba(255, 42, 133, 0.35);
 }
 
 @media (max-width: 768px) {
   .form-input, .form-select, .form-textarea {
-    font-size: 16px !important; /* Prevents unwanted iOS Safari auto-zoom on input tap */
+    font-size: 16px !important;
   }
   .btn {
-    min-height: 44px; /* Touch-friendly size standard */
+    min-height: 46px;
   }
 }
 
@@ -373,44 +431,38 @@ code, pre, .mono {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.78rem;
-  color: #f87171;
+  font-size: 0.8rem;
+  color: #ff5ea5;
   margin-top: 6px;
 }
 
-/* Status Badge Utility */
+/* ==========================================================================
+   STATUS BADGES - GTA VI HUD STYLE
+   ========================================================================== */
+
 .status-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.status-badge.confirmed {
-  background: rgba(16, 185, 129, 0.12);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+.status-badge.confirmed, .status-badge.open {
+  background: rgba(0, 240, 255, 0.12);
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-.status-badge.cancelled {
-  background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.status-badge.open {
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
-
-.status-badge.full {
-  background: rgba(239, 68, 68, 0.1);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+.status-badge.cancelled, .status-badge.full {
+  background: rgba(255, 42, 133, 0.15);
+  color: #ff5ea5;
+  border: 1px solid rgba(255, 42, 133, 0.45);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }

@@ -1,6 +1,6 @@
 /* ==========================================================================
-   HOST & VENUE SECTION STYLING
-   Showcase Jaya Engineering College & Department of CSE
+   HOST & VENUE SECTION STYLING - GTA 6 / VICE CITY THEME
+   Showcase Jaya Engineering College & Department of CSE in Cyber Noir Glass
    ========================================================================== */
 
 .host-section {
@@ -12,12 +12,17 @@
   grid-template-columns: 1.1fr 0.9fr;
   gap: 40px;
   padding: 44px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(135deg, rgba(46, 17, 74, 0.72) 0%, rgba(22, 9, 40, 0.8) 100%);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1.5px solid rgba(255, 42, 133, 0.55);
+  border-bottom: 4px solid #ff2a85;
   border-radius: var(--radius-xl);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.55), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
 .host-details {
@@ -27,12 +32,12 @@
 }
 
 .host-kicker {
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--accent-green);
+  font-family: var(--font-heading);
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: #ff5ea5;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -40,17 +45,21 @@
 
 .host-main-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.2;
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 .host-sub-title {
   font-family: var(--font-heading);
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #38bdf8;
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #00f0ff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .host-bio {
@@ -70,14 +79,22 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  background: rgba(14, 6, 28, 0.45);
+  border: 1px solid rgba(255, 42, 133, 0.25);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(10px);
+}
+
+.host-feature-item:hover {
+  background: rgba(255, 42, 133, 0.15);
+  border-color: rgba(255, 42, 133, 0.5);
+  transform: translateY(-2px);
 }
 
 .host-feature-icon {
-  color: var(--accent-green);
+  color: #00f0ff;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -85,14 +102,16 @@
 .host-feature-text h4 {
   font-family: var(--font-heading);
   font-size: 0.92rem;
-  font-weight: 600;
-  color: #f1f5f9;
+  font-weight: 800;
+  color: #ffffff;
   margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .host-feature-text p {
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: #c4b5fd;
 }
 
 /* Right Location Widget */
@@ -100,11 +119,14 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 32px;
-  background: #090d15;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 34px;
+  background: rgba(16, 7, 34, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.35);
   border-radius: var(--radius-lg);
   position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .location-header {
@@ -118,27 +140,30 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-body);
+  font-family: var(--font-heading);
   font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--accent-green);
-  background: rgba(16, 185, 129, 0.1);
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
 }
 
 .location-radar {
-  width: 7px;
-  height: 7px;
-  background: var(--accent-green);
+  width: 8px;
+  height: 8px;
+  background: #00f0ff;
   border-radius: 50%;
 }
 
 .location-address-box {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 28px;
+  gap: 16px;
+  margin-bottom: 30px;
 }
 
 .address-item {
@@ -148,31 +173,274 @@
 }
 
 .address-icon {
-  color: #38bdf8;
+  color: #ff2a85;
   margin-top: 3px;
   flex-shrink: 0;
 }
 
 .address-content h5 {
   font-size: 0.8rem;
-  font-family: var(--font-body);
-  font-weight: 600;
-  color: #94a3b8;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #c4b5fd;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   margin-bottom: 2px;
 }
 
 .address-content p {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #f8fafc;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .address-content small {
-  font-size: 0.82rem;
-  color: #64748b;
+  font-size: 0.84rem;
+  color: #8b7ca8;
   display: block;
+}
+
+/* ==========================================================================
+   MAPCN CUSTOM DESIGN VENUE MAP - GTA 6 VICE CITY RADAR
+   ========================================================================== */
+
+.mapcn-container-card {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 42, 133, 0.45);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55), inset 0 0 20px rgba(0, 0, 0, 0.7);
+  margin: 6px 0 24px 0;
+  background: #08040f;
+}
+
+.mapcn-canvas-viewport {
+  width: 100%;
+  height: 100%;
+}
+
+.mapcn-hud-bar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.mapcn-hud-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(14, 6, 28, 0.88);
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #00f0ff;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(10px);
+}
+
+.mapcn-hud-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f0ff;
+  animation: radar-blink 1.4s ease-in-out infinite;
+}
+
+@keyframes radar-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.7); }
+}
+
+.mapcn-hud-coords {
+  background: rgba(14, 6, 28, 0.88);
+  border: 1px solid rgba(255, 42, 133, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #c4b5fd;
+  backdrop-filter: blur(10px);
+}
+
+.mapcn-controls-group {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 5;
+}
+
+.mapcn-ctrl-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: rgba(14, 6, 28, 0.88);
+  border: 1px solid rgba(255, 42, 133, 0.4);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+}
+
+.mapcn-ctrl-btn:hover {
+  background: rgba(255, 42, 133, 0.3);
+  border-color: #00f0ff;
+  color: #00f0ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Radar Marker */
+.mapcn-custom-marker {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mapcn-radar-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 42, 133, 0.25);
+  border: 1.5px solid #ff2a85;
+  animation: beacon-pulse 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes beacon-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.2);
+    opacity: 0;
+  }
+}
+
+.mapcn-marker-pin {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff2a85, #831843);
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(255, 42, 133, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  transition: transform var(--transition-fast);
+}
+
+.mapcn-custom-marker:hover .mapcn-marker-pin {
+  transform: scale(1.15);
+  background: linear-gradient(135deg, #00f0ff, #0284c7);
+}
+
+.mapcn-marker-label {
+  margin-top: 4px;
+  background: rgba(10, 4, 20, 0.92);
+  border: 1px solid rgba(0, 240, 255, 0.5);
+  color: #00f0ff;
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+/* MapLibre Popup Customization - Vice City Glass */
+.maplibregl-popup-content {
+  background: rgba(14, 6, 28, 0.95) !important;
+  border: 1.5px solid rgba(255, 42, 133, 0.55) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 12px 14px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(16px);
+}
+
+.maplibregl-popup-tip {
+  border-top-color: rgba(14, 6, 28, 0.95) !important;
+}
+
+.mapcn-popup-tag {
+  font-size: 0.62rem;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #00f0ff;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.mapcn-popup-name {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.mapcn-popup-address {
+  font-size: 0.74rem;
+  color: #c4b5fd;
+  margin-bottom: 4px;
+}
+
+.mapcn-popup-coords {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #8b7ca8;
+}
+
+/* Loading Overlay */
+.mapcn-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 4, 15, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #c4b5fd;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  z-index: 4;
+}
+
+.mapcn-loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 42, 133, 0.2);
+  border-top-color: #ff2a85;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 .map-btn-wrapper {

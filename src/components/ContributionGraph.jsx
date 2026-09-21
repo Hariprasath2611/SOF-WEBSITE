@@ -41,7 +41,7 @@ export default function ContributionGraph() {
           <div className="contrib-header">
             <div className="contrib-title-group">
               <h3>
-                <GitCommit size={20} color="#10b981" />
+                <GitCommit size={20} color="#00f0ff" />
                 <span>EVERY CONTRIBUTION MATTERS.</span>
               </h3>
               <p>

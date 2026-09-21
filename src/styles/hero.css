@@ -1,224 +1,333 @@
 /* ==========================================================================
-   HERO SECTION STYLING
-   Human-Crafted, Editorial, and Authentic
+   HERO SECTION STYLING - GTA 6 / VICE CITY CENTRIC LAYOUT
+   Centered Slanted Banner Slab, Sunset Atmosphere & Hanging Cyan Actions
    ========================================================================== */
 
 .hero-section {
   position: relative;
-  min-height: calc(100vh - var(--header-height));
-  display: flex;
-  align-items: center;
-  padding-top: calc(var(--header-height) + 36px);
-  padding-bottom: 72px;
+  min-height: 100vh;
+  padding-top: calc(var(--header-height) + 24px);
+  padding-bottom: 100px;
   overflow: hidden;
   z-index: 2;
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 0.95fr;
-  gap: 48px;
-  align-items: center;
-  width: 100%;
-  max-width: 100%;
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1050px;
+  height: 560px;
+  background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.28) 0%, rgba(168, 85, 247, 0.15) 50%, transparent 75%);
+  pointer-events: none;
+  z-index: 1;
 }
 
-@media (max-width: 992px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
-}
-
-/* Left Column Content */
-.hero-content {
+.hero-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  z-index: 3;
-  width: 100%;
-  max-width: 100%;
-}
-
-.hero-host-badge {
-  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.22);
-  border-radius: var(--radius-full);
-  padding: 6px 14px;
-  margin-bottom: 20px;
-  font-family: var(--font-body);
-  font-size: clamp(0.72rem, 2.8vw, 0.86rem);
-  font-weight: 500;
-  color: #6ee7b7;
-  max-width: 100%;
-  line-height: 1.35;
-  box-sizing: border-box;
+  position: relative;
+  z-index: 3;
 }
 
-.host-pulse-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--accent-green);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--accent-green);
-  flex-shrink: 0;
-}
-
-.hero-title-group {
-  margin-bottom: 18px;
+/* The Iconic GTA 6 Slanted Banner Container */
+.gta-hero-banner-wrapper {
   width: 100%;
-  max-width: 100%;
+  max-width: 1100px;
+  margin: 16px auto 56px auto;
+  position: relative;
+  padding: 0 0 24px 0;
+}
+
+.gta-hero-banner {
+  background: linear-gradient(135deg, rgba(46, 17, 74, 0.72) 0%, rgba(22, 9, 40, 0.8) 100%);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1.5px solid rgba(255, 42, 133, 0.55);
+  border-bottom: 4px solid #ff2a85;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.55), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transform: skew(-2.5deg, -0.6deg);
+  border-radius: var(--radius-sm);
+  padding: 44px 48px 52px;
+  position: relative;
+}
+
+/* Inner Grid Content - Un-skew to keep typography sharp */
+.banner-grid-content {
+  transform: skew(2.5deg, 0.6deg);
+  display: grid;
+  grid-template-columns: 0.95fr 1.35fr;
+  gap: 44px;
+  align-items: center;
+}
+
+/* Left: Bold Title Slab (Like the GTA VI Logo Box) */
+.banner-left-title-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid rgba(255, 42, 133, 0.25);
+  padding-right: 36px;
 }
 
 .hero-title {
-  font-size: clamp(1.85rem, 7vw, 4.3rem);
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -0.035em;
-  margin-bottom: 16px;
-  text-transform: none;
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 5.2vw, 3.9rem);
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   color: #ffffff;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.hero-title .title-accent {
-  background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
+.title-row {
+  color: #ffffff;
+}
+
+.title-accent {
+  color: #00f0ff;
+  margin-top: 4px;
+}
+
+/* Right: Info & Description */
+.banner-right-info-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .hero-headline {
-  font-family: var(--font-body);
-  font-size: clamp(0.95rem, 1.8vw, 1.3rem);
-  font-weight: 600;
-  color: #38bdf8;
-  letter-spacing: -0.01em;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 18px;
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+  line-height: 1.25;
 }
 
 .hero-description {
-  font-size: 1.05rem;
-  color: #94a3b8;
+  font-size: 0.98rem;
+  color: #cbd5e1;
   line-height: 1.65;
-  max-width: 580px;
-  margin-bottom: 26px;
+  margin-bottom: 20px;
 }
 
+/* Host Details Row */
 .hero-host-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 14px 18px;
-  background: #0e1320;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 3px solid var(--accent-green);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  margin-bottom: 32px;
-  max-width: 560px;
+  gap: 6px;
+  padding: 12px 16px;
+  background: rgba(255, 42, 133, 0.08);
+  border-left: 3px solid #ff2a85;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.host-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+
+.host-meta-icon {
+  color: #ff5ea5;
+  flex-shrink: 0;
 }
 
 .host-org {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #f1f5f9;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 0.88rem;
 }
 
 .host-institution {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: #c4b5fd;
+  font-size: 0.85rem;
 }
 
 .host-location {
+  color: #00f0ff;
+  font-family: var(--font-heading);
+  font-weight: 700;
   font-size: 0.82rem;
-  color: var(--accent-green);
-  display: flex;
-  align-items: center;
-  gap: 6px;
   margin-top: 2px;
 }
 
-/* CTA Action Bar */
-.hero-cta-group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 36px;
+.host-location svg {
+  color: #00f0ff;
+  flex-shrink: 0;
 }
 
-/* Hero Live Counter Stats */
+/* Bottom-Right Hanging Action Buttons (Matches Reference 'BUY TICKETS') */
+.banner-hanging-actions {
+  position: absolute;
+  bottom: -22px;
+  right: 36px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transform: skew(2.5deg, 0.6deg);
+  z-index: 5;
+}
+
+.banner-hanging-actions .btn-primary {
+  padding: 12px 28px;
+  font-size: 0.95rem;
+}
+
+.banner-hanging-actions .btn-secondary {
+  padding: 12px 24px;
+  font-size: 0.95rem;
+}
+
+/* 3. Live Metrics Row - Centered below banner */
 .hero-stats-row {
   display: flex;
   align-items: center;
+  justify-content: space-around;
   gap: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-subtle);
   width: 100%;
-}
-
-@media (max-width: 640px) {
-  .hero-section {
-    padding-top: calc(var(--header-height) + 16px);
-    padding-bottom: 40px;
-    align-items: flex-start;
-    height: auto;
-  }
-  .hero-description {
-    font-size: 0.95rem;
-  }
-  .hero-host-info {
-    padding: 12px 14px;
-    margin-bottom: 24px;
-    width: 100%;
-  }
-  .hero-cta-group {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-    margin-bottom: 28px;
-  }
-  .hero-cta-group .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .hero-stats-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    padding-top: 20px;
-  }
+  max-width: 880px;
+  padding: 24px 32px;
+  background: linear-gradient(135deg, rgba(42, 16, 68, 0.72) 0%, rgba(20, 8, 38, 0.78) 100%);
+  border: 1px solid rgba(255, 42, 133, 0.35);
+  border-radius: var(--radius-md);
+  margin-bottom: 56px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .hero-stat-item {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
 }
 
 .stat-number {
   font-family: var(--font-heading);
-  font-size: 1.65rem;
-  font-weight: 800;
+  font-size: 1.8rem;
+  font-weight: 900;
   color: #ffffff;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .stat-number.green {
-  color: var(--accent-green);
+  color: #00f0ff;
 }
 
 .stat-label {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  font-weight: 500;
+  font-family: var(--font-heading);
+  font-size: 0.76rem;
+  color: #c4b5fd;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* 4. Centered Cyber Terminal Console */
+.hero-terminal-centered {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+}
+
+
+
+/* ==========================================================================
+   RESPONSIVE DESIGN FOR SLANTED HERO BANNER
+   ========================================================================== */
+
+@media (max-width: 960px) {
+  .gta-hero-banner {
+    transform: none;
+    padding: 36px 24px 64px;
+  }
+
+  .banner-grid-content {
+    transform: none;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .banner-left-title-box {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 42, 133, 0.25);
+    padding-right: 0;
+    padding-bottom: 24px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .banner-hanging-actions {
+    transform: none;
+    right: 50%;
+    transform: translateX(50%);
+    width: calc(100% - 48px);
+    max-width: 440px;
+    justify-content: center;
+  }
+
+  .banner-hanging-actions .btn {
+    flex: 1;
+  }
+
+  .hero-stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 580px) {
+  .gta-hero-banner {
+    padding: 24px 16px 74px;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-headline {
+    font-size: 1rem;
+  }
+
+  .banner-hanging-actions {
+    width: calc(100% - 24px);
+    flex-direction: column;
+    gap: 8px;
+    bottom: -46px;
+  }
+
+  .banner-hanging-actions .btn {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 0.84rem;
+  }
+
+  .hero-stats-row {
+    margin-top: 36px;
+  }
 }

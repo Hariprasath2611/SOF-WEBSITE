@@ -192,12 +192,12 @@ export default function AdminDashboard({ onBackToHome }) {
                 width: '54px',
                 height: '54px',
                 borderRadius: '50%',
-                background: 'rgba(16, 185, 129, 0.1)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
+                background: 'rgba(0, 240, 255, 0.1)',
+                border: '1px solid rgba(0, 240, 255, 0.3)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#10b981',
+                color: '#00f0ff',
                 marginBottom: '16px'
               }}
             >
@@ -275,7 +275,7 @@ export default function AdminDashboard({ onBackToHome }) {
         <div className="admin-top-bar">
           <div className="admin-title-group">
             <h1>
-              <Shield size={24} color="#10b981" />
+              <Shield size={24} color="#00f0ff" />
               <span>SFD 2026 Registration Management</span>
             </h1>
             <p>Jaya Engineering College • Real-Time Slot Control & Google Sheets Gateway</p>
@@ -304,7 +304,7 @@ export default function AdminDashboard({ onBackToHome }) {
               type="button"
               onClick={handleExportExcel}
               className="btn-wizard-back"
-              style={{ color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.3)', cursor: 'pointer' }}
+              style={{ color: '#00f0ff', borderColor: 'rgba(0, 240, 255, 0.3)', cursor: 'pointer' }}
               title="Export filtered registrations to Microsoft Excel (.xlsx)"
             >
               <FileSpreadsheet size={15} />
@@ -397,8 +397,8 @@ export default function AdminDashboard({ onBackToHome }) {
         {actionMessage && (
           <div
             style={{
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid #10b981',
+              background: 'rgba(0, 240, 255, 0.15)',
+              border: '1px solid #00f0ff',
               color: '#34d399',
               padding: '12px 18px',
               borderRadius: '8px',
@@ -422,7 +422,7 @@ export default function AdminDashboard({ onBackToHome }) {
 
               <div className="kpi-metric-card">
                 <span className="kpi-title">Active Confirmed</span>
-                <span className="kpi-number" style={{ color: '#10b981' }}>{overview.confirmedRegistrations}</span>
+                <span className="kpi-number" style={{ color: '#00f0ff' }}>{overview.confirmedRegistrations}</span>
                 <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Consuming slots</span>
               </div>
 
@@ -457,9 +457,9 @@ export default function AdminDashboard({ onBackToHome }) {
                   className="btn-wizard-back"
                   onClick={() => setAdminTab('registrations')}
                   style={{
-                    background: adminTab === 'registrations' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                    background: adminTab === 'registrations' ? 'rgba(0, 240, 255, 0.15)' : 'transparent',
                     color: adminTab === 'registrations' ? '#34d399' : '#94a3b8',
-                    borderColor: adminTab === 'registrations' ? '#10b981' : 'rgba(255, 255, 255, 0.15)',
+                    borderColor: adminTab === 'registrations' ? '#00f0ff' : 'rgba(255, 255, 255, 0.15)',
                     fontWeight: 600,
                     cursor: 'pointer'
                   }}
@@ -615,7 +615,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                       {(() => {
                                         const cat = r.demoStallCategory || getDemoStallCategory(leader.college, leader.department);
                                         if (cat === 'jec_cse') {
-                                          return <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.15)', color: '#6ee7b7', border: '1px solid rgba(16, 185, 129, 0.3)' }}>JEC CSE (Quota: 30)</span>;
+                                          return <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(0, 240, 255, 0.15)', color: '#6ee7b7', border: '1px solid rgba(0, 240, 255, 0.3)' }}>JEC CSE (Quota: 30)</span>;
                                         } else if (cat === 'jec_other') {
                                           return <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(56, 189, 248, 0.15)', color: '#7dd3fc', border: '1px solid rgba(56, 189, 248, 0.3)' }}>JEC Other (Quota: 10)</span>;
                                         } else {
@@ -626,7 +626,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                   )}
                                 </td>
                                 <td className="col-fee">
-                                  <div style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                                  <div style={{ color: '#00f0ff', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
                                     ₹{(r.members ? r.members.length : 1) * 100}
                                   </div>
                                   <div style={{ fontSize: '0.74rem', color: '#38bdf8', fontFamily: 'var(--font-mono)' }} title="UPI Transaction Reference">
@@ -733,7 +733,7 @@ export default function AdminDashboard({ onBackToHome }) {
                           <span style={{ color: '#fff', fontWeight: 700 }}>
                             {effectiveRegistered} / {effectiveMaxSlots}
                           </span>
-                          <span style={{ color: isFull ? '#f87171' : '#10b981' }}>
+                          <span style={{ color: isFull ? '#f87171' : '#00f0ff' }}>
                             {effectiveRemaining} Left
                           </span>
                         </div>
@@ -757,7 +757,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                   className="event-slot-bar-fill"
                                   style={{
                                     width: `${ev.quotasStats ? Math.min(100, Math.round((ev.quotasStats.jecCse.registered / 60) * 100)) : 0}%`,
-                                    background: '#10b981'
+                                    background: '#00f0ff'
                                   }}
                                 />
                               </div>

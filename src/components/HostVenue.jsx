@@ -1,8 +1,9 @@
 import React from 'react';
 import { MapPin, Navigation, Building2, Award, Laptop, Users, ExternalLink } from 'lucide-react';
+import MapcnVenueMap from './MapcnVenueMap';
 
 export default function HostVenue() {
-  const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=Jaya+Engineering+College+Thirunindravur+Tamil+Nadu';
+  const mapsUrl = 'https://www.google.com/maps/place/Jaya+Engineering+College/@13.135473,80.045303,17z/data=!4m6!3m5!1s0x3a5289b72cf8bb8f:0xd5fed379d9b04ecc!8m2!3d13.135473!4d80.045303!16s%2Fm%2F0cw1fjr';
 
   return (
     <section id="about" className="section host-section">
@@ -78,7 +79,7 @@ export default function HostVenue() {
                 <span className="location-radar" />
                 <span>OFFICIAL VENUE</span>
               </div>
-              <MapPin size={20} color="#10b981" />
+              <MapPin size={20} color="var(--accent-pink)" />
             </div>
 
             <div className="location-address-box">
@@ -95,11 +96,14 @@ export default function HostVenue() {
                 <Navigation size={20} className="address-icon" />
                 <div className="address-content">
                   <h5>Location & Campus Address</h5>
-                  <p>Thirunindravur Road, Tamil Nadu</p>
+                  <p>CTH Road, Prakash Nagar, Thiruninravur</p>
                   <small>Pin Code: 602 024 · Accessible via suburban rail & bus routes</small>
                 </div>
               </div>
             </div>
+
+            {/* Custom mapcn Dark Theme Venue Map */}
+            <MapcnVenueMap />
 
             <div className="map-btn-wrapper">
               <a

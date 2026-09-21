@@ -143,7 +143,7 @@ export default function HeroTerminal() {
             />
           </div>
           <div className="terminal-tab-title">
-            <Terminal size={14} color="#10b981" />
+            <Terminal size={14} color="#00f0ff" />
             <span>bash: ~/sfd-2026</span>
           </div>
           <span className="terminal-status-badge">LIVE CLI</span>
@@ -181,7 +181,7 @@ export default function HeroTerminal() {
                   key={index}
                   className="term-line"
                   style={{
-                    color: '#10b981',
+                    color: '#00f0ff',
                     fontWeight: 700,
                     letterSpacing: '0.05em',
                     padding: '4px 0'

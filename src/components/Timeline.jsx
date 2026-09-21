@@ -39,7 +39,7 @@ export default function Timeline() {
                 <h3 className="timeline-title">{stage.title}</h3>
 
                 <div className="timeline-location-tag">
-                  <MapPin size={13} color="#10b981" />
+                  <MapPin size={13} color="var(--accent-cyan)" />
                   <span>{stage.location}</span>
                 </div>
 
