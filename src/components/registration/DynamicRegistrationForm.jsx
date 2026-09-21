@@ -18,11 +18,11 @@ export default function DynamicRegistrationForm({
 
   const isHackathon = selectedEventKey === 'mini-hackathon';
   const isDemoStall = selectedEventKey === 'demo-stall';
-  const isFlexible = isHackathon || isDemoStall;
+  const isFlexible = eventConfig.isTeam && eventConfig.minTeamSize && eventConfig.maxTeamSize && eventConfig.minTeamSize !== eventConfig.maxTeamSize;
   
-  const defaultSize = isHackathon ? 4 : (isDemoStall ? 3 : eventConfig.teamSize);
+  const defaultSize = eventConfig.maxTeamSize || eventConfig.teamSize || 1;
   const effectiveTeamSize = isFlexible ? (Number(formData.teamSize) || (formData.members && formData.members.length > 0 ? formData.members.length + 1 : defaultSize)) : eventConfig.teamSize;
-  const remainingMembersCount = isFlexible ? Math.max(0, effectiveTeamSize - 1) : Math.max(0, eventConfig.teamSize - 1);
+  const remainingMembersCount = isFlexible ? Math.max(0, effectiveTeamSize - 1) : Math.max(0, (eventConfig.teamSize || 1) - 1);
 
   const handleFlexibleSizeChange = (newSize) => {
     const currentMembers = [...(formData.members || [])];
