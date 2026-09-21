@@ -80,7 +80,7 @@ export const overallCoordinators = [
     email: "soniya.sfd@jaya.edu.in",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    photo: null,
+    photo: "/coordinators/Soniya.png",
     avatarBadge: "TECH"
   },
   {
