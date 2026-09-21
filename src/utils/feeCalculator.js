@@ -2,7 +2,7 @@
  * Dynamic Registration Fee Calculator for Software Freedom Day 2026
  * 
  * Fee Structure (Per Head):
- * - External Colleges: ₹200 per head
+ * - External Colleges: ₹100 per head
  * - Jaya Engineering College (Internal): ₹100 per head
  * 
  * Note: Special rates are calculated discretely based on college detection
@@ -19,7 +19,7 @@ export const TEAM_SIZES = {
 
 export function calculateEventFee(eventKey, collegeName = '', actualMembersCount = null) {
   const isJaya = /(jaya|\bjec\b)/i.test((collegeName || '').trim());
-  const perHeadFee = isJaya ? 100 : 200;
+  const perHeadFee = 100;
   const count = Number(actualMembersCount) > 0 ? Number(actualMembersCount) : (TEAM_SIZES[eventKey] || 1);
   const totalAmount = perHeadFee * count;
 
