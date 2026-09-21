@@ -58,7 +58,7 @@ export function getDemoStallCategory(college = '', department = '') {
 
 export function calculateServerFee(eventKey, collegeName = '', actualMembersCount = null) {
   const isJaya = /(jaya|\bjec\b)/i.test((collegeName || '').trim());
-  const perHeadFee = isJaya ? 100 : 200;
+  const perHeadFee = 100;
   const teamSizes = {
     'demo-stall': 3,
     'mini-hackathon': 4,
