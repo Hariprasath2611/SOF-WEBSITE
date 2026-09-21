@@ -20,7 +20,7 @@ export const EVENT_TRACKS = [
     icon: 'Layers',
     summary: 'Showcase working software projects, open-source utilities, and AI prototypes to industry juries.',
     requirements: [
-      'Team of exactly 3 members (1 Team Leader + 2 Members)',
+      'Flexible Team Size: 1 to 3 Members (Solo creators to 3-member teams)',
       'Capacity: 60 Project Stalls (Open to Jaya CSE, Other Depts & External Colleges)',
       'Live working prototype or application demonstration',
       'Open-source repository (GitHub/GitLab) recommended'
