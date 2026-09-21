@@ -443,7 +443,7 @@ export default function AdminDashboard({ onBackToHome }) {
                 <span className="kpi-number" style={{ color: '#fbbf24' }}>
                   ₹{overview.totalAmountCollected !== undefined 
                       ? overview.totalAmountCollected 
-                      : registrations.filter(r => r.status === 'CONFIRMED').reduce((sum, r) => sum + (Number(r.paymentAmount) || 0), 0)}
+                      : registrations.filter(r => r.status === 'CONFIRMED').reduce((sum, r) => sum + ((r.members ? r.members.length : 1) * 100), 0)}
                 </span>
                 <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>Revenue collected</span>
               </div>
@@ -627,7 +627,7 @@ export default function AdminDashboard({ onBackToHome }) {
                                 </td>
                                 <td className="col-fee">
                                   <div style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
-                                    ₹{r.paymentAmount || 0}
+                                    ₹{(r.members ? r.members.length : 1) * 100}
                                   </div>
                                   <div style={{ fontSize: '0.74rem', color: '#38bdf8', fontFamily: 'var(--font-mono)' }} title="UPI Transaction Reference">
                                     UTR: {r.paymentUtr || 'N/A'}
