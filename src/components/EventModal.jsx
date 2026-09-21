@@ -87,32 +87,7 @@ export default function EventModal({ event, onClose }) {
             </div>
           </div>
 
-          {/* Topics & Themes */}
-          {event.topics && event.topics.length > 0 && (
-            <div>
-              <div className="modal-section-title">
-                <span>Featured Focus Areas & Topics</span>
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {event.topics.map((t) => (
-                  <span
-                    key={t}
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      padding: '4px 10px',
-                      background: 'rgba(56, 189, 248, 0.08)',
-                      border: '1px solid rgba(56, 189, 248, 0.25)',
-                      borderRadius: '4px',
-                      color: '#7dd3fc'
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+
 
           {/* Official Rules & Guidelines */}
           <div>

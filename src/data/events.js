@@ -107,7 +107,7 @@ export const events = [
       "Open Science, Open Data, Open Future"
     ],
     rules: [
-      "Use of open-source design tools (GIMP, Inkscape, Blender, Penpot, Krita) or web design tools is welcomed.",
+      "You should use Canva only.",
       "Posters must be original work created during the designated event timeframe.",
       "Plagiarism or uncredited asset usage leads to immediate disqualification.",
       "Designers must explain the visual storytelling and concept during jury inspection.",
