@@ -17,10 +17,14 @@ export default function DynamicRegistrationForm({
   if (!eventConfig) return null;
 
   const isHackathon = selectedEventKey === 'mini-hackathon';
-  const effectiveTeamSize = isHackathon ? (Number(formData.teamSize) || (formData.members && formData.members.length > 0 ? formData.members.length + 1 : 4)) : eventConfig.teamSize;
-  const remainingMembersCount = isHackathon ? Math.max(0, effectiveTeamSize - 1) : Math.max(0, eventConfig.teamSize - 1);
+  const isDemoStall = selectedEventKey === 'demo-stall';
+  const isFlexible = isHackathon || isDemoStall;
+  
+  const defaultSize = isHackathon ? 4 : (isDemoStall ? 3 : eventConfig.teamSize);
+  const effectiveTeamSize = isFlexible ? (Number(formData.teamSize) || (formData.members && formData.members.length > 0 ? formData.members.length + 1 : defaultSize)) : eventConfig.teamSize;
+  const remainingMembersCount = isFlexible ? Math.max(0, effectiveTeamSize - 1) : Math.max(0, eventConfig.teamSize - 1);
 
-  const handleHackathonSizeChange = (newSize) => {
+  const handleFlexibleSizeChange = (newSize) => {
     const currentMembers = [...(formData.members || [])];
     const newMemberSlots = newSize - 1;
     const updatedMembers = currentMembers.slice(0, newMemberSlots);
@@ -41,8 +45,8 @@ export default function DynamicRegistrationForm({
 
     // 1. Team Name validation for team events (optional for solo hackathon)
     if (eventConfig.isTeam) {
-      if (isHackathon && effectiveTeamSize === 1) {
-        // Optional for solo hackathon
+      if (isFlexible && effectiveTeamSize === 1) {
+        // Optional for solo participant
       } else {
         if (!formData.teamName || formData.teamName.trim().length < 2) {
           errs.teamName = 'Team Name is required (minimum 2 characters)';
@@ -116,8 +120,8 @@ export default function DynamicRegistrationForm({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // If solo hackathon and teamName is empty, auto-fill nicely
-      if (isHackathon && effectiveTeamSize === 1 && (!formData.teamName || !formData.teamName.trim())) {
+      // If solo participant and teamName is empty, auto-fill nicely
+      if (isFlexible && effectiveTeamSize === 1 && (!formData.teamName || !formData.teamName.trim())) {
         const fallbackName = `${(formData.teamLeader?.name || 'Solo').trim()} (Solo)`;
         onUpdateFormData({
           ...formData,
@@ -140,34 +144,34 @@ export default function DynamicRegistrationForm({
           {eventConfig.name}
         </h3>
         <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginTop: '6px' }}>
-          {isHackathon
-            ? 'Flexible Team Track: You can compete solo (1 member) or form a team up to 4 members. Pricing is calculated per member entered.'
+          {isFlexible
+            ? `Flexible Team Track: You can compete solo (1 member) or form a team up to ${eventConfig.maxTeamSize} members. Pricing is calculated per member entered.`
             : eventConfig.isTeam
             ? `Please enter details for your team of ${eventConfig.teamSize}. All members will receive individual certificates.`
             : 'Please enter your participant details for the hands-on workshop.'}
         </p>
       </div>
 
-      {/* MINI HACKATHON FLEXIBLE TEAM SIZE SELECTOR */}
-      {isHackathon && (
+      {/* FLEXIBLE TEAM SIZE SELECTOR */}
+      {isFlexible && (
         <div style={{ background: 'rgba(59, 130, 246, 0.07)', border: '1px solid rgba(59, 130, 246, 0.28)', padding: '16px 20px', borderRadius: '12px', marginBottom: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '6px' }}>
             <span style={{ fontWeight: 700, color: '#93c5fd', fontSize: '0.88rem', letterSpacing: '0.02em' }}>
               Select Number of Team Members:
             </span>
             <span style={{ fontSize: '0.76rem', color: '#cbd5e1', background: 'rgba(59, 130, 246, 0.2)', padding: '2px 8px', borderRadius: '4px' }}>
-              ₹100/head (Jaya) • ₹200/head (External)
+              {isDemoStall ? '₹100/head (Jaya) • ₹200/head (External)' : '₹100/head (Jaya) • ₹200/head (External)'}
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-            {[1, 2, 3, 4].map((size) => {
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${eventConfig.maxTeamSize}, 1fr)`, gap: '10px' }}>
+            {Array.from({ length: eventConfig.maxTeamSize }, (_, i) => i + 1).map((size) => {
               const isSelected = effectiveTeamSize === size;
               return (
                 <button
                   key={size}
                   type="button"
-                  onClick={() => handleHackathonSizeChange(size)}
+                  onClick={() => handleFlexibleSizeChange(size)}
                   style={{
                     padding: '10px 8px',
                     borderRadius: '8px',
@@ -186,7 +190,7 @@ export default function DynamicRegistrationForm({
                     {size === 1 ? '1 (Solo)' : `${size} Members`}
                   </span>
                   <span style={{ fontSize: '0.7rem', opacity: 0.85 }}>
-                    {size === 1 ? 'Individual' : size === 4 ? 'Max Squad' : 'Team'}
+                    {size === 1 ? 'Individual' : size === eventConfig.maxTeamSize ? 'Max Squad' : 'Team'}
                   </span>
                 </button>
               );
@@ -201,17 +205,17 @@ export default function DynamicRegistrationForm({
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label htmlFor="teamName" className="form-label">
               <span>
-                Team Name {(!isHackathon || effectiveTeamSize > 1) && <span className="required-asterisk">*</span>}
+                Team Name {(!isFlexible || effectiveTeamSize > 1) && <span className="required-asterisk">*</span>}
               </span>
               <span style={{ fontSize: '0.74rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
-                {isHackathon && effectiveTeamSize === 1 ? 'Optional for solo hacker' : 'Unique identifier for your squad'}
+                {isFlexible && effectiveTeamSize === 1 ? 'Optional for solo participant' : 'Unique identifier for your squad'}
               </span>
             </label>
             <input
               id="teamName"
               type="text"
               className={`form-input ${errors.teamName ? 'has-error' : ''}`}
-              placeholder={isHackathon && effectiveTeamSize === 1 ? 'e.g. Solo Hacker / Cyber Coder (Optional)' : 'e.g. Linux Wizards / Kernel Hackers'}
+              placeholder={isFlexible && effectiveTeamSize === 1 ? 'e.g. Solo Participant (Optional)' : 'e.g. Linux Wizards / Kernel Hackers'}
               value={formData.teamName || ''}
               onChange={(e) => {
                 onUpdateFormData({ ...formData, teamName: e.target.value });
