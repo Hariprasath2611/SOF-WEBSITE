@@ -524,10 +524,10 @@ class RegistrationService {
       .filter((r) => r.status === 'CONFIRMED')
       .reduce((acc, curr) => acc + (curr.members ? curr.members.length : 1), 0);
 
-    // Total amount collected across all confirmed registrations
+    // Total amount collected across all confirmed registrations (re-calculated dynamically at 100/head)
     const totalAmountCollected = this.registrations
       .filter((r) => r.status === 'CONFIRMED')
-      .reduce((acc, curr) => acc + (Number(curr.paymentAmount) || 0), 0);
+      .reduce((acc, curr) => acc + ((curr.members ? curr.members.length : 1) * 100), 0);
 
     return {
       totalRegistrations,
