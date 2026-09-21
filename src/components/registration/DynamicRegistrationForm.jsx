@@ -160,7 +160,7 @@ export default function DynamicRegistrationForm({
               Select Number of Team Members:
             </span>
             <span style={{ fontSize: '0.76rem', color: '#cbd5e1', background: 'rgba(59, 130, 246, 0.2)', padding: '2px 8px', borderRadius: '4px' }}>
-              {isDemoStall ? '₹100/head (Jaya) • ₹200/head (External)' : '₹100/head (Jaya) • ₹200/head (External)'}
+              {isDemoStall ? '₹100/head (All Colleges)' : '₹100/head (All Colleges)'}
             </span>
           </div>
 
