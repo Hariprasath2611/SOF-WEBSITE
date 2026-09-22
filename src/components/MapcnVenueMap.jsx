@@ -41,6 +41,14 @@ export default function MapcnVenueMap() {
 
     mapRef.current = map;
 
+    // Suppress missing image warnings (e.g., "wood-pattern") by providing a dummy 1x1 image
+    map.on('styleimagemissing', (e) => {
+      const id = e.id;
+      if (id) {
+        map.addImage(id, new ImageData(1, 1));
+      }
+    });
+
     const setupMarkerAndReady = () => {
       if (!isMounted) return;
       setIsLoaded(true);
