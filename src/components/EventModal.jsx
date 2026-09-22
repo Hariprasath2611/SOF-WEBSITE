@@ -36,7 +36,7 @@ export default function EventModal({ event, onClose }) {
         <div className="modal-header">
           <div className="modal-title-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <FolderGit2 size={16} color="#10b981" />
+              <FolderGit2 size={16} color="var(--accent-cyan)" />
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: '#94a3b8' }}>
                 {event.repo}
               </span>

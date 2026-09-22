@@ -79,7 +79,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
               >
                 <span>{item.label}</span>
-                <ArrowUpRight size={18} color="#10b981" />
+                <ArrowUpRight size={18} color="#00f0ff" />
               </a>
             </li>
           ))}
