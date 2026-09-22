@@ -16,7 +16,6 @@ export const events = [
     color: "#10b981", // Terminal green
     summary: "Showcase your working software projects, open-source contributions, developer tools, AI applications, and prototypes to peers and industry juries.",
     description: "The Demo Stall provides an interactive stage for student creators and open-source enthusiasts to exhibit live working applications, prototypes, developer utilities, and AI innovations. Engage in real-time demonstrations, receive critical technical feedback, and inspire the open-source community.",
-    eligibility: "Total 50 Stalls — Quota: 30 stalls for Jaya Engineering College CSE, 10 stalls for Other Jaya Depts, and 10 stalls for any department from External Colleges.",
     teamSize: "1 - 3 Members per team",
     duration: "Full Day Exhibition & Jury Evaluation",
     venue: "CSE Department Innovation Lab / Main Quadrangle",
@@ -107,7 +106,7 @@ export const events = [
       "Open Science, Open Data, Open Future"
     ],
     rules: [
-      "Use of open-source design tools (GIMP, Inkscape, Blender, Penpot, Krita) or web design tools is welcomed.",
+      "You should use Canva only.",
       "Posters must be original work created during the designated event timeframe.",
       "Plagiarism or uncredited asset usage leads to immediate disqualification.",
       "Designers must explain the visual storytelling and concept during jury inspection.",
@@ -172,7 +171,7 @@ export const events = [
     summary: "Spirited battle of intellect debating pivotal technology ethics, open vs closed AI, software patents, and digital privacy.",
     description: "Step into the arena of critical thought. The Debate event pits articulate technical minds against one another in structured parliamentary-style rounds, deconstructing the most urgent ethical, philosophical, and systemic dilemmas confronting modern technology and developer freedom.",
     eligibility: "Open to all engineering students passionate about tech discourse and policy.",
-    teamSize: "2 Members per team (For & Against rounds)",
+    teamSize: "1 - 5 Members per team",
     duration: "3 Rounds (Preliminary, Semi-Finals, Finals)",
     venue: "Auditorium Annex / Conference Hall",
     registrationLink: "#register?track=panel-discussion",

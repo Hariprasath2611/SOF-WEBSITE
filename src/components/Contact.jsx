@@ -45,9 +45,9 @@ export default function Contact() {
             <p>
               Send in institutional inquiries, sponsorship propositions, or certificate verifications directly to the department desk.
             </p>
-            <a href="mailto:sfd2026@jaya.edu.in" className="contact-link" style={{ color: '#38bdf8' }}>
+            <a href="mailto:hariprasanth.cse26@jec.ac.in" className="contact-link" style={{ color: '#38bdf8' }}>
               <Mail size={15} />
-              <span>sfd2026@jaya.edu.in</span>
+              <span>hariprasanth.cse26@jec.ac.in</span>
             </a>
           </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { CheckCircle, Printer, ArrowLeft, ShieldCheck, Copy, Check, Receipt } from 'lucide-react';
+import { CheckCircle, Printer, ArrowLeft, ShieldCheck, Copy, Check, Receipt, Download } from 'lucide-react';
 import { calculateEventFee } from '../../utils/feeCalculator';
+import { downloadConfirmationPDF } from '../../utils/pdfGenerator';
 
 export default function ConfirmationPass({ registration, onReset, onBackToHome }) {
   const [copiedId, setCopiedId] = useState(false);
@@ -10,6 +11,10 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPDF = () => {
+    downloadConfirmationPDF('confirmation-pass-card', `SFD_Pass_${registration.registrationId}.pdf`);
   };
 
   const isTeam = registration.teamSize > 1;
@@ -34,7 +39,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
 
   return (
     <div className="confirmation-step">
-      <div className="confirmation-card">
+      <div className="confirmation-card" id="confirmation-pass-card">
         {/* Top Header */}
         <div className="conf-header">
           <div className="conf-success-icon">
@@ -217,11 +222,15 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
         </div>
       </div>
 
-      {/* Action Buttons (Hidden when printing) */}
-      <div className="reg-actions-row no-print" style={{ justifyContent: 'center', gap: '16px' }}>
-        <button type="button" className="btn-wizard-next" onClick={handlePrint} style={{ padding: '13px 28px' }}>
+      {/* Action Buttons (Hidden when printing/PDF gen) */}
+      <div className="reg-actions-row no-print" style={{ justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+        <button type="button" className="btn-wizard-next" onClick={handleDownloadPDF} style={{ padding: '13px 28px' }}>
+          <Download size={16} />
+          <span>Download PDF Pass</span>
+        </button>
+        <button type="button" className="btn-wizard-back" onClick={handlePrint} style={{ padding: '13px 20px' }}>
           <Printer size={16} />
-          <span>Print / Download Official Pass</span>
+          <span>Print Pass</span>
         </button>
 
         <button type="button" className="btn-wizard-back" onClick={onReset}>

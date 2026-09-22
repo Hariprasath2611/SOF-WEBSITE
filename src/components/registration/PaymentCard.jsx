@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QrCode, Copy, Check, Smartphone, AlertCircle, HelpCircle, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { QrCode, Copy, Check, Smartphone, AlertCircle, HelpCircle, CheckCircle2 } from 'lucide-react';
 import { calculateEventFee } from '../../utils/feeCalculator';
 
 export default function PaymentCard({
@@ -17,8 +17,6 @@ export default function PaymentCard({
   const feeInfo = calculateEventFee(eventKey, collegeName, membersCount);
   const upiId = 'nishanth7326@oksbi';
   const payeeName = 'Nishanth .I';
-
-  const upiIntentUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${feeInfo.totalAmount}&cu=INR&tn=${encodeURIComponent('SFD2026-Reg')}`;
 
   const handleCopyUPI = () => {
     navigator.clipboard.writeText(upiId);
@@ -71,16 +69,7 @@ export default function PaymentCard({
             <span>Scan via GPay / PhonePe / Paytm</span>
           </div>
 
-          {/* Direct Mobile UPI Intent Button */}
-          <a
-            href={upiIntentUrl}
-            className="btn-pay-upi-mobile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>Pay ₹{feeInfo.totalAmount} via UPI App</span>
-            <ArrowUpRight size={16} />
-          </a>
+
         </div>
 
         {/* Right Column: UPI Details & Step-by-Step Instructions */}
