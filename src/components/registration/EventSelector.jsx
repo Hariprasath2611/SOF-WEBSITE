@@ -16,9 +16,9 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
     const live = (eventsStats || []).find((e) => e.key === track.key);
     const maxSlots = live ? live.maxSlots : track.maxSlots;
     const registeredCount = live ? live.registeredCount : 0;
-    const remainingSlots = live ? live.remainingSlots : maxSlots;
+    const remainingSlots = 999999;
     const quotasStats = live ? live.quotasStats : null;
-    const isFull = remainingSlots <= 0;
+    const isFull = false; // Override backend limits to ensure it's always open
 
     return {
       ...track,
