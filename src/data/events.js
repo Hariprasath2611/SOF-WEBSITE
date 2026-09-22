@@ -16,7 +16,6 @@ export const events = [
     color: "#10b981", // Terminal green
     summary: "Showcase your working software projects, open-source contributions, developer tools, AI applications, and prototypes to peers and industry juries.",
     description: "The Demo Stall provides an interactive stage for student creators and open-source enthusiasts to exhibit live working applications, prototypes, developer utilities, and AI innovations. Engage in real-time demonstrations, receive critical technical feedback, and inspire the open-source community.",
-    eligibility: "Total 50 Stalls — Quota: 30 stalls for Jaya Engineering College CSE, 10 stalls for Other Jaya Depts, and 10 stalls for any department from External Colleges.",
     teamSize: "1 - 3 Members per team",
     duration: "Full Day Exhibition & Jury Evaluation",
     venue: "CSE Department Innovation Lab / Main Quadrangle",
