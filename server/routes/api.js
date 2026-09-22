@@ -61,9 +61,17 @@ router.post('/registrations', async (req, res) => {
     }
 
     // 2. Validate Team Name for team events
+    let finalTeamName = teamName;
     if (eventConfig.isTeam) {
-      if (!teamName || teamName.trim().length < 2) {
-        return res.status(400).json({ success: false, error: 'Team Name is required (min 2 characters).' });
+      const isFlexible = eventKey === 'mini-hackathon' || eventKey === 'demo-stall';
+      const isSolo = isFlexible && (!members || members.length === 0);
+      
+      if (!finalTeamName || finalTeamName.trim().length < 2) {
+        if (isSolo && teamLeader && teamLeader.name) {
+          finalTeamName = `${teamLeader.name.trim()} (Solo)`;
+        } else {
+          return res.status(400).json({ success: false, error: 'Team Name is required (min 2 characters).' });
+        }
       }
     }
 
@@ -150,7 +158,7 @@ router.post('/registrations', async (req, res) => {
     // 6. Execute Atomic Registration
     const registration = await registrationService.register({
       eventKey,
-      teamName,
+      teamName: finalTeamName,
       teamLeader,
       members,
       paymentAmount,
