@@ -69,10 +69,12 @@ export default function EventModal({ event, onClose }) {
 
           {/* Key Specs Grid */}
           <div className="modal-specs-grid">
-            <div className="modal-spec-card">
-              <h5>Eligibility</h5>
-              <p>{event.eligibility}</p>
-            </div>
+            {event.eligibility && (
+              <div className="modal-spec-card">
+                <h5>Eligibility</h5>
+                <p>{event.eligibility}</p>
+              </div>
+            )}
             <div className="modal-spec-card">
               <h5>Team Configuration</h5>
               <p>{event.teamSize}</p>
