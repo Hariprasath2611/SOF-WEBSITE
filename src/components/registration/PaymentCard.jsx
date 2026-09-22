@@ -58,7 +58,7 @@ export default function PaymentCard({
         <div className="payment-qr-wrap">
           <div className="qr-code-frame">
             <img
-              src="/payment-qr.png"
+              src="/payment-qr-code.jpeg"
               alt="SFD 2026 GPay Payment QR Code"
               loading="eager"
             />
