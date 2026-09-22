@@ -39,8 +39,7 @@ export default function Footer() {
                   width: 7,
                   height: 7,
                   borderRadius: '50%',
-                  background: 'var(--accent-green)',
-                  boxShadow: '0 0 8px var(--accent-green)'
+                  background: 'var(--accent-green)'
                 }}
               />
               <span>System Uptime: {formatUptime(uptimeSeconds)}</span>

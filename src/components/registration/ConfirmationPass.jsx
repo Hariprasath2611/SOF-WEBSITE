@@ -71,7 +71,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
                 className="btn-copy-id no-print"
                 title="Copy Registration ID"
               >
-                {copiedId ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
+                {copiedId ? <Check size={14} color="#00f0ff" /> : <Copy size={14} />}
               </button>
             </div>
             <span style={{ fontSize: '0.8rem', color: '#38bdf8', fontFamily: 'var(--font-mono)', display: 'block' }}>
@@ -84,7 +84,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
         <div className="conf-receipt-box">
           <div className="conf-receipt-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Receipt size={18} color="#10b981" />
+              <Receipt size={18} color="#00f0ff" />
               <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.92rem' }}>
                 UPI Payment & Fee Receipt
               </span>
@@ -115,7 +115,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
                     className="btn-copy-mini no-print"
                     title="Copy UTR Number"
                   >
-                    {copiedUtr ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
+                    {copiedUtr ? <Check size={12} color="#00f0ff" /> : <Copy size={12} />}
                   </button>
                 )}
               </div>
@@ -134,7 +134,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
 
             <div>
               <span className="conf-receipt-lbl">Payment Status</span>
-              <span className="conf-receipt-val" style={{ fontSize: '0.92rem', color: '#10b981' }}>
+              <span className="conf-receipt-val" style={{ fontSize: '0.92rem', color: '#00f0ff' }}>
                 Verified & Confirmed
               </span>
               <span className="conf-receipt-sub">{registration.timestamp}</span>
@@ -202,7 +202,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
                   <tr key={idx}>
                     <td><span style={{ fontFamily: 'var(--font-mono)', color: '#94a3b8' }}>{idx + 1}</span></td>
                     <td style={{ fontWeight: 600 }}>{m.name}</td>
-                    <td style={{ fontSize: '0.82rem', color: idx === 0 && isTeam ? '#10b981' : '#94a3b8' }}>
+                    <td style={{ fontSize: '0.82rem', color: idx === 0 && isTeam ? '#00f0ff' : '#94a3b8' }}>
                       {idx === 0 && isTeam ? 'Team Leader (Primary Contact)' : (isTeam ? `Team Member ${idx + 1}` : 'Participant')}
                     </td>
                     <td style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
@@ -218,7 +218,7 @@ export default function ConfirmationPass({ registration, onReset, onBackToHome }
         {/* Footer Notes for Printout */}
         <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px dashed rgba(255, 255, 255, 0.1)', fontSize: '0.82rem', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
           <div>🏛️ Department of CSE, Jaya Engineering College, Thirunindravur, Chennai</div>
-          <div>Fee Paid: <strong style={{ color: '#10b981' }}>₹{paidAmount}</strong> • UTR: <strong style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{utrDisplay}</strong></div>
+          <div>Fee Paid: <strong style={{ color: '#00f0ff' }}>₹{paidAmount}</strong> • UTR: <strong style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{utrDisplay}</strong></div>
         </div>
       </div>
 

@@ -1,14 +1,14 @@
 /* ==========================================================================
-   EVENT DETAILS MODAL STYLING
-   Interactive Modal for Event Rules, Guidelines & Registration
+   EVENT DETAILS MODAL STYLING - GTA 6 / VICE CITY THEME
+   Interactive Cyber Modal with Neon Magenta Frame & Electric Cyan Accents
    ========================================================================== */
 
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(4, 6, 10, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(6, 3, 12, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,15 +23,18 @@
 }
 
 .modal-dialog {
-  background: #0c101a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(46, 17, 74, 0.88) 0%, rgba(22, 9, 40, 0.94) 100%);
+  border: 1.5px solid rgba(255, 42, 133, 0.55);
+  border-bottom: 4px solid #ff2a85;
+  border-radius: var(--radius-lg);
   width: 100%;
   max-width: 760px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
   position: relative;
   overflow: hidden;
   animation: scaleUp 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -50,36 +53,43 @@
 
 .modal-header {
   padding: 24px 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 42, 133, 0.3);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  background: #090d15;
+  background: rgba(14, 6, 28, 0.7);
+  backdrop-filter: blur(14px);
 }
 
 .modal-title-group h2 {
+  font-family: var(--font-heading);
   font-size: 1.7rem;
-  font-weight: 800;
+  font-weight: 900;
   color: #ffffff;
   display: flex;
   align-items: center;
   gap: 12px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 .modal-title-group p {
-  font-family: var(--font-mono);
+  font-family: var(--font-heading);
   font-size: 0.88rem;
-  color: var(--accent-green);
+  font-weight: 700;
+  color: #00f0ff;
   margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .modal-close-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
+  background: rgba(255, 42, 133, 0.12);
+  border: 1px solid rgba(255, 42, 133, 0.4);
+  color: #ff5ea5;
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -88,9 +98,10 @@
 }
 
 .modal-close-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(255, 42, 133, 0.3);
+  color: #ffffff;
+  border-color: #ff2a85;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .modal-body {
@@ -104,10 +115,11 @@
 
 .modal-section-title {
   font-size: 0.95rem;
-  font-family: var(--font-mono);
-  color: #38bdf8;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #00f0ff;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -127,24 +139,29 @@
 }
 
 .modal-spec-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-md);
+  background: rgba(16, 7, 34, 0.65);
+  border: 1.5px solid rgba(255, 42, 133, 0.35);
+  border-bottom: 2px solid #ff2a85;
+  border-radius: var(--radius-sm);
   padding: 14px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .modal-spec-card h5 {
   font-size: 0.76rem;
-  font-family: var(--font-mono);
-  color: var(--text-muted);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #c4b5fd;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   margin-bottom: 4px;
 }
 
 .modal-spec-card p {
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #f8fafc;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .modal-rules-list {
@@ -164,21 +181,25 @@
 }
 
 .modal-rule-item svg {
-  color: var(--accent-green);
+  color: #00f0ff;
   flex-shrink: 0;
   margin-top: 3px;
 }
 
 .modal-coordinator-callout {
-  background: rgba(16, 185, 129, 0.06);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  border-radius: var(--radius-lg);
+  background: rgba(16, 7, 34, 0.7);
+  border: 1.5px solid rgba(0, 240, 255, 0.4);
+  border-bottom: 3px solid #00f0ff;
+  border-radius: var(--radius-sm);
   padding: 18px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .modal-coordinator-callout .btn-phone {
@@ -190,8 +211,9 @@
 
 .modal-footer {
   padding: 20px 28px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: #090d15;
+  border-top: 1px solid rgba(255, 42, 133, 0.25);
+  background: rgba(14, 6, 28, 0.7);
+  backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -204,7 +226,7 @@
   }
   .modal-dialog {
     max-height: 94vh;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-sm);
   }
   .modal-header {
     padding: 16px 14px;

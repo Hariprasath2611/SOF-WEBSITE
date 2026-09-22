@@ -85,7 +85,7 @@ export default function Participation() {
             </p>
 
             <div className="banner-callout">
-              <CheckCircle2 size={18} color="#10b981" />
+              <CheckCircle2 size={18} color="var(--accent-cyan)" />
               <span>
                 <strong>Important Note:</strong> The event is hosted by the <strong>Department of Computer Science & Engineering</strong>, but participation is 100% open to students from <strong>ANY ENGINEERING DEPARTMENT</strong> and from <strong>ANY RECOGNIZED ENGINEERING COLLEGE</strong>.
               </span>

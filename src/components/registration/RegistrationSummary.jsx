@@ -185,7 +185,7 @@ export default function RegistrationSummary({
           type="checkbox"
           checked={agreed}
           onChange={(e) => setAgreed(e.target.checked)}
-          style={{ marginTop: '3px', accentColor: '#10b981' }}
+          style={{ marginTop: '3px', accentColor: '#00f0ff' }}
         />
         <span>
           I confirm that the payment of <strong>₹{feeInfo.totalAmount}</strong> has been transferred via UPI, the entered 12-digit UTR is authentic and unused, and all participants will bring their college ID cards on event day.

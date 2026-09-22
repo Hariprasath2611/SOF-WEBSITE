@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Preloader from './components/Preloader';
 import BackgroundCanvas from './components/BackgroundCanvas';
+import PostHeroBackdrop from './components/PostHeroBackdrop';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import HostVenue from './components/HostVenue';
@@ -19,6 +21,7 @@ import './styles/registration.css';
 import './styles/admin.css';
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'register' | 'admin'
   const [preselectedTrack, setPreselectedTrack] = useState(null);
 
@@ -75,7 +78,9 @@ export default function App() {
   if (currentView === 'register') {
     return (
       <div className="app-root">
+        {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
         <BackgroundCanvas />
+        <PostHeroBackdrop />
         <RegistrationPage onBackToHome={navigateToHome} preselectedTrack={preselectedTrack} />
       </div>
     );
@@ -85,7 +90,9 @@ export default function App() {
   if (currentView === 'admin') {
     return (
       <div className="app-root">
+        {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
         <BackgroundCanvas />
+        <PostHeroBackdrop />
         <AdminDashboard onBackToHome={navigateToHome} />
       </div>
     );
@@ -94,7 +101,10 @@ export default function App() {
   // 3. Main Event Website
   return (
     <div className="app-root">
-      {/* Dynamic Animated Background Canvas with Git Branches & Code Particles */}
+      {/* GTA 6 / Vice City Cinematic Preloader */}
+      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+
+      {/* Dynamic Animated Background Canvas with Code Particles */}
       <BackgroundCanvas />
 
       {/* Sticky Glassmorphic Navbar */}
@@ -102,32 +112,37 @@ export default function App() {
 
       {/* Main Content Sections */}
       <main>
-        {/* Hero Section with Interactive Terminal */}
+        {/* Dedicated Hero Section with Full Real GTA 6 Car Video Background */}
         <Hero />
 
-        {/* Organizer / Host College & Campus Venue */}
-        <HostVenue />
+        {/* Post-Hero Container with Vice City Sunset Photography & Palm Atmosphere */}
+        <div className="post-hero-bg-wrapper">
+          <PostHeroBackdrop />
 
-        {/* Who Can Participate? Open to All Engineering Students */}
-        <Participation />
+          {/* Organizer / Host College & Campus Venue */}
+          <HostVenue />
 
-        {/* 5 Main Events Explorer & Dedicated Event Coordinators */}
-        <EventGrid />
+          {/* Who Can Participate? Open to All Engineering Students */}
+          <Participation />
 
-        {/* Open Source Living Ecosystem */}
-        <OpenSourceNetwork />
+          {/* 5 Main Events Explorer & Dedicated Event Coordinators */}
+          <EventGrid />
 
-        {/* 10 Overall Event Coordinators Grid */}
-        <OverallCoordinators />
+          {/* Open Source Living Ecosystem */}
+          <OpenSourceNetwork />
 
-        {/* High-Converting Registration CTA */}
-        <RegistrationCTA />
+          {/* 10 Overall Event Coordinators Grid */}
+          <OverallCoordinators />
 
-        {/* Interactive FAQ Accordion */}
-        <FAQ />
+          {/* High-Converting Registration CTA */}
+          <RegistrationCTA />
 
-        {/* Direct Contact & Helpdesk */}
-        <Contact />
+          {/* Interactive FAQ Accordion */}
+          <FAQ />
+
+          {/* Direct Contact & Helpdesk */}
+          <Contact />
+        </div>
       </main>
 
       {/* Footer */}

@@ -38,7 +38,7 @@ export default function PaymentCard({
       <div className="payment-header-row">
         <div className="payment-title-group">
           <h4>
-            <QrCode size={22} color="#10b981" />
+            <QrCode size={22} color="#00f0ff" />
             <span>Registration Fee & UPI Payment Gateway</span>
           </h4>
           <p>Complete the UPI transfer and submit your 12-digit transaction ID (UTR) to reserve your slot</p>
@@ -65,7 +65,7 @@ export default function PaymentCard({
           </div>
 
           <div className="qr-scan-label">
-            <Smartphone size={14} color="#10b981" />
+            <Smartphone size={14} color="#00f0ff" />
             <span>Scan via GPay / PhonePe / Paytm</span>
           </div>
 
@@ -98,8 +98,8 @@ export default function PaymentCard({
               >
                 {copied ? (
                   <>
-                    <Check size={14} color="#10b981" />
-                    <span style={{ color: '#10b981', fontWeight: 600 }}>Copied!</span>
+                    <Check size={14} color="#00f0ff" />
+                    <span style={{ color: '#00f0ff', fontWeight: 600 }}>Copied!</span>
                   </>
                 ) : (
                   <>
@@ -120,7 +120,7 @@ export default function PaymentCard({
             <div className="payment-step-item">
               <span className="payment-step-num">2</span>
               <span>
-                Transfer exactly <strong style={{ color: '#10b981' }}>₹{feeInfo.totalAmount}</strong> to complete registration.
+                Transfer exactly <strong style={{ color: '#00f0ff' }}>₹{feeInfo.totalAmount}</strong> to complete registration.
               </span>
             </div>
             <div className="payment-step-item">
@@ -143,7 +143,7 @@ export default function PaymentCard({
                   style={{
                     fontSize: '0.74rem',
                     fontFamily: 'var(--font-mono)',
-                    color: isUtrComplete ? '#10b981' : (utrNumber.length > 0 ? '#f59e0b' : '#94a3b8'),
+                    color: isUtrComplete ? '#00f0ff' : (utrNumber.length > 0 ? '#f59e0b' : '#94a3b8'),
                     fontWeight: 600
                   }}
                 >
@@ -175,7 +175,7 @@ export default function PaymentCard({
               />
 
               {isUtrComplete && (
-                <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '4px', color: '#10b981', fontSize: '0.78rem', fontWeight: 600 }}>
+                <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '4px', color: '#00f0ff', fontSize: '0.78rem', fontWeight: 600 }}>
                   <CheckCircle2 size={16} />
                   <span>Ready</span>
                 </div>
@@ -189,7 +189,7 @@ export default function PaymentCard({
                   Please enter all 12 digits from your receipt ({12 - utrNumber.length} more remaining).
                 </span>
               ) : isUtrComplete ? (
-                <span style={{ color: '#10b981' }}>
+                <span style={{ color: '#00f0ff' }}>
                   ✓ 12-digit reference entered. Verified on final submission.
                 </span>
               ) : (

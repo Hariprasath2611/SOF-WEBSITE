@@ -29,7 +29,7 @@ export default function RegistrationCTA() {
             </a>
 
             <a href="#events" className="btn btn-secondary" style={{ padding: '15px 28px' }}>
-              <Terminal size={18} color="#10b981" />
+              <Terminal size={18} color="var(--accent-cyan)" />
               <span>EXPLORE EVENTS</span>
               <span className="btn-arrow-icon">↗</span>
             </a>
@@ -46,19 +46,19 @@ export default function RegistrationCTA() {
               marginTop: '40px',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.82rem',
-              color: '#94a3b8'
+              color: '#c4b5fd'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle size={15} color="#10b981" />
+              <CheckCircle size={15} color="var(--accent-cyan)" />
               <span>₹100 Registration / Event</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle size={15} color="#10b981" />
+              <CheckCircle size={15} color="var(--accent-cyan)" />
               <span>Participation Certificates</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CheckCircle size={15} color="#10b981" />
+              <CheckCircle size={15} color="var(--accent-cyan)" />
               <span>Exciting Cash Prizes & Swag</span>
             </div>
           </div>
