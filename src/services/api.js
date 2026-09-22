@@ -90,13 +90,21 @@ function saveLocalRegistrations(list) {
 
 function getNextLocalId() {
   try {
+    const localRegs = getLocalRegistrations();
+    const maxRegId = localRegs.reduce((max, r) => {
+      if (r.registrationId && r.registrationId.startsWith('REG-2026-')) {
+        const num = parseInt(r.registrationId.split('-')[2], 10);
+        return num > max ? num : max;
+      }
+      return max;
+    }, 0);
+
     let count = parseInt(localStorage.getItem(LOCAL_COUNTER_KEY) || '0', 10);
-    count += 1;
+    count = Math.max(count, maxRegId, 18) + 1;
     localStorage.setItem(LOCAL_COUNTER_KEY, String(count));
     return `REG-2026-${String(count).padStart(5, '0')}`;
   } catch {
-    const count = getLocalRegistrations().length + 1;
-    return `REG-2026-${String(count).padStart(5, '0')}`;
+    return `REG-2026-${String(19).padStart(5, '0')}`;
   }
 }
 

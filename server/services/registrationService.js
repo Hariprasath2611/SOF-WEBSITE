@@ -104,15 +104,24 @@ class RegistrationService {
       
       // Sync counter
       const counterDoc = await db.collection("settings").findOne({ _id: "counter" });
-      if (counterDoc && counterDoc.value > this.counter) {
-        this.counter = counterDoc.value;
-      } else if (this.counter > (counterDoc ? counterDoc.value : 0)) {
-        await db.collection("settings").updateOne(
-          { _id: "counter" },
-          { $set: { value: this.counter } },
-          { upsert: true }
-        );
-      }
+      
+      // Compute max ID from registrations
+      const maxRegId = this.registrations.reduce((max, r) => {
+        if (r.registrationId && r.registrationId.startsWith('REG-2026-')) {
+          const num = parseInt(r.registrationId.split('-')[2], 10);
+          return num > max ? num : max;
+        }
+        return max;
+      }, 0);
+
+      let dbCounter = counterDoc ? counterDoc.value : 0;
+      this.counter = Math.max(this.counter, dbCounter, maxRegId, 18);
+
+      await db.collection("settings").updateOne(
+        { _id: "counter" },
+        { $set: { value: this.counter } },
+        { upsert: true }
+      );
       
       console.log(`Synced ${this.registrations.length} registrations from MongoDB.`);
       this.saveToDisk(); // Update local backup
@@ -127,15 +136,25 @@ class RegistrationService {
         const raw = fs.readFileSync(STORE_PATH, 'utf-8');
         const data = JSON.parse(raw);
         this.registrations = data.registrations || [];
-        this.counter = data.counter || this.registrations.length;
+        
+        const maxRegId = this.registrations.reduce((max, r) => {
+          if (r.registrationId && r.registrationId.startsWith('REG-2026-')) {
+            const num = parseInt(r.registrationId.split('-')[2], 10);
+            return num > max ? num : max;
+          }
+          return max;
+        }, 0);
+
+        this.counter = Math.max(data.counter || 0, maxRegId, 18);
         console.log(`Loaded ${this.registrations.length} registrations from local persistent store.`);
       } else {
+        this.counter = 18;
         this.saveToDisk();
       }
     } catch (err) {
       console.error('Error loading local store, initializing empty store:', err.message);
       this.registrations = [];
-      this.counter = 0;
+      this.counter = 18;
       this.saveToDisk();
     }
   }
