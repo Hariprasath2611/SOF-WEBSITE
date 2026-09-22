@@ -13,7 +13,7 @@ export const EVENT_TRACKS = [
     teamSize: 3,
     minTeamSize: 1,
     maxTeamSize: 3,
-    maxSlots: 60,
+    maxSlots: 999999,
     isTeam: true,
     accentColor: '#10b981', // Terminal emerald
     badge: '1 - 3 MEMBERS',
@@ -35,7 +35,7 @@ export const EVENT_TRACKS = [
     teamSize: 4,
     minTeamSize: 1,
     maxTeamSize: 4,
-    maxSlots: 50,
+    maxSlots: 999999,
     isTeam: true,
     accentColor: '#3b82f6', // Electric blue
     badge: '1 - 4 MEMBERS',
@@ -57,7 +57,7 @@ export const EVENT_TRACKS = [
     teamSize: 2,
     minTeamSize: 1,
     maxTeamSize: 2,
-    maxSlots: 25,
+    maxSlots: 999999,
     isTeam: true,
     accentColor: '#a855f7', // Violet
     badge: '1 - 2 MEMBERS',
@@ -78,7 +78,7 @@ export const EVENT_TRACKS = [
     teamSize: 5,
     minTeamSize: 1,
     maxTeamSize: 5,
-    maxSlots: 10,
+    maxSlots: 999999,
     isTeam: true,
     accentColor: '#f59e0b', // Amber
     badge: '1 - 5 MEMBERS',
@@ -97,7 +97,7 @@ export const EVENT_TRACKS = [
     tagline: 'Learn. Build. Explore.',
     trackNumber: '05',
     teamSize: 1,
-    maxSlots: 50,
+    maxSlots: 999999,
     isTeam: false,
     accentColor: '#06b6d4', // Cyan
     badge: 'INDIVIDUAL',

@@ -94,10 +94,10 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
 
               <p className="event-card-desc">{track.summary}</p>
 
-              {/* Slot Availability Counter */}
+              {/* Event Availability Status */}
               <div className="slot-badge-container">
                 <span style={{ color: '#94a3b8' }}>
-                  Capacity: {track.maxSlots} {track.isTeam ? (track.key === 'demo-stall' ? 'Stalls' : 'Teams') : 'Seats'}
+                  Registration Status
                 </span>
 
                 {track.isFull ? (
@@ -108,30 +108,10 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
                 ) : (
                   <span className="slot-count-badge open">
                     <CheckCircle2 size={13} />
-                    <span>{track.remainingSlots} / {track.maxSlots} slots available</span>
+                    <span>OPEN (Unlimited Slots)</span>
                   </span>
                 )}
               </div>
-
-              {/* Demo Stall Breakdown Indicator */}
-              {track.key === 'demo-stall' && (
-                <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.07)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600, letterSpacing: '0.03em' }}>
-                    Registration Breakdown (60 Total Slots):
-                  </div>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.28)', padding: '2px 7px', borderRadius: '4px', color: '#6ee7b7' }}>
-                      Jaya CSE: {track.quotasStats ? `${track.quotasStats.jecCse.registered} teams` : 'Open'}
-                    </span>
-                    <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.28)', padding: '2px 7px', borderRadius: '4px', color: '#7dd3fc' }}>
-                      Jaya Other Depts: {track.quotasStats ? `${track.quotasStats.jecOther.registered} teams` : 'Open'}
-                    </span>
-                    <span style={{ fontSize: '0.72rem', background: 'rgba(168, 85, 247, 0.12)', border: '1px solid rgba(168, 85, 247, 0.28)', padding: '2px 7px', borderRadius: '4px', color: '#c084fc' }}>
-                      External Colleges: {track.quotasStats ? `${track.quotasStats.external.registered} teams` : 'Open'}
-                    </span>
-                  </div>
-                </div>
-              )}
             </div>
           );
         })}
