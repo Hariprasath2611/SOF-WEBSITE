@@ -1,0 +1,132 @@
+/* ==========================================================================
+   SOFTWARE FREEDOM DAY 2026 - PURE CINEMATIC FULLSCREEN LOGO PRELOADER
+   Pure Pitch Black (#000000) Screen with Centered Large Logo (No borders / No glows)
+   ========================================================================== */
+
+.sfd-preloader {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999999;
+  background: #000000 !important;
+  background-color: #000000 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  cursor: pointer;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sfd-preloader.fade-out {
+  opacity: 0;
+  transform: scale(1.03);
+  pointer-events: none;
+}
+
+/* Center Logo Wrapper - Expanded Size */
+.preloader-center-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: min(900px, 90vw);
+  max-height: 85vh;
+  padding: 0 20px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Exact Large Logo Display */
+.preloader-main-logo {
+  width: 100%;
+  max-width: min(850px, 88vw);
+  max-height: 75vh;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  animation: logoFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: center;
+}
+
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Minimalist Clean Bottom Loading Bar */
+.preloader-bottom-line-wrap {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.8;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.preloader-minimal-track {
+  width: 160px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.preloader-minimal-fill {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: width 0.1s ease-out;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 768px) {
+  .preloader-main-logo {
+    max-width: min(520px, 92vw);
+  }
+  
+  .preloader-bottom-line-wrap {
+    bottom: 30px;
+  }
+  
+  .preloader-minimal-track {
+    width: 120px;
+    height: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preloader-main-logo {
+    max-width: 95vw;
+  }
+}

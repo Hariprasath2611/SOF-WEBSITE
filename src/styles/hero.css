@@ -12,17 +12,34 @@
   z-index: 2;
 }
 
-.hero-section::before {
-  content: '';
+/* Background Video for Hero Section Only */
+.hero-video-bg-container {
   position: absolute;
-  top: 8%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 1050px;
-  height: 560px;
-  background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.28) 0%, rgba(168, 85, 247, 0.15) 50%, transparent 75%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
   pointer-events: none;
-  z-index: 1;
+}
+
+.hero-video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.hero-video-overlay {
+  display: none;
+}
+
+.hero-section::before {
+  display: none;
 }
 
 .hero-container {

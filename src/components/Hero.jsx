@@ -5,6 +5,19 @@ import HeroTerminal from './HeroTerminal';
 export default function Hero() {
   return (
     <section id="home" className="hero-section">
+      {/* Background Video (Full Real Hero Car Video) */}
+      <div className="hero-video-bg-container" aria-hidden="true">
+        <video
+          className="hero-video-bg"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src="/gta-hero-bg.mp4" type="video/mp4" />
+        </video>
+      </div>
+
       <div className="container hero-container">
         {/* The Iconic GTA 6 Slanted Banner Container */}
         <div className="gta-hero-banner-wrapper">
