@@ -15,8 +15,8 @@ export default function PaymentCard({
   const [copied, setCopied] = useState(false);
   const [showUtrHelp, setShowUtrHelp] = useState(false);
   const feeInfo = calculateEventFee(eventKey, collegeName, membersCount);
-  const upiId = 'nishanth7326@oksbi';
-  const payeeName = 'Nishanth .I';
+  const upiId = '7824084676@slc';
+  const payeeName = 'I NISHANTH';
 
   const handleCopyUPI = () => {
     navigator.clipboard.writeText(upiId);
