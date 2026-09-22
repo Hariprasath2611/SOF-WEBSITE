@@ -10,7 +10,8 @@ import {
   Bot,
   ShieldAlert,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Activity
 } from 'lucide-react';
 
 const DEPARTMENTS = [
@@ -49,6 +50,12 @@ const DEPARTMENTS = [
     abbr: 'EEE',
     icon: Zap,
     synergy: 'Open-source SCADA, smart grid simulation, Arduino firmware & power electronics.'
+  },
+  {
+    name: 'Electronics & Instrumentation',
+    abbr: 'E&I',
+    icon: Activity,
+    synergy: 'Industrial automation, PLC logic, open-source sensor integration & IoT control systems.'
   },
   {
     name: 'Mechanical Engineering',
