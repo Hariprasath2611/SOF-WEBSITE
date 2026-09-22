@@ -71,16 +71,7 @@ export default function PaymentCard({
             <span>Scan via GPay / PhonePe / Paytm</span>
           </div>
 
-          {/* Direct Mobile UPI Intent Button */}
-          <a
-            href={upiIntentUrl}
-            className="btn-pay-upi-mobile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>Pay ₹{feeInfo.totalAmount} via UPI App</span>
-            <ArrowUpRight size={16} />
-          </a>
+
         </div>
 
         {/* Right Column: UPI Details & Step-by-Step Instructions */}
