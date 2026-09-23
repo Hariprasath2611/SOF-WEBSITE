@@ -13,15 +13,23 @@ export default function PaymentCard({
   utrError
 }) {
   const [copied, setCopied] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
   const [showUtrHelp, setShowUtrHelp] = useState(false);
   const feeInfo = calculateEventFee(eventKey, collegeName, membersCount);
   const upiId = '7824084676@upi';
-  const payeeName = 'I NISHANTH';
+  const phoneNumber = '7824084676';
+  const payeeName = 'Nishanth Inbaraj';
 
   const handleCopyUPI = () => {
     navigator.clipboard.writeText(upiId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
+  };
+
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText(phoneNumber);
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2500);
   };
 
   const handleUtrChange = (e) => {
@@ -69,7 +77,40 @@ export default function PaymentCard({
             <span>Scan via GPay / PhonePe / Paytm</span>
           </div>
 
-
+          {/* Note if QR not working */}
+          <div className="qr-fallback-box">
+            <div className="qr-fallback-title">
+              <AlertCircle size={13} color="#f59e0b" />
+              <span>If QR not working:</span>
+            </div>
+            <div className="qr-fallback-body">
+              <div>GPay this number:</div>
+              <div className="qr-fallback-num-row">
+                <span className="qr-fallback-num">{phoneNumber}</span>
+                <button
+                  type="button"
+                  onClick={handleCopyPhone}
+                  className="btn-copy-mini"
+                  title="Copy phone number"
+                >
+                  {copiedPhone ? (
+                    <>
+                      <Check size={11} color="#00f0ff" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={11} />
+                      <span>Copy</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              <div className="qr-fallback-holder">
+                A/C Holder: <strong>{payeeName}</strong>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right Column: UPI Details & Step-by-Step Instructions */}
@@ -115,7 +156,7 @@ export default function PaymentCard({
           <div className="payment-steps-container">
             <div className="payment-step-item">
               <span className="payment-step-num">1</span>
-              <span>Scan QR above or open your preferred UPI App (Google Pay, PhonePe, Paytm, BHIM).</span>
+              <span>Scan QR above or open your preferred UPI App (GPay to <strong style={{ color: '#00f0ff' }}>{phoneNumber}</strong> if QR is not working).</span>
             </div>
             <div className="payment-step-item">
               <span className="payment-step-num">2</span>
