@@ -1,5 +1,3 @@
-const fetch = require('node-fetch'); // Use native fetch in newer node or require node-fetch
-
 async function run() {
   const payload = {
     eventKey: "panel-discussion",
@@ -12,7 +10,7 @@ async function run() {
       year: "3rd year"
     },
     members: [],
-    paymentAmount: 100, // Or whatever the fee is, the backend recalculates it.
+    paymentAmount: 100,
     paymentUtr: "626605346790",
     payerName: "D hariprasath"
   };
