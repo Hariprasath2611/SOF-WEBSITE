@@ -43,7 +43,7 @@ export const timelineData = [
   {
     stage: "05",
     time: "Afternoon | 01:45 PM - 03:45 PM",
-    title: "Hands-on FOSS Workshop",
+    title: "Workshop",
     location: "CSE Seminar Hall",
     category: "Event 04",
     status: "Learning Track",

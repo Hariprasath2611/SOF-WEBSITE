@@ -63,7 +63,7 @@ gantt
 | **01** | **Demo Stall** | Team of 3 (60 Stalls) | 10:15 AM – 03:30 PM | CSE Innovation Lab & Quadrangle | **D Hariprasath** |
 | **02** | **Mini Hackathon** | Team of 4 | 10:15 AM – 03:30 PM | Computing Center Lab 2 & 3 | **Nishanth** |
 | **03** | **Poster Designing** | Team of 2 / Solo | 10:30 AM – 01:00 PM | Multimedia Lab / Design Studio | **Rajeshwari** |
-| **04** | **Hands-on Workshop** | Individual | 01:45 PM – 03:45 PM | CSE Seminar Hall | **Ram siva Sundara Karthikeyan** |
+| **04** | **Workshop** | Individual | 01:45 PM – 03:45 PM | CSE Seminar Hall | **Ram siva Sundara Karthikeyan** |
 | **05** | **Tech Debate Arena** | Team of 2 / 5 | 01:45 PM – 03:45 PM | Auditorium Annex / Conference Hall | **Rahul Raj** |
 
 ---

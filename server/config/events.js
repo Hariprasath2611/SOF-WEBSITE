@@ -63,7 +63,7 @@ export const EVENTS = [
   {
     key: 'workshop',
     name: 'Workshop – Individual',
-    title: 'Hands-on Workshop',
+    title: 'Workshop',
     tagline: 'Learn. Build. Explore.',
     teamSize: 1,
     maxSlots: 999999,

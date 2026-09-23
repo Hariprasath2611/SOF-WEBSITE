@@ -93,7 +93,7 @@ export const EVENT_TRACKS = [
   {
     key: 'workshop',
     name: 'Workshop – Individual',
-    title: 'Hands-on Workshop',
+    title: 'Workshop',
     tagline: 'Learn. Build. Explore.',
     trackNumber: '05',
     teamSize: 1,

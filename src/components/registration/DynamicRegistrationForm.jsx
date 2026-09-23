@@ -148,7 +148,7 @@ export default function DynamicRegistrationForm({
             ? `Flexible Team Track: You can compete solo (1 member) or form a team up to ${eventConfig.maxTeamSize} members. Pricing is calculated per member entered.`
             : eventConfig.isTeam
             ? `Please enter details for your team of ${eventConfig.teamSize}. All members will receive individual certificates.`
-            : 'Please enter your participant details for the hands-on workshop.'}
+            : 'Please enter your participant details for the workshop.'}
         </p>
       </div>
 

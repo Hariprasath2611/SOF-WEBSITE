@@ -47,7 +47,7 @@ export const faqData = [
   {
     id: 9,
     question: "Can I participate in multiple events?",
-    answer: "Yes, you can register for multiple events as long as their physical schedule tracks do not clash. For example, a student can showcase at the Demo Stall and also attend the Hands-on Workshop or participate in the Tech Debate."
+    answer: "Yes, you can register for multiple events as long as their physical schedule tracks do not clash. For example, a student can showcase at the Demo Stall and also attend the Workshop or participate in the Tech Debate."
   },
   {
     id: 10,

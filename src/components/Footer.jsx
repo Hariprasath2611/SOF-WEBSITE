@@ -66,7 +66,7 @@ export default function Footer() {
               <li><a href="#events" className="footer-link">Track 01: Demo Stall</a></li>
               <li><a href="#events" className="footer-link">Track 02: Mini Hackathon</a></li>
               <li><a href="#events" className="footer-link">Track 03: Poster Designing</a></li>
-              <li><a href="#events" className="footer-link">Track 04: Hands-on Workshop</a></li>
+              <li><a href="#events" className="footer-link">Track 04: Workshop</a></li>
               <li><a href="#events" className="footer-link">Track 05: Tech Debate Arena</a></li>
             </ul>
           </div>
