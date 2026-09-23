@@ -67,9 +67,9 @@ export const events = [
       "Eco-Tech & Smart Sustainability"
     ],
     rules: [
-      "Problem statements will be released at the beginning of the hackathon session.",
+      "Participants have the complete freedom to build any project of their choice. You can build your prototype beforehand and bring it to the hackathon.",
       "Solutions must be published to a public Git repository with an open-source license (MIT, Apache 2.0, GPL, etc.).",
-      "Use of open-source frameworks, libraries, and boilerplates is permitted, but the core solution must be built during the event.",
+      "Use of open-source frameworks, libraries, and boilerplates is highly encouraged.",
       "Final submissions must include a README.md and a 3-minute live pitch to the panel.",
       "Judging criteria: Problem-solution fit, code quality, open-source spirit, and functional demo."
     ],
