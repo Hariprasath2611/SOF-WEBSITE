@@ -15,7 +15,7 @@ export default function PaymentCard({
   const [copied, setCopied] = useState(false);
   const [showUtrHelp, setShowUtrHelp] = useState(false);
   const feeInfo = calculateEventFee(eventKey, collegeName, membersCount);
-  const upiId = '7824084676@slc';
+  const upiId = '7824084676@upi';
   const payeeName = 'I NISHANTH';
 
   const handleCopyUPI = () => {
