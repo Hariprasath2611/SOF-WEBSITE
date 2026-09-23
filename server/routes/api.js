@@ -110,7 +110,8 @@ router.post('/registrations', async (req, res) => {
     // 4. Validate Team Members (if team-based)
     const isHackathon = eventKey === 'mini-hackathon';
     const isDemoStall = eventKey === 'demo-stall';
-    const isFlexible = isHackathon || isDemoStall;
+    const isPanel = eventKey === 'panel-discussion';
+    const isFlexible = isHackathon || isDemoStall || isPanel;
     const expectedMembersCount = eventConfig.teamSize - 1; // excluding leader
     if (eventConfig.isTeam) {
       if (!isFlexible && (!Array.isArray(members) || members.length !== expectedMembersCount)) {
