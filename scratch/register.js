@@ -1,7 +1,7 @@
 async function run() {
   const payload = {
     eventKey: "panel-discussion",
-    teamName: "D hariprasath (Solo)", // Added to bypass old backend validation
+    teamName: "D hariprasath (Solo)", 
     teamLeader: {
       name: "D hariprasath",
       email: "hariprasath@example.com",
@@ -17,7 +17,7 @@ async function run() {
   };
 
   try {
-    const res = await fetch("https://sof-website-vhai.onrender.com/api/registrations", {
+    const res = await fetch("http://localhost:5000/api/registrations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

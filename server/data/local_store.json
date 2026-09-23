@@ -1,7 +1,41 @@
 {
-  "counter": 1,
-  "lastUpdated": "2026-09-20T14:55:00.000Z",
+  "counter": 19,
+  "lastUpdated": "2026-09-23T04:46:01.595Z",
   "registrations": [
+    {
+      "registrationId": "REG-2026-00019",
+      "timestamp": "23/9/2026, 10:16:01 am",
+      "isoTimestamp": "2026-09-23T04:46:01.595Z",
+      "eventKey": "panel-discussion",
+      "eventName": "Panel of Discussion – 1 to 5 Members",
+      "teamSize": 1,
+      "teamName": "D hariprasath (Solo)",
+      "teamLeader": {
+        "name": "D hariprasath",
+        "email": "hariprasath@example.com",
+        "college": "Jaya Engineering College",
+        "department": "Computer Science and engineering",
+        "year": "3rd year"
+      },
+      "members": [
+        {
+          "name": "D hariprasath",
+          "email": "hariprasath@example.com",
+          "phone": "9999999999",
+          "college": "Jaya Engineering College",
+          "department": "Computer Science and engineering",
+          "year": "3rd year",
+          "isLeader": true,
+          "memberIndex": 1
+        }
+      ],
+      "paymentAmount": 100,
+      "paymentUtr": "626605346790",
+      "payerName": "D hariprasath",
+      "paymentStatus": "SUBMITTED",
+      "demoStallCategory": null,
+      "status": "CONFIRMED"
+    },
     {
       "registrationId": "REG-2026-00001",
       "timestamp": "20/9/2026, 2:07:01 pm",
