@@ -1,6 +1,7 @@
 async function run() {
   const payload = {
     eventKey: "panel-discussion",
+    teamName: "D hariprasath (Solo)", // Added to bypass old backend validation
     teamLeader: {
       name: "D hariprasath",
       email: "hariprasath@example.com",
@@ -24,9 +25,9 @@ async function run() {
       body: JSON.stringify(payload)
     });
     
-    const text = await res.text();
+    const text = await res.json();
     console.log("Status:", res.status);
-    console.log("Response:", text);
+    console.log("Response:", JSON.stringify(text, null, 2));
   } catch (err) {
     console.error(err);
   }
