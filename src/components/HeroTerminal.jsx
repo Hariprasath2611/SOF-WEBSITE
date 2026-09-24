@@ -80,7 +80,7 @@ export default function HeroTerminal() {
     } else if (lower === 'venue' || lower === 'location') {
       newEntry.push({
         type: 'info',
-        text: 'Jaya Engineering College, Thirunindravur Road, Tamil Nadu. Main Auditorium & CSE Innovation Labs.'
+        text: 'Jaya Engineering College, Thirunindravur Road, Tamil Nadu. Auditorium.'
       });
     } else if (lower === 'register') {
       newEntry.push({

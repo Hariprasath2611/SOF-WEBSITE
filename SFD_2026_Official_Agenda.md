@@ -44,15 +44,15 @@ gantt
 
 | Time Slot | Program / Milestone | Venue | Session Highlights |
 | :--- | :--- | :--- | :--- |
-| **08:30 AM – 09:00 AM** | **Registration & Desk Check-In** | Main Entrance / Auditorium Lobby | Participant kit collection, badge allocation, and stall allotment |
-| **09:00 AM – 10:00 AM** | **Grand Inaugural Ceremony & Keynote** | **Main College Auditorium** | • Tamizh Thaai Vaazhthu<br>• Lighting of the Kuthuvilakku<br>• Welcome Address by HOD (Dept of CSE)<br>• Presidential Address by Principal<br>• Keynote Address by Chief Guest on Open Source & Technology Freedom<br>• Event Track Briefing & Rules Announcement |
-| **10:00 AM – 10:15 AM** | **High Tea & Track Transition** | Auditorium Foyer | Refreshments and movement to respective competition venues |
-| **10:15 AM – 01:00 PM** | **Morning Track Sessions** | Respective Venues | • **Track 01: Demo Stall Exhibition (Round 1)** *(CSE Innovation Lab & Quadrangle)*<br>• **Track 02: Mini Hackathon — Sprint Phase 1** *(Computing Lab 2 & 3)*<br>• **Track 03: Poster Designing Challenge** *(Multimedia Lab)* |
+| **08:30 AM – 09:00 AM** | **Registration & Desk Check-In** | Auditorium Lobby | Participant kit collection, badge allocation, and stall allotment |
+| **09:00 AM – 10:00 AM** | **Grand Inaugural Ceremony & Keynote** | **Auditorium** | • Tamizh Thaai Vaazhthu<br>• Lighting of the Kuthuvilakku<br>• Welcome Address by HOD (Dept of CSE)<br>• Presidential Address by Principal<br>• Keynote Address by Chief Guest on Open Source & Technology Freedom<br>• Event Track Briefing & Rules Announcement |
+| **10:00 AM – 10:15 AM** | **High Tea & Track Transition** | Auditorium Foyer | Refreshments and movement to respective competition areas |
+| **10:15 AM – 01:00 PM** | **Morning Track Sessions** | Auditorium | • **Track 01: Demo Stall Exhibition (Round 1)** *(Auditorium)*<br>• **Track 02: Mini Hackathon — Sprint Phase 1** *(Auditorium)*<br>• **Track 03: Poster Designing Challenge** *(Auditorium)* |
 | **01:00 PM – 01:45 PM** | **Lunch Break & Networking** | College Dining Hall | Lunch for participants, judges, and student coordinators |
-| **01:45 PM – 03:45 PM** | **Afternoon Track Sessions** | Respective Venues | • **Track 01: Demo Stall (Jury Evaluation & Final Review)** *(CSE Innovation Lab)*<br>• **Track 02: Mini Hackathon — Code Freeze & Pitching** *(Computing Lab 2 & 3)*<br>• **Track 04: Hands-on FOSS Workshop (Linux & Git)** *(CSE Seminar Hall)*<br>• **Track 05: Tech Debate Arena (Prelims & Finals)** *(Auditorium Annex)* |
+| **01:45 PM – 03:45 PM** | **Afternoon Track Sessions** | Auditorium | • **Track 01: Demo Stall (Jury Evaluation & Final Review)** *(Auditorium)*<br>• **Track 02: Mini Hackathon — Code Freeze & Pitching** *(Auditorium)*<br>• **Track 04: Hands-on FOSS Workshop (Linux & Git)** *(Auditorium)*<br>• **Track 05: Tech Debate Arena (Prelims & Finals)** *(Auditorium)* |
 | **03:45 PM – 04:00 PM** | **Jury Score Consolidation & Break** | Faculty Conference Room | Score evaluation, certificate preparation, and seating in Auditorium |
-| **04:00 PM – 04:45 PM** | **Valedictory & Grand Award Ceremony** | **Main College Auditorium** | • Valedictory Address by Guest of Honour<br>• Prize Distribution (Cash Awards, Trophies & Merit Certificates) for all 5 Event Tracks<br>• Coordinator Recognition & Volunteer Appreciation<br>• Vote of Thanks |
-| **04:45 PM – 05:00 PM** | **National Anthem, Group Photo & Dispersal** | Main College Auditorium | • National Anthem<br>• Official Photo Session with Dignitaries, Winners & Organizing Committee<br>• Participant Dispersal |
+| **04:00 PM – 04:45 PM** | **Valedictory & Grand Award Ceremony** | **Auditorium** | • Valedictory Address by Guest of Honour<br>• Prize Distribution (Cash Awards, Trophies & Merit Certificates) for all 5 Event Tracks<br>• Coordinator Recognition & Volunteer Appreciation<br>• Vote of Thanks |
+| **04:45 PM – 05:00 PM** | **National Anthem, Group Photo & Dispersal** | Auditorium | • National Anthem<br>• Official Photo Session with Dignitaries, Winners & Organizing Committee<br>• Participant Dispersal |
 
 ---
 
@@ -60,11 +60,11 @@ gantt
 
 | Track # | Event Title | Format & Team Size | Time Window | Venue | Student Coordinator |
 | :---: | :--- | :---: | :---: | :--- | :--- |
-| **01** | **Demo Stall** | Team of 3 (60 Stalls) | 10:15 AM – 03:30 PM | CSE Innovation Lab & Quadrangle | **D Hariprasath** |
-| **02** | **Mini Hackathon** | Team of 4 | 10:15 AM – 03:30 PM | Computing Center Lab 2 & 3 | **Nishanth** |
-| **03** | **Poster Designing** | Team of 2 / Solo | 10:30 AM – 01:00 PM | Multimedia Lab / Design Studio | **Rajeshwari** |
-| **04** | **Workshop** | Individual | 01:45 PM – 03:45 PM | CSE Seminar Hall | **Ram siva Sundara Karthikeyan** |
-| **05** | **Tech Debate Arena** | Team of 2 / 5 | 01:45 PM – 03:45 PM | Auditorium Annex / Conference Hall | **Rahul Raj** |
+| **01** | **Demo Stall** | Team of 3 (60 Stalls) | 10:15 AM – 03:30 PM | Auditorium | **D Hariprasath** |
+| **02** | **Mini Hackathon** | Team of 4 | 10:15 AM – 03:30 PM | Auditorium | **Nishanth** |
+| **03** | **Poster Designing** | Team of 2 / Solo | 10:30 AM – 01:00 PM | Auditorium | **Rajeshwari** |
+| **04** | **Workshop** | Individual | 01:45 PM – 03:45 PM | Auditorium | **Ram siva Sundara Karthikeyan** |
+| **05** | **Tech Debate Arena** | Team of 2 / 5 | 01:45 PM – 03:45 PM | Auditorium | **Rahul Raj** |
 
 ---
 

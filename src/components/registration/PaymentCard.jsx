@@ -81,7 +81,7 @@ export default function PaymentCard({
           <div className="qr-fallback-box">
             <div className="qr-fallback-title">
               <AlertCircle size={13} color="#f59e0b" />
-              <span>If QR not working:</span>
+              <span>If QR or UPI not working:</span>
             </div>
             <div className="qr-fallback-body">
               <div>GPay this number:</div>
@@ -108,6 +108,24 @@ export default function PaymentCard({
               </div>
               <div className="qr-fallback-holder">
                 A/C Holder: <strong>{payeeName}</strong>
+              </div>
+
+              {/* Alternative UPI IDs */}
+              <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(245,158,11,0.2)' }}>
+                <div style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 600, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Alternative UPI IDs:
+                </div>
+                {[
+                  '7824084676@slc',
+                  'nishanth7326-2@okicici',
+                  'nishanth7326@oksbi',
+                  '7824084676@superyes',
+                  '7824084676@upi',
+                ].map((id) => (
+                  <div key={id} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: '#38bdf8', padding: '2px 0' }}>
+                    • {id}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

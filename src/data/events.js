@@ -18,7 +18,7 @@ export const events = [
     description: "The Demo Stall provides an interactive stage for student creators and open-source enthusiasts to exhibit live working applications, prototypes, developer utilities, and AI innovations. Engage in real-time demonstrations, receive critical technical feedback, and inspire the open-source community.",
     teamSize: "1 - 3 Members per team",
     duration: "Full Day Exhibition & Jury Evaluation",
-    venue: "CSE Department Innovation Lab / Main Quadrangle",
+    venue: "Auditorium",
     registrationLink: "#register?track=demo-stall",
     topics: [
       "Open Source Software & Tools",
@@ -57,7 +57,7 @@ export const events = [
     eligibility: "Open to solo coders and teams up to 4 members from ANY engineering discipline.",
     teamSize: "1 - 4 Members per team (Solo or Squad)",
     duration: "4 - 5 Hours Intensive Sprint",
-    venue: "Computing Center Lab 2 & 3",
+    venue: "Auditorium",
     registrationLink: "#register?track=mini-hackathon",
     topics: [
       "Open Source Developer Productivity",
@@ -96,7 +96,7 @@ export const events = [
     eligibility: "Open to creative engineering students from all departments and years.",
     teamSize: "Individual or 2 Members per team",
     duration: "2.5 Hours",
-    venue: "Design Studio / Multimedia Lab",
+    venue: "Auditorium",
     registrationLink: "#register?track=poster-design",
     topics: [
       "Philosophy of Software Freedom & FOSS",
@@ -135,7 +135,7 @@ export const events = [
     eligibility: "Open to all engineering students wanting practical developer superpowers.",
     teamSize: "Individual Participation",
     duration: "2 Hours Interactive Session",
-    venue: "CSE Seminar Hall & Hands-on Terminal Lab",
+    venue: "Auditorium",
     registrationLink: "#register?track=workshop",
     topics: [
       "Linux Command Line Mastery & Bash Scripting",
@@ -173,7 +173,7 @@ export const events = [
     eligibility: "Open to all engineering students passionate about tech discourse and policy.",
     teamSize: "1 - 5 Members per team",
     duration: "3 Rounds (Preliminary, Semi-Finals, Finals)",
-    venue: "Auditorium Annex / Conference Hall",
+    venue: "Auditorium",
     registrationLink: "#register?track=panel-discussion",
     topics: [
       "Open Weights vs Closed Gatekeepers: The Future of Frontier AI",
