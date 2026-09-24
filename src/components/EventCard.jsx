@@ -12,7 +12,8 @@ import {
   MapPin,
   ExternalLink,
   ChevronRight,
-  Info
+  Info,
+  Lock
 } from 'lucide-react';
 
 const ICON_MAP = {
@@ -34,7 +35,12 @@ export default function EventCard({ event, onOpenDetails }) {
           <FolderGit2 size={13} />
           <span>{event.repo}</span>
         </div>
-        <span className="event-number-tag">TRACK {event.number}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span className="event-closed-badge">
+            <Lock size={10} /> CLOSED
+          </span>
+          <span className="event-number-tag">TRACK {event.number}</span>
+        </div>
       </div>
 
       {/* Main Body */}
