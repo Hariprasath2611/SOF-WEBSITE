@@ -7,9 +7,9 @@ import {
   Clock,
   MapPin,
   CheckCircle2,
+  AlertCircle,
   ExternalLink,
-  ShieldCheck,
-  Lock
+  ShieldCheck
 } from 'lucide-react';
 
 export default function EventModal({ event, onClose }) {
@@ -160,28 +160,20 @@ export default function EventModal({ event, onClose }) {
           </div>
         </div>
 
-        {/* Closed notice banner inside modal */}
-        <div className="modal-closed-notice">
-          <Lock size={16} />
-          <div>
-            <strong>Registration Closed:</strong> All slots for {event.title} are completely filled. Online registration has concluded.
-          </div>
-        </div>
-
-        {/* Modal Footer */}
+        {/* Modal Footer with Registration CTA */}
         <div className="modal-footer">
           <button type="button" className="btn btn-secondary" onClick={onClose}>
             Close
           </button>
 
-          <button
-            type="button"
-            className="btn btn-closed"
-            disabled
+          <a
+            href={event.registrationLink}
+            className="btn btn-primary"
+            onClick={onClose}
           >
-            <Lock size={14} />
-            <span>Registration Closed</span>
-          </button>
+            <span>Register for {event.title}</span>
+            <span className="btn-arrow-icon">→</span>
+          </a>
         </div>
       </div>
     </div>

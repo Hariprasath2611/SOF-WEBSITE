@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Terminal, Menu, X, ArrowUpRight, Code, ShieldCheck, Lock } from 'lucide-react';
+import { Terminal, Menu, X, ArrowUpRight, Code, ShieldCheck } from 'lucide-react';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -52,9 +52,9 @@ export default function Navbar() {
 
         {/* Action Button & Mobile Toggle */}
         <div className="header-actions">
-          <a href="#register" className="nav-btn-closed" title="Registrations are officially closed">
-            <Lock size={13} />
-            <span>Registration Closed</span>
+          <a href="#register" className="btn btn-primary nav-btn-register">
+            <span>Register</span>
+            <span className="btn-arrow-icon">→</span>
           </a>
 
           <button
@@ -88,12 +88,12 @@ export default function Navbar() {
         <div className="mobile-drawer-footer">
           <a
             href="#register"
-            className="btn btn-closed"
+            className="btn btn-primary"
             style={{ width: '100%' }}
             onClick={() => setMobileOpen(false)}
           >
-            <Lock size={15} />
-            <span>Registration Closed</span>
+            <span>Register Now</span>
+            <span className="btn-arrow-icon">→</span>
           </a>
           <p style={{ fontSize: '0.8rem', color: '#64748b', textAlign: 'center' }}>
             Jaya Engineering College · Dept of CSE

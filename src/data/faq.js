@@ -31,8 +31,8 @@ export const faqData = [
   },
   {
     id: 6,
-    question: "Is registration still open for SFD 2026?",
-    answer: "Registrations for Software Freedom Day 2026 are now officially closed. All available slots across Demo Stall, Mini Hackathon, Poster Designing, Workshop, and Debate have reached maximum capacity. No further online or on-spot registrations can be accepted."
+    question: "How do I register for the events?",
+    answer: "You can click on any 'Register Now' button on this website or select an event in the Events Explorer to open its direct registration form. Teams can register together for collaborative events (Demo Stall, Mini Hackathon, Poster Designing, Debate)."
   },
   {
     id: 7,

@@ -325,7 +325,6 @@ export async function fetchEvents() {
 }
 
 export async function submitRegistration(payload) {
-  throw new Error('Registrations are officially closed for Software Freedom Day 2026. All event slots have been filled.');
   // Compute safe non-zero fee based on event, college, and member count
   const actualCount = ((payload.members && Array.isArray(payload.members)) ? payload.members.filter(m => m && m.name && m.name.trim().length > 0).length : 0) + 1;
   const expectedFee = calculateEventFee(payload.eventKey, payload.teamLeader?.college, actualCount).totalAmount;
