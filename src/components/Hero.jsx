@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, MapPin, Sparkles, Terminal, Code2, Users, Layers, Building2 } from 'lucide-react';
+import { ArrowRight, MapPin, Sparkles, Terminal, Code2, Users, Layers, Building2, Lock } from 'lucide-react';
 import HeroTerminal from './HeroTerminal';
 
 export default function Hero() {
@@ -34,6 +34,13 @@ export default function Hero() {
 
               {/* Right Side: Headline, Description, and Metadata */}
               <div className="banner-right-info-box">
+                {/* Registration Closed Notice Pill */}
+                <div className="hero-closed-alert-pill">
+                  <span className="closed-pulse-dot" />
+                  <Lock size={13} />
+                  <span>REGISTRATIONS OFFICIALLY CLOSED • SLOTS FULL</span>
+                </div>
+
                 <div className="hero-headline">
                   <span>Celebrate Freedom. Build Open. Share Knowledge.</span>
                 </div>
@@ -66,9 +73,9 @@ export default function Hero() {
                 <span className="btn-arrow-icon">→</span>
               </a>
 
-              <a href="#register" className="btn btn-secondary">
-                <span>Register Now</span>
-                <span className="btn-arrow-icon">↗</span>
+              <a href="#register" className="btn-closed-hanging">
+                <Lock size={14} />
+                <span>Registrations Closed</span>
               </a>
             </div>
           </div>
