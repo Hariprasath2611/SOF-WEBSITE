@@ -1,109 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { fetchEvents, submitRegistration } from '../services/api';
-import EventSelector from '../components/registration/EventSelector';
-import DynamicRegistrationForm from '../components/registration/DynamicRegistrationForm';
-import RegistrationSummary from '../components/registration/RegistrationSummary';
+import React, { useState } from 'react';
+import { ArrowLeft, Shield, Sparkles, Lock, CheckCircle, MapPin, Phone, AlertCircle } from 'lucide-react';
+import { events } from '../data/events';
 import ConfirmationPass from '../components/registration/ConfirmationPass';
-import { ArrowLeft, Shield, Sparkles, Check } from 'lucide-react';
 
-const STEPS = [
-  { step: 1, label: 'Choose Track' },
-  { step: 2, label: 'Participant Info' },
-  { step: 3, label: 'Review & Confirm' },
-  { step: 4, label: 'Pass Issued' }
-];
-
-export default function RegistrationPage({ onBackToHome, preselectedTrack = null }) {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedEventKey, setSelectedEventKey] = useState(preselectedTrack || '');
-  const [eventsStats, setEventsStats] = useState([]);
-  const [loadingStats, setLoadingStats] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
+export default function RegistrationPage({ onBackToHome }) {
   const [confirmedRegistration, setConfirmedRegistration] = useState(null);
 
-  // Form State
-  const [formData, setFormData] = useState({
-    teamName: '',
-    teamLeader: {
-      name: '',
-      email: '',
-      college: '',
-      department: '',
-      year: ''
-    },
-    members: []
-  });
-
-  // Load live slot statistics
-  const refreshSlots = async () => {
-    try {
-      setLoadingStats(true);
-      const data = await fetchEvents();
-      setEventsStats(data);
-    } catch (err) {
-      console.warn('Failed to fetch live slots from backend:', err.message);
-    } finally {
-      setLoadingStats(false);
-    }
-  };
-
-  useEffect(() => {
-    refreshSlots();
-  }, []);
-
-  // When preselected track is passed from home event card
-  useEffect(() => {
-    if (preselectedTrack) {
-      setSelectedEventKey(preselectedTrack);
-      setCurrentStep(2);
-    }
-  }, [preselectedTrack]);
-
-  // Handle final submission
-  const handleSubmitRegistration = async (paymentData = {}) => {
-    setIsSubmitting(true);
-    setSubmitError(null);
-
-    try {
-      const payload = {
-        eventKey: selectedEventKey,
-        teamName: formData.teamName,
-        teamLeader: formData.teamLeader,
-        members: formData.members,
-        paymentAmount: paymentData.paymentAmount,
-        paymentUtr: paymentData.paymentUtr,
-        payerName: paymentData.payerName,
-        paymentStatus: paymentData.paymentStatus || 'SUBMITTED'
-      };
-
-      const result = await submitRegistration(payload);
-      setConfirmedRegistration(result);
-      setCurrentStep(4);
-      // Refresh slot counts in background
-      refreshSlots();
-    } catch (err) {
-      setSubmitError(err.message || 'Submission failed. Please check your network or try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Reset for another registration
-  const handleReset = () => {
-    setSelectedEventKey('');
-    setFormData({
-      teamName: '',
-      teamLeader: { name: '', email: '', college: '', department: '', year: '' },
-      members: []
-    });
-    setConfirmedRegistration(null);
-    setCurrentStep(1);
-    refreshSlots();
-  };
-
-  // Calculate progress width
-  const progressPercent = ((currentStep - 1) / (STEPS.length - 1)) * 100;
+  // If a participant has already obtained a pass, show it
+  if (confirmedRegistration) {
+    return (
+      <div className="reg-page-container">
+        <div className="reg-inner-wrapper">
+          <ConfirmationPass
+            registration={confirmedRegistration}
+            onReset={() => setConfirmedRegistration(null)}
+            onBackToHome={onBackToHome}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="reg-page-container">
@@ -118,86 +34,122 @@ export default function RegistrationPage({ onBackToHome, preselectedTrack = null
               style={{ padding: '8px 16px', fontSize: '0.82rem' }}
             >
               <ArrowLeft size={14} />
-              <span>SFD 2026 Home</span>
+              <span>← Back to SFD 2026 Home</span>
             </button>
           )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto', fontSize: '0.78rem', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>
             <Shield size={14} color="#00f0ff" />
-            <span className="hide-on-mobile">Secure Verification System</span>
+            <span className="hide-on-mobile">Official SFD Portal</span>
           </div>
         </div>
 
-        {/* Header Branding */}
-        <header className="reg-portal-header no-print">
-          <div className="reg-brand-tag">
-            <Sparkles size={14} />
-            <span>Official Event Portal • SFD 2026</span>
+        {/* Closed Registration Main Showcase Card */}
+        <div className="reg-closed-card">
+          <div className="reg-closed-header">
+            <div className="reg-closed-icon-ring">
+              <Lock size={38} />
+            </div>
+
+            <div className="reg-closed-status-pill">
+              <span className="closed-pulse-dot" />
+              <span>OFFICIAL EVENT NOTICE</span>
+            </div>
+
+            <h1 className="reg-closed-title">REGISTRATION IS OFFICIALLY CLOSED</h1>
+            
+            <p className="reg-closed-subtitle">
+              Software Freedom Day 2026 • Department of Computer Science & Engineering, Jaya Engineering College
+            </p>
           </div>
-          <h1 className="reg-portal-title">JEC EVENT REGISTRATION</h1>
-          <p className="reg-portal-subtitle">
-            Department of Computer Science and Engineering, Jaya Engineering College.
-            Register your team or reserve your individual masterclass seat below.
-          </p>
-        </header>
 
-        {/* Stepper Progress Bar */}
-        <div className="reg-stepper no-print">
-          <div className="reg-stepper-progress" style={{ width: `calc(${progressPercent}% * 0.9)` }} />
-          {STEPS.map((s) => {
-            const isCompleted = currentStep > s.step;
-            const isActive = currentStep === s.step;
+          <div className="reg-closed-body">
+            <div className="reg-closed-message-box">
+              <p className="reg-closed-main-p">
+                The registration for this event is now officially over. All available slots across all 5 challenge tracks (Demo Stall, Mini Hackathon, Poster Designing, Workshop, Tech Debate) have been completely filled.
+              </p>
+              <p className="reg-closed-sub-p">
+                No new online submissions or on-spot registrations will be accepted. We sincerely thank every student, team, and engineering college for the overwhelming enthusiasm and support!
+              </p>
+            </div>
 
-            return (
-              <div key={s.step} className={`reg-step-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
-                <div className="reg-step-circle">
-                  {isCompleted ? <Check size={16} /> : s.step}
+            {/* Crucial Instructions for Participants */}
+            <div className="reg-closed-info-grid">
+              <div className="reg-closed-info-item">
+                <div style={{ color: '#10b981', flexShrink: 0, marginTop: '2px' }}>
+                  <CheckCircle size={22} />
                 </div>
-                <span className="reg-step-label">{s.label}</span>
+                <div>
+                  <h4>Already Registered?</h4>
+                  <p>
+                    All confirmed participants should carry their <strong>Confirmation Pass</strong> (digital or printout) along with their valid <strong>College ID Card</strong> on the event day.
+                  </p>
+                </div>
               </div>
-            );
-          })}
-        </div>
 
-        {/* Main Content Panel */}
-        <div className="reg-card-panel">
-          {currentStep === 1 && (
-            <EventSelector
-              eventsStats={eventsStats}
-              selectedEventKey={selectedEventKey}
-              onSelectEvent={(key) => setSelectedEventKey(key)}
-              onProceed={() => setCurrentStep(2)}
-            />
-          )}
+              <div className="reg-closed-info-item">
+                <div style={{ color: '#00f0ff', flexShrink: 0, marginTop: '2px' }}>
+                  <MapPin size={22} />
+                </div>
+                <div>
+                  <h4>Campus Venue & Timing</h4>
+                  <p>
+                    Venue: <strong>Auditorium, Jaya Engineering College</strong>, CTH Road, Thirunindravur, Chennai. Detailed schedule notifications will be emailed to team leaders.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-          {currentStep === 2 && (
-            <DynamicRegistrationForm
-              selectedEventKey={selectedEventKey}
-              formData={formData}
-              onUpdateFormData={setFormData}
-              onBack={() => setCurrentStep(1)}
-              onProceed={() => setCurrentStep(3)}
-            />
-          )}
+            {/* Track Coordinators Directory */}
+            <div className="reg-closed-coordinators-section">
+              <h3 className="coord-section-title">
+                <Phone size={15} color="#00f0ff" />
+                <span>Need Assistance? Contact Track Coordinators</span>
+              </h3>
 
-          {currentStep === 3 && (
-            <RegistrationSummary
-              selectedEventKey={selectedEventKey}
-              formData={formData}
-              onBack={() => setCurrentStep(2)}
-              onSubmit={handleSubmitRegistration}
-              isSubmitting={isSubmitting}
-              submitError={submitError}
-            />
-          )}
+              <div className="reg-closed-coord-grid">
+                {events.map((ev) => (
+                  <div key={ev.id} className="reg-coord-card">
+                    <div className="coord-track-tag" style={{ color: ev.color }}>
+                      TRACK {ev.number} • {ev.title}
+                    </div>
+                    <div className="coord-name">{ev.coordinator.name}</div>
+                    <a href={`tel:${ev.coordinator.phone}`} className="coord-call-link">
+                      <Phone size={12} />
+                      <span>{ev.coordinator.phone}</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          {currentStep === 4 && (
-            <ConfirmationPass
-              registration={confirmedRegistration}
-              onReset={handleReset}
-              onBackToHome={onBackToHome}
-            />
-          )}
+            {/* Action Buttons */}
+            <div className="reg-closed-actions">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={onBackToHome}
+                style={{ padding: '12px 28px' }}
+              >
+                <span>← Return to SFD 2026 Home</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                  if (onBackToHome) onBackToHome();
+                  setTimeout(() => {
+                    const el = document.getElementById('events');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }, 150);
+                }}
+                style={{ padding: '12px 24px' }}
+              >
+                <span>Explore Event Tracks & Rules</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
