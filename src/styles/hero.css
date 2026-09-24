@@ -214,6 +214,52 @@
   font-size: 0.95rem;
 }
 
+/* Hero Closed Alert Pill */
+.hero-closed-alert-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(225, 29, 72, 0.2);
+  border: 1px solid rgba(244, 63, 94, 0.6);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  color: #fecdd3;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(225, 29, 72, 0.25);
+}
+
+.hero-closed-alert-pill svg {
+  color: #f43f5e;
+}
+
+.btn-closed-hanging {
+  background: rgba(225, 29, 72, 0.2) !important;
+  color: #fecdd3 !important;
+  border: 1.5px solid rgba(244, 63, 94, 0.6) !important;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25);
+  transition: all var(--transition-fast);
+}
+
+.btn-closed-hanging:hover {
+  background: rgba(225, 29, 72, 0.35) !important;
+  color: #ffffff !important;
+  border-color: #f43f5e !important;
+}
+
 /* 3. Live Metrics Row - Centered below banner */
 .hero-stats-row {
   display: flex;
