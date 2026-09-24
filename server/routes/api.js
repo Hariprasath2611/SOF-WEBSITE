@@ -47,13 +47,12 @@ router.get('/events', (req, res) => {
  * Submits a new registration with strict server-side validation and atomic slot locking
  */
 router.post('/registrations', async (req, res) => {
-  try {
-    const { eventKey, teamName, teamLeader, members, paymentAmount, paymentUtr, payerName, paymentStatus } = req.body;
+  // Registrations are officially closed for SFD 2026
+  return res.status(403).json({
+    success: false,
+    error: 'Registrations are officially closed for Software Freedom Day 2026. All event slots have been filled.'
+  });
 
-    // 1. Basic validation
-    if (!eventKey) {
-      return res.status(400).json({ success: false, error: 'Please select an event.' });
-    }
 
     const eventConfig = getEventByKey(eventKey);
     if (!eventConfig) {
