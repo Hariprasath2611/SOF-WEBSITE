@@ -15,6 +15,7 @@ export const EVENT_TRACKS = [
     maxTeamSize: 3,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     accentColor: '#10b981', // Terminal emerald
     badge: '1 - 3 MEMBERS',
     icon: 'Layers',
@@ -82,6 +83,7 @@ export const EVENT_TRACKS = [
     maxTeamSize: 5,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     accentColor: '#f59e0b', // Amber
     badge: '1 - 5 MEMBERS',
     icon: 'MessageSquareCode',
@@ -101,6 +103,7 @@ export const EVENT_TRACKS = [
     teamSize: 1,
     maxSlots: 999999,
     isTeam: false,
+    isClosed: true,
     accentColor: '#06b6d4', // Cyan
     badge: 'INDIVIDUAL',
     icon: 'Cpu',

@@ -33,15 +33,42 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
   });
 
   const selectedTrack = enrichedTracks.find((t) => t.key === selectedEventKey);
+  const allTracksClosed = enrichedTracks.every((t) => t.isClosed);
 
   return (
     <div className="event-selector-step">
+      {allTracksClosed && (
+        <div style={{
+          background: 'rgba(239, 68, 68, 0.12)',
+          border: '1.5px solid rgba(239, 68, 68, 0.45)',
+          borderRadius: '12px',
+          padding: '16px 20px',
+          marginBottom: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '14px',
+          color: '#fca5a5'
+        }}>
+          <AlertCircle size={26} color="#ef4444" style={{ flexShrink: 0 }} />
+          <div>
+            <div style={{ fontWeight: 800, color: '#fff', fontSize: '1.05rem', marginBottom: '4px' }}>
+              All Registrations Are Now Closed
+            </div>
+            <div style={{ fontSize: '0.88rem', color: '#cbd5e1', lineHeight: 1.45 }}>
+              Online registrations for all 5 event tracks of Software Freedom Day 2026 have reached capacity and are officially closed. No further submissions are being accepted.
+            </div>
+          </div>
+        </div>
+      )}
+
       <div style={{ textAlign: 'center', marginBottom: '28px' }}>
         <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>
           Select Your Event Track
         </h3>
         <p style={{ color: '#94a3b8', fontSize: '0.92rem' }}>
-          Choose the track you wish to compete or participate in. Slot availability is updated in real time.
+          {allTracksClosed
+            ? 'All tracks are currently closed for registration. Details and guidelines remain accessible.'
+            : 'Choose the track you wish to compete or participate in. Slot availability is updated in real time.'}
         </p>
       </div>
 
@@ -152,11 +179,11 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
         <button
           type="button"
           className="btn-wizard-next"
-          disabled={!selectedEventKey || (selectedTrack && (selectedTrack.isClosed || selectedTrack.isFull))}
+          disabled={allTracksClosed || !selectedEventKey || (selectedTrack && (selectedTrack.isClosed || selectedTrack.isFull))}
           onClick={onProceed}
         >
-          <span>Continue to Details</span>
-          <ArrowRight size={16} />
+          <span>{allTracksClosed ? 'Registrations Closed' : 'Continue to Details'}</span>
+          {!allTracksClosed && <ArrowRight size={16} />}
         </button>
       </div>
     </div>

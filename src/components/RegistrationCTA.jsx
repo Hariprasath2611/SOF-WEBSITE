@@ -8,28 +8,28 @@ export default function RegistrationCTA() {
         <div className="cta-box">
           <div className="section-tag" style={{ marginBottom: '20px' }}>
             <Sparkles size={14} />
-            <span>Join The Celebration</span>
+            <span>Registration Update</span>
           </div>
 
-          <h2 className="cta-title">READY TO BUILD OPEN?</h2>
+          <h2 className="cta-title">REGISTRATIONS ARE NOW CLOSED</h2>
 
           <p className="cta-subtitle">
-            Join Software Freedom Day 2026 at Jaya Engineering College and experience a day of open-source technology, creativity, learning, collaboration, and innovation. Open to engineering students across all colleges and branches!
+            Thank you for the tremendous response! Online registrations for Software Freedom Day 2026 across all event tracks have reached full capacity and are officially closed. Explore event tracks and coordinator details below.
           </p>
 
           <div className="cta-buttons">
             <a
               href="#register"
-              className="btn btn-primary"
-              style={{ padding: '15px 32px', fontSize: '1.05rem' }}
+              className="btn btn-secondary"
+              style={{ padding: '15px 32px', fontSize: '1.05rem', borderColor: 'rgba(239, 68, 68, 0.45)', color: '#fca5a5' }}
             >
               <Rocket size={18} />
-              <span>REGISTER NOW</span>
+              <span>REGISTRATION STATUS</span>
               <span className="btn-arrow-icon">→</span>
             </a>
 
-            <a href="#events" className="btn btn-secondary" style={{ padding: '15px 28px' }}>
-              <Terminal size={18} color="var(--accent-cyan)" />
+            <a href="#events" className="btn btn-primary" style={{ padding: '15px 28px' }}>
+              <Terminal size={18} />
               <span>EXPLORE EVENTS</span>
               <span className="btn-arrow-icon">↗</span>
             </a>

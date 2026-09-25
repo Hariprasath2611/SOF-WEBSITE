@@ -14,6 +14,7 @@ export const EVENTS = [
     maxTeamSize: 3,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     sheetEnvKey: 'DEMO_STALL_SHEET_ID',
     sheetName: 'Demo_Stall_Registrations',
     description: 'Exhibition of working open-source software, prototypes, AI utilities, and developer tools.'
@@ -58,6 +59,7 @@ export const EVENTS = [
     maxTeamSize: 5,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     sheetEnvKey: 'PANEL_DISCUSSION_SHEET_ID',
     sheetName: 'Panel_of_Discussion_Registrations',
     description: 'Structured parliamentary debate and discussion exploring ethics, open AI, and digital privacy.'
@@ -70,6 +72,7 @@ export const EVENTS = [
     teamSize: 1,
     maxSlots: 999999,
     isTeam: false,
+    isClosed: true,
     sheetEnvKey: 'WORKSHOP_SHEET_ID',
     sheetName: 'Workshop_Registrations',
     description: 'Interactive masterclass covering Linux command line, Git branching, and GitHub workflows.'

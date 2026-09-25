@@ -19,6 +19,7 @@ export const events = [
     teamSize: "1 - 3 Members per team",
     duration: "Full Day Exhibition & Jury Evaluation",
     venue: "Auditorium",
+    isClosed: true,
     registrationLink: "#register?track=demo-stall",
     topics: [
       "Open Source Software & Tools",
@@ -138,6 +139,7 @@ export const events = [
     teamSize: "Individual Participation",
     duration: "2 Hours Interactive Session",
     venue: "Auditorium",
+    isClosed: true,
     registrationLink: "#register?track=workshop",
     topics: [
       "Linux Command Line Mastery & Bash Scripting",
@@ -176,6 +178,7 @@ export const events = [
     teamSize: "1 - 5 Members per team",
     duration: "3 Rounds (Preliminary, Semi-Finals, Finals)",
     venue: "Auditorium",
+    isClosed: true,
     registrationLink: "#register?track=panel-discussion",
     topics: [
       "Open Weights vs Closed Gatekeepers: The Future of Frontier AI",

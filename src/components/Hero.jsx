@@ -67,7 +67,7 @@ export default function Hero() {
               </a>
 
               <a href="#register" className="btn btn-secondary">
-                <span>Register Now</span>
+                <span>Registrations Closed</span>
                 <span className="btn-arrow-icon">↗</span>
               </a>
             </div>
