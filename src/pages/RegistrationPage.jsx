@@ -4,7 +4,8 @@ import EventSelector from '../components/registration/EventSelector';
 import DynamicRegistrationForm from '../components/registration/DynamicRegistrationForm';
 import RegistrationSummary from '../components/registration/RegistrationSummary';
 import ConfirmationPass from '../components/registration/ConfirmationPass';
-import { ArrowLeft, Shield, Sparkles, Check } from 'lucide-react';
+import { ArrowLeft, Shield, Sparkles, Check, AlertCircle } from 'lucide-react';
+import { getTrackConfig } from '../config/events';
 
 const STEPS = [
   { step: 1, label: 'Choose Track' },
@@ -52,16 +53,29 @@ export default function RegistrationPage({ onBackToHome, preselectedTrack = null
     refreshSlots();
   }, []);
 
+  const selectedTrackConfig = getTrackConfig(selectedEventKey);
+  const isSelectedTrackClosed = Boolean(selectedTrackConfig?.isClosed);
+
   // When preselected track is passed from home event card
   useEffect(() => {
     if (preselectedTrack) {
       setSelectedEventKey(preselectedTrack);
-      setCurrentStep(2);
+      const trackConfig = getTrackConfig(preselectedTrack);
+      if (trackConfig && trackConfig.isClosed) {
+        setCurrentStep(1);
+      } else {
+        setCurrentStep(2);
+      }
     }
   }, [preselectedTrack]);
 
   // Handle final submission
   const handleSubmitRegistration = async (paymentData = {}) => {
+    if (isSelectedTrackClosed) {
+      setSubmitError(`Registrations for ${selectedTrackConfig?.title || 'this event'} are closed.`);
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -170,7 +184,39 @@ export default function RegistrationPage({ onBackToHome, preselectedTrack = null
             />
           )}
 
-          {currentStep === 2 && (
+          {currentStep === 2 && (isSelectedTrackClosed ? (
+            <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px',
+                color: '#ef4444'
+              }}>
+                <AlertCircle size={32} />
+              </div>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>
+                Registrations Closed
+              </h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.95rem', maxWidth: '480px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+                Registrations for <strong>{selectedTrackConfig?.title || 'this track'}</strong> have officially closed. Please choose another active event track to participate.
+              </p>
+              <button
+                type="button"
+                className="btn-wizard-next"
+                style={{ margin: '0 auto', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                onClick={() => setCurrentStep(1)}
+              >
+                <ArrowLeft size={16} />
+                <span>Select Another Event</span>
+              </button>
+            </div>
+          ) : (
             <DynamicRegistrationForm
               selectedEventKey={selectedEventKey}
               formData={formData}
@@ -178,7 +224,7 @@ export default function RegistrationPage({ onBackToHome, preselectedTrack = null
               onBack={() => setCurrentStep(1)}
               onProceed={() => setCurrentStep(3)}
             />
-          )}
+          ))}
 
           {currentStep === 3 && (
             <RegistrationSummary

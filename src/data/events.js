@@ -58,6 +58,7 @@ export const events = [
     teamSize: "1 - 4 Members per team (Solo or Squad)",
     duration: "4 - 5 Hours Intensive Sprint",
     venue: "Auditorium",
+    isClosed: true,
     registrationLink: "#register?track=mini-hackathon",
     topics: [
       "Open Source Developer Productivity",
@@ -97,6 +98,7 @@ export const events = [
     teamSize: "Individual or 2 Members per team",
     duration: "2.5 Hours",
     venue: "Auditorium",
+    isClosed: true,
     registrationLink: "#register?track=poster-design",
     topics: [
       "Philosophy of Software Freedom & FOSS",

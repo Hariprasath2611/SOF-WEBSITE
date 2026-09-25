@@ -28,6 +28,7 @@ export const EVENTS = [
     maxTeamSize: 4,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     sheetEnvKey: 'MINI_HACKATHON_SHEET_ID',
     sheetName: 'Mini_Hackathon_Registrations',
     description: 'Rapid open-source problem-solving sprint under competitive time constraints.'
@@ -42,6 +43,7 @@ export const EVENTS = [
     maxTeamSize: 2,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     sheetEnvKey: 'POSTER_DESIGN_SHEET_ID',
     sheetName: 'Poster_Design_Registrations',
     description: 'Visual advocacy and digital storytelling on technology freedom, FOSS, and data sovereignty.'

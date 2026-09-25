@@ -728,7 +728,8 @@ export default function AdminDashboard({ onBackToHome }) {
                     const effectiveRemaining = Math.max(0, effectiveMaxSlots - effectiveRegistered);
                     const effectiveTeamSize = ev.key === 'mini-hackathon' ? '1 - 4' : (localTrack?.teamSize || ev.teamSize);
                     const percent = Math.min(100, Math.round((effectiveRegistered / effectiveMaxSlots) * 100));
-                    const isFull = effectiveRemaining === 0 || ev.status === 'FULL';
+                    const isClosed = Boolean(ev.isClosed || localTrack?.isClosed || ev.status === 'CLOSED');
+                    const isFull = isClosed || effectiveRemaining === 0 || ev.status === 'FULL';
 
                     return (
                       <div key={ev.key} className={`event-slot-card ${isFull ? 'full-border' : ''}`}>
@@ -739,8 +740,8 @@ export default function AdminDashboard({ onBackToHome }) {
                               Team Size: {effectiveTeamSize}
                             </span>
                           </div>
-                          <span className={`status-badge ${isFull ? 'cancelled' : 'confirmed'}`}>
-                            {isFull ? 'FULL' : 'OPEN'}
+                          <span className={`status-badge ${isClosed ? 'cancelled' : isFull ? 'cancelled' : 'confirmed'}`}>
+                            {isClosed ? 'CLOSED' : isFull ? 'FULL' : 'OPEN'}
                           </span>
                         </div>
 

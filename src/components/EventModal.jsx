@@ -58,6 +58,26 @@ export default function EventModal({ event, onClose }) {
 
         {/* Modal Scrollable Body */}
         <div className="modal-body">
+          {event.isClosed && (
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.12)',
+              border: '1px solid rgba(239, 68, 68, 0.4)',
+              borderRadius: '8px',
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              color: '#fca5a5',
+              fontSize: '0.9rem',
+              marginBottom: '10px'
+            }}>
+              <AlertCircle size={20} color="#ef4444" style={{ flexShrink: 0 }} />
+              <div>
+                <strong style={{ color: '#fff' }}>Registrations Closed:</strong> Registrations for this event have officially closed.
+              </div>
+            </div>
+          )}
+
           {/* About Section */}
           <div>
             <div className="modal-section-title">
@@ -166,14 +186,38 @@ export default function EventModal({ event, onClose }) {
             Close
           </button>
 
-          <a
-            href={event.registrationLink}
-            className="btn btn-primary"
-            onClick={onClose}
-          >
-            <span>Register for {event.title}</span>
-            <span className="btn-arrow-icon">→</span>
-          </a>
+          {event.isClosed ? (
+            <button
+              type="button"
+              className="btn btn-closed"
+              disabled
+              style={{
+                opacity: 0.75,
+                cursor: 'not-allowed',
+                background: 'rgba(239, 68, 68, 0.15)',
+                color: '#f87171',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              <AlertCircle size={15} />
+              <span>Registrations Closed</span>
+            </button>
+          ) : (
+            <a
+              href={event.registrationLink}
+              className="btn btn-primary"
+              onClick={onClose}
+            >
+              <span>Register for {event.title}</span>
+              <span className="btn-arrow-icon">→</span>
+            </a>
+          )}
         </div>
       </div>
     </div>

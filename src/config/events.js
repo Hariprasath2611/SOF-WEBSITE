@@ -37,6 +37,7 @@ export const EVENT_TRACKS = [
     maxTeamSize: 4,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     accentColor: '#3b82f6', // Electric blue
     badge: '1 - 4 MEMBERS',
     icon: 'Terminal',
@@ -59,6 +60,7 @@ export const EVENT_TRACKS = [
     maxTeamSize: 2,
     maxSlots: 999999,
     isTeam: true,
+    isClosed: true,
     accentColor: '#a855f7', // Violet
     badge: '1 - 2 MEMBERS',
     icon: 'Palette',

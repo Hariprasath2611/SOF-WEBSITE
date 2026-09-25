@@ -60,6 +60,13 @@ router.post('/registrations', async (req, res) => {
       return res.status(400).json({ success: false, error: `Invalid event selected: "${eventKey}".` });
     }
 
+    if (eventConfig.isClosed) {
+      return res.status(400).json({
+        success: false,
+        error: `Registrations for ${eventConfig.title || eventConfig.name} are closed.`
+      });
+    }
+
     // 2. Validate Team Name for team events
     let finalTeamName = teamName;
     if (eventConfig.isTeam) {

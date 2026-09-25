@@ -18,14 +18,16 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
     const registeredCount = live ? live.registeredCount : 0;
     const remainingSlots = 999999;
     const quotasStats = live ? live.quotasStats : null;
-    const isFull = false; // Override backend limits to ensure it's always open
+    const isClosed = Boolean(track.isClosed || live?.isClosed || live?.status === 'CLOSED');
+    const isFull = isClosed; // Closed tracks cannot accept new bookings
 
     return {
       ...track,
       maxSlots,
       registeredCount,
-      remainingSlots,
+      remainingSlots: isClosed ? 0 : remainingSlots,
       quotasStats,
+      isClosed,
       isFull
     };
   });
@@ -47,27 +49,45 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
         {enrichedTracks.map((track) => {
           const Icon = ICON_MAP[track.icon] || Terminal;
           const isSelected = selectedEventKey === track.key;
+          const isUnavailable = track.isClosed || track.isFull;
 
           return (
             <div
               key={track.key}
-              className={`event-select-card ${isSelected ? 'selected' : ''} ${track.isFull ? 'disabled' : ''}`}
+              className={`event-select-card ${isSelected ? 'selected' : ''} ${track.isClosed ? 'disabled closed' : track.isFull ? 'disabled' : ''}`}
               onClick={() => {
-                if (!track.isFull) {
+                if (!isUnavailable) {
                   onSelectEvent(track.key);
                 }
               }}
               role="button"
-              tabIndex={track.isFull ? -1 : 0}
+              tabIndex={isUnavailable ? -1 : 0}
               onKeyDown={(e) => {
-                if ((e.key === 'Enter' || e.key === ' ') && !track.isFull) {
+                if ((e.key === 'Enter' || e.key === ' ') && !isUnavailable) {
                   onSelectEvent(track.key);
                 }
               }}
+              style={track.isClosed ? { cursor: 'not-allowed', opacity: 0.65 } : undefined}
             >
               <div className="card-top-row">
                 <span className="card-track-number">TRACK {track.trackNumber}</span>
-                <span className="card-team-badge">{track.badge}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  {track.isClosed && (
+                    <span style={{
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontSize: '0.7rem',
+                      fontWeight: 800,
+                      color: '#ef4444',
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      padding: '2px 6px',
+                      borderRadius: '4px'
+                    }}>
+                      CLOSED
+                    </span>
+                  )}
+                  <span className="card-team-badge">{track.badge}</span>
+                </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
@@ -100,7 +120,17 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
                   Registration Status
                 </span>
 
-                {track.isFull ? (
+                {track.isClosed ? (
+                  <span className="slot-count-badge closed" style={{
+                    background: 'rgba(239, 68, 68, 0.15)',
+                    color: '#f87171',
+                    border: '1px solid rgba(239, 68, 68, 0.35)',
+                    fontWeight: 700
+                  }}>
+                    <AlertCircle size={13} />
+                    <span>REGISTRATIONS CLOSED</span>
+                  </span>
+                ) : track.isFull ? (
                   <span className="slot-count-badge full">
                     <AlertCircle size={13} />
                     <span>FULL</span>
@@ -122,7 +152,7 @@ export default function EventSelector({ eventsStats, selectedEventKey, onSelectE
         <button
           type="button"
           className="btn-wizard-next"
-          disabled={!selectedEventKey || (selectedTrack && selectedTrack.isFull)}
+          disabled={!selectedEventKey || (selectedTrack && (selectedTrack.isClosed || selectedTrack.isFull))}
           onClick={onProceed}
         >
           <span>Continue to Details</span>

@@ -134,8 +134,9 @@ function getLocalEventsWithSlots() {
       (r) => r.eventKey === track.key && r.status !== 'CANCELLED'
     );
     const activeCount = activeRegistrations.length;
-    const remainingSlots = Math.max(0, track.maxSlots - activeCount);
-    const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
+    const isClosed = track.isClosed === true;
+    const remainingSlots = isClosed ? 0 : Math.max(0, track.maxSlots - activeCount);
+    const status = isClosed ? 'CLOSED' : (remainingSlots === 0 ? 'FULL' : 'OPEN');
 
     let quotasStats = null;
     if (track.key === 'demo-stall') {
@@ -167,6 +168,7 @@ function getLocalEventsWithSlots() {
 
     return {
       ...track,
+      isClosed,
       registeredCount: activeCount,
       remainingSlots,
       quotasStats,
@@ -180,6 +182,12 @@ function registerLocally(formData) {
   const track = getTrackConfig(eventKey);
   if (!track) {
     throw new Error(`Invalid event selected: "${eventKey}"`);
+  }
+
+  if (track.isClosed) {
+    const err = new Error(`Registrations for ${track.title || track.name} are closed.`);
+    err.code = 'REGISTRATION_CLOSED';
+    throw err;
   }
 
   const regs = getLocalRegistrations();

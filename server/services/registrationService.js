@@ -220,8 +220,9 @@ class RegistrationService {
         (r) => r.eventKey === ev.key && r.status !== 'CANCELLED'
       );
       const activeCount = activeRegistrations.length;
-      const remainingSlots = Math.max(0, ev.maxSlots - activeCount);
-      const status = remainingSlots === 0 ? 'FULL' : 'OPEN';
+      const isClosed = ev.isClosed === true;
+      const remainingSlots = isClosed ? 0 : Math.max(0, ev.maxSlots - activeCount);
+      const status = isClosed ? 'CLOSED' : (remainingSlots === 0 ? 'FULL' : 'OPEN');
 
       let quotasStats = null;
       if (ev.key === 'demo-stall') {
@@ -253,6 +254,7 @@ class RegistrationService {
 
       return {
         ...ev,
+        isClosed,
         registeredCount: activeCount,
         remainingSlots,
         quotasStats,
@@ -270,6 +272,13 @@ class RegistrationService {
     const eventConfig = getEventByKey(eventKey);
     if (!eventConfig) {
       throw new Error(`Invalid event selected: "${eventKey}"`);
+    }
+
+    if (eventConfig.isClosed) {
+      const err = new Error(`Registrations for ${eventConfig.title || eventConfig.name} are closed.`);
+      err.statusCode = 400;
+      err.code = 'REGISTRATION_CLOSED';
+      throw err;
     }
 
     // Acquire event lock to guarantee atomic slot reservation

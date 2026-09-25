@@ -34,7 +34,23 @@ export default function EventCard({ event, onOpenDetails }) {
           <FolderGit2 size={13} />
           <span>{event.repo}</span>
         </div>
-        <span className="event-number-tag">TRACK {event.number}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {event.isClosed && (
+            <span style={{
+              background: 'rgba(239, 68, 68, 0.18)',
+              color: '#f87171',
+              border: '1px solid rgba(239, 68, 68, 0.45)',
+              padding: '2px 8px',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              letterSpacing: '0.04em'
+            }}>
+              CLOSED
+            </span>
+          )}
+          <span className="event-number-tag">TRACK {event.number}</span>
+        </div>
       </div>
 
       {/* Main Body */}
